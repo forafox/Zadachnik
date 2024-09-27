@@ -1,0 +1,36 @@
+helios
+
+helios.tomcat: {
+  label: Embedded Tomcat Server
+}
+
+helios.tomcat.gateway: {
+  label: Routing configs
+}
+
+helios.tomcat.backend: {
+  label: Spring MVC Backend
+}
+
+helios.tomcat.frontend: {
+  label: "Static files"
+}
+
+helios.tomcat.gateway -> helios.tomcat.backend: {
+  label: "/api"
+}
+helios.tomcat.gateway -> helios.tomcat.frontend: {
+  label: "/"
+}
+
+user: {
+  shape: person
+}
+
+user -> helios.tomcat.gateway
+
+helios.tomcat.backend -> helios.postgres
+
+helios.postgres: {
+  shape: cylinder
+}
