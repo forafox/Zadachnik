@@ -28,3 +28,6 @@
 
 *.fls
 *.dvi
+*.glo
+*.glsdefs
+*.ist

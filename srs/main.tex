@@ -3,10 +3,44 @@
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 \usepackage[english,russian]{babel}
+% For... glossary
+\usepackage[toc]{glossaries}
+
+% To set custom label for enumerate
+\usepackage{enumitem}
+
+\usepackage[left=2cm,right=2cm]{geometry}
+
 \author{Егор Федоров \and Андрей Карабанов}
 \title{Software Requirements for Zadachnik}
+
+\makenoidxglossaries
+\newglossaryentry{product-backlog}{
+  name={Product Backlog},
+  description={это упорядоченный и постоянно обновляемый список всего, что планируется сделать для создания и улучшения продукта. Этот артефакт Скрама является единственным источником работы для Скрам-команды. \Gls{product-owner} несет ответственность за Бэклог Продукта, включая его содержимое, доступность и упорядочение}
+}
+\newglossaryentry{product-owner}{
+  name={Product Owner},
+  description={ Это одна из 3 зон ответственности в Скрам-команде. Владелец Продукта отвечает за максимизацию ценности продукта, получаемого в результате работы Скрам-команды. В его обязанности также входит курирование и приоритизация Бэклога Продукта. Около 50\% времени Владелец Продукта проводит с клиентами и заинтересованными лицами, остальные 50\% работает совместно с командой}
+}
+
+\newglossaryentry{latex}
+{
+    name=latex,
+    description={Is a markup language specially suited for 
+scientific documents}
+}
+
+
+\newglossaryentry{formula}
+{
+    name=formula,
+    description={A mathematical expression}
+}
+
 \begin{document}
 \maketitle
+\tableofcontents
 
 \section{Описание информационной системы}
 Информационная система Zadachnik -- система отслеживания багов и
@@ -22,7 +56,7 @@
   \item Оценка времени на выполнение задач
   \item Оценка времени на выполнение всего проекта
   \item Сбор аналитики по времени выполнения задач
-  \item Фасилитация и организация spring planning, daily scrum, spring review и spring retro.
+  \item Фасилитация и организация sprint planning, daily scrum, spring review и spring retro.
 \end{itemize}
 
 \subsection{Классы и характеристики пользователей}
@@ -41,4 +75,18 @@
 Бэклогу Продукта и Инкрементам. Нередко участвует в Обзоре спринта.
 \end{itemize}
 
+\section{Функциональные требования}
+
+В данной секции в формате user story описаны требования к системе.
+Требования разбиты на подсекции в зависимости от класса пользователей,
+от которых исходит это требование.
+Если требование актуально для нескольких классов пользователей, оно
+вынесено в общее.
+
+\subsection{Требования Product Owner}
+\begin{enumerate}[label=\textbf{POR\arabic*}.]
+  \item Я, как Product Owner, хочу видеть \Gls{product-backlog}
+\end{enumerate}
+
+\printnoidxglossaries
 \end{document}
