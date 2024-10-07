@@ -4,7 +4,7 @@
 \usepackage{hyperref}
 \usepackage[english,russian]{babel}
 % For... glossary
-\usepackage[toc]{glossaries}
+\usepackage[toc,translate=babel]{glossaries}
 
 % To set custom label for enumerate
 \usepackage{enumitem}
@@ -16,12 +16,25 @@
 
 \makenoidxglossaries
 \newglossaryentry{product-backlog}{
-  name={Product Backlog},
+  name={product Backlog},
   description={это упорядоченный и постоянно обновляемый список всего, что планируется сделать для создания и улучшения продукта. Этот артефакт Скрама является единственным источником работы для Скрам-команды. \Gls{product-owner} несет ответственность за Бэклог Продукта, включая его содержимое, доступность и упорядочение}
 }
 \newglossaryentry{product-owner}{
-  name={Product Owner},
-  description={ Это одна из 3 зон ответственности в Скрам-команде. Владелец Продукта отвечает за максимизацию ценности продукта, получаемого в результате работы Скрам-команды. В его обязанности также входит курирование и приоритизация Бэклога Продукта. Около 50\% времени Владелец Продукта проводит с клиентами и заинтересованными лицами, остальные 50\% работает совместно с командой}
+  name={product Owner},
+  description={это одна из 3 зон ответственности в Скрам-команде. Владелец Продукта отвечает за максимизацию ценности продукта, получаемого в результате работы Скрам-команды. В его обязанности также входит курирование и приоритизация Бэклога Продукта. Около 50\% времени Владелец Продукта проводит с клиентами и заинтересованными лицами, остальные 50\% работает совместно с командой}
+}
+\newglossaryentry{kanban-board}{
+  name={kanban доска},
+  description={это способ визуализации списка задач. На странице Kanban-доски отображаются все задачи из \Gls{product-backlog} в форме карточек. При этом карточки можно перемещать между статусами.}
+}
+\newglossaryentry{task-attribute}{
+  name={атрибут задачи},
+  plural={атрибуты задачи},
+  description={это  свойство, ассоциированные с задачей. В данной системе атрибутами задачи являются: название, описание, \gls{task-priority}}
+}
+\newglossaryentry{task-priority}{
+  name={приоритет задачи},
+  description={определяет, насколько задача важна для системы. Может быть одним из следующих значений: низкий, средний, высокий, блокер}
 }
 
 \newglossaryentry{latex}
@@ -83,9 +96,16 @@ scientific documents}
 Если требование актуально для нескольких классов пользователей, оно
 вынесено в общее.
 
+\subsection{Общие требования}
+\begin{enumerate}[label=\textbf{FR\arabic*}.]
+  \item Я, как пользователь, хочу иметь возможность создавать и редактировать 
+    задачи, указывать их \glspl{task-attribute}.
+  \item Я, как пользователь, хочу видеть \Gls{product-backlog} в виде \glsdisp{kanban-board}{Kanba-доски}.
+\end{enumerate}
+
 \subsection{Требования Product Owner}
 \begin{enumerate}[label=\textbf{POR\arabic*}.]
-  \item Я, как Product Owner, хочу видеть \Gls{product-backlog}
+  \item TODO
 \end{enumerate}
 
 \printnoidxglossaries
