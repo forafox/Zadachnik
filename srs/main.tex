@@ -4,6 +4,15 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage[english,russian]{babel}
+\usepackage{fancyhdr}
+
+%
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularray}
+\usepackage{tikz}
+
 % For... glossary
 \usepackage[toc,translate=babel]{glossaries}
 
@@ -15,10 +24,22 @@
 \author{Егор Федоров \and Андрей Карабанов}
 \title{Software Requirements for Zadachnik}
 
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot[C]{\thepage}
+
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{firststyle}
+{
+	\fancyhead{}
+	\fancyfoot[C]{г. Санкт-Петербург\\2024 г.}
+}
+
+
 \input{glossary.tex}
 
 \begin{document}
-\maketitle
+\input{./title.tex}
 \tableofcontents
 
 \section{Описание предметной области}
