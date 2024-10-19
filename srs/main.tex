@@ -128,7 +128,6 @@ planning, spring review, sprint retro.
 
 \section{Прецеденты использования}
 \subsection{Регистрация в сети}
-\begin{center}
   \begin{tabular}{|l|p{9cm}|}
   \hline
   \textbf{Прецендент} & Регистрация в системе \\
@@ -152,11 +151,11 @@ planning, spring review, sprint retro.
   \hline
 \end{tabular}
 
-	\subsection{}
+\subsection{Вход в систему}
 
 \begin{tabular}{|l|p{9cm}|}
   \hline
-  \textbf{Прецендент} & Аутентификация и Авторизация пользователя в системе \\
+  \textbf{Прецендент} & Вход в систему \\
   \hline
   \textbf{ID} & 1 \\
   \hline
@@ -181,6 +180,33 @@ planning, spring review, sprint retro.
   \hline
 \end{tabular}
 
+\subsection{Создание команды}
+
+\begin{tabular}{|l|p{9cm}|}
+  \hline
+  \textbf{Прецендент} & Создание команды  \\
+  \hline
+  \textbf{ID} & 1 \\
+  \hline
+  \textbf{Краткое описание} & Пользователь создает новую комадну\\
+  \hline
+  \textbf{Главный актер} & Пользователь с ролью ProductOwner \\
+  \hline
+  \textbf{Второстепенные актеры} & нет \\
+  \hline
+  \textbf{Предусловия} &  Пользователь авторизован в системе, пользователь имеет роль Product Owner \\
+  \hline
+  \textbf{Основной поток} & \begin{enumerate}
+    \item Пользователь переходит на страницу создания команды
+    \item Пользователь вводит название команды и идентификатор
+    \item Система проверяет введенные данные на корректность
+    \item Пользователь попадает на страницу созданной команды
+  \end{enumerate} \\
+  \hline
+\end{tabular}
+
+\subsection{Создание доски задач}
+
 \begin{tabular}{|l|p{9cm}|}
   \hline
   \textbf{Прецендент} & Создание доски задач  \\
@@ -189,20 +215,22 @@ planning, spring review, sprint retro.
   \hline
   \textbf{Краткое описание} & Пользователь создает новую доску задач \\
   \hline
-  \textbf{Главный актер} & Пользователь\\
+  \textbf{Главный актер} & Пользователь с ролью ProductOwner \\
   \hline
   \textbf{Второстепенные актеры} & нет \\
   \hline
-  \textbf{Предусловия} &  Пользователь авторизован в системе\\
+  \textbf{Предусловия} &  Пользователь авторизован в системе, пользователь имеет роль ProductOwner, пользователь имеет созданную команду\\
   \hline
   \textbf{Основной поток} & \begin{enumerate}
-    \item Пользователь переходит на страницу создания доски задач
+    \item Пользователь переходит на страницу команды
     \item Пользователь вводит данные для создания доски задач
     \item Система проверяет введенные данные на корректность
     \item Пользователь попадает на страницу созданной доски
   \end{enumerate} \\
   \hline
 \end{tabular}
+
+\subsection{Создание задачи}
 
 \begin{tabular}{|l|p{9cm}|}
   \hline
@@ -226,7 +254,8 @@ planning, spring review, sprint retro.
   \end{enumerate} \\
   \hline
 \end{tabular} 
-\end{center}
+
+\subsection{Назначение исполнителя задачи}
 
 \begin{tabular}{|l|p{9cm}|}
   \hline
@@ -251,6 +280,8 @@ planning, spring review, sprint retro.
   \end{enumerate} \\
   \hline
 \end{tabular}
+
+\subsection{Перевод задачи в другой статус}
 
 \begin{tabular}{|l|p{9cm}|}
   \hline
