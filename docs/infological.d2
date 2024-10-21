@@ -128,12 +128,13 @@ sprint.retro_meeting <-> team_meeting: {
   }
 }
 
-team.daily_meeting <-> team_meeting: {
+team <-> team_meeting: {
+  label: "Daily Meeting"
   source-arrowhead: {
-    shape: cf-many
+    shape: cf-one
   }
   target-arrowhead: {
-    shape: cf-one
+    shape: cf-many
   }
 }
 
