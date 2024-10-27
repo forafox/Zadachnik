@@ -53,14 +53,20 @@ product_release: {
   shape: sql_table
   id: {constraint: primary_key}
   product_id: int {constraint: foreign_key}
+  sprint_id: int {constraint: foreign_key}
 }
 
-sprint.release <-> product_release: {
+release_changelog: {
+  shape: sql_table
+  release_id: {constraint: foreign_key}
+}
+
+sprint <-> product_release.sprint_id: {
   source-arrowhead: {
-    shape: cf-one
+    shape: cf-one-required
   }
   target-arrowhead: {
-    shape: cf-one-required
+    shape: cf-many
   }
   label: "release after sprint. we may need to release during\na sprint, but we MUST release after"
 }
