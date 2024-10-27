@@ -53,11 +53,42 @@ product_release: {
   id: {constraint: primary_key}
   product_id: int {constraint: foreign_key}
   sprint_id: int {constraint: foreign_key}
+  notes: int {constraint: foreign_key}
 }
 
-release_changelog: {
+product_release.notes <-> article: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+release_changelog_entry: {
   shape: sql_table
   release_id: {constraint: foreign_key}
+  task_id: {constraint: foreign_key}
+  type: varchar(255) {tooltip: See keepachangelog.org}
+  comment: text
+}
+
+release_changelog_entry.release_id <-> product_release: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+release_changelog_entry.task_id <-> task: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
 }
 
 sprint <-> product_release.sprint_id: {
@@ -220,20 +251,34 @@ product <-> team: {
 task: {
   shape: sql_table
   id: int {constraint: primary_key}
-  type: EPIC | STORY | TASK
+  type: 'EPIC | STORY | TASK'
   title: varchar(255)
   descripton: text
   product_id: int {constraint: foreign_key}
-  part_of: int
 }
 
-task.part_of <-> task.id: {
-  label: "Task is a part of epic / story"
+task_relation: {
+  shape: sql_table
+  type: varchar(255)
+  parent: id {constraint: foreign_key}
+  child: id {constraint: foreign_key}
+}
+
+task_relation.parent <-> task: {
   source-arrowhead: {
     shape: cf-many
   }
   target-arrowhead: {
-    shape: cf-one
+    shape: cf-one-required
+  }
+}
+
+task_relation.child <-> task: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
   }
 }
 
