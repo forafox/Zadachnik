@@ -1,0 +1,48 @@
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage[english,russian]{babel}
+\usepackage{fancyhdr}
+
+%
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularray}
+\usepackage{tikz}
+
+% Inline lists with enumerate*
+\usepackage[inline]{enumitem}
+
+% For... glossary
+\usepackage[toc,translate=babel]{glossaries}
+
+% To set custom label for enumerate
+\usepackage{enumitem}
+
+\usepackage{geometry}
+\geometry{right=15mm}
+\geometry{left=30mm}
+\geometry{bottom=20mm}
+\geometry{top=20mm}
+\geometry{ignorefoot}% считать от нижней границы текста
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot[C]{\thepage}
+
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{firststyle}
+{
+	\fancyhead{}
+	\fancyfoot[C]{г. Санкт-Петербург\\2024 г.}
+}
+
+\author{Егор Федоров \and Андрей Карабанов}
+\title{Software Requirements for Zadachnik}
+
+\usepackage{setspace}
+\linespread{1.5}
+
+\setlength{\parindent}{1.25cm} % отступ для абзаца
