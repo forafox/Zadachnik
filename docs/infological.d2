@@ -42,11 +42,10 @@ team_meeting: {
   team_id: int {constraint: foreign_key}
 }
 
-meeting_minutes: {
+article: {
   shape: sql_table
   id: {constraint: primary_key}
-  meeting_id: {constraint: foreign_key}
-  author: int: {constraint: foreign_key}
+  author int: {constraint: foreign_key}
 }
 
 product_release: {
@@ -80,16 +79,17 @@ product_release.product_id <-> product: {
   }
 }
 
-meeting_minutes.meeting_id <-> team_meeting: {
+article <-> team_meeting: {
   source-arrowhead: {
     shape: cf-many
   }
   target-arrowhead: {
-    shape: cf-one-required
+    shape: cf-one
   }
+  label: "Meeting minutes"
 }
 
-meeting_minutes.author <-> user: {
+article.author <-> user: {
   source-arrowhead: {
     shape: cf-many
   }
@@ -163,7 +163,7 @@ comment <-> task: {
   }
 }
 
-comment <-> meeting_minutes: {
+comment <-> article: {
   source-arrowhead: {
     shape: cf-many
   }
