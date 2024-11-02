@@ -239,15 +239,6 @@ product.owner <-> user: {
   }
 }
 
-product <-> team: {
-  source-arrowhead: {
-    shape: cf-many
-  }
-  target-arrowhead: {
-    shape: cf-many
-  }
-}
-
 task: {
   shape: sql_table
   id: serial {constraint: primary_key}
@@ -320,7 +311,32 @@ task_changes.task_id <-> task: {
     shape: cf-many
   }
 }
+
 task_changes.changed_by <-> user: {
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+  source-arrowhead: {
+    shape: cf-many
+  }
+}
+
+product_teams: {
+  shape: sql_table
+  product_id: integer {constraint: foreign_key}
+  team_id: integer {constraint: foreign_key}
+}
+
+product <-> product_teams.team_id: {
+  target-arrowhead: {
+    shape: cf-many
+  }
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+product_teams.product_id <-> team: {
   target-arrowhead: {
     shape: cf-one-required
   }
