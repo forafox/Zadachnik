@@ -1,0 +1,330 @@
+product: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  short_name: varchar(255) {constraint: unique}
+  title: varchar(255)
+  description: text
+  owner: int {constraint: foreign_key}
+}
+
+team: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  title: varchar(255) {constraint: unique}
+  scrum_master: int
+}
+
+user: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  username: varchar(255) {constraint: unique}
+  full_name: varchar(255)
+}
+
+sprint: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  team_id: int {constraint: foreign_key}
+}
+
+comment: {
+  shape: sql_table
+  id: int {constraint: primaty_key}
+  author: int {constraint: foreign_key}
+  content: text
+}
+
+team_meeting: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  title: varchar(255)
+  agenda: text
+  team_id: int {constraint: foreign_key}
+}
+
+article: {
+  shape: sql_table
+  id: {constraint: primary_key}
+  author int: {constraint: foreign_key}
+}
+
+product_release: {
+  shape: sql_table
+  id: {constraint: primary_key}
+  product_id: int {constraint: foreign_key}
+  sprint_id: int {constraint: foreign_key}
+  notes: int {constraint: foreign_key}
+}
+
+product_release.notes <-> article: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+release_changelog_entry: {
+  shape: sql_table
+  release_id: {constraint: foreign_key}
+  task_id: {constraint: foreign_key}
+  type: varchar(255) {tooltip: See keepachangelog.org}
+  comment: text
+}
+
+release_changelog_entry.release_id <-> product_release: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+release_changelog_entry.task_id <-> task: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+sprint <-> product_release.sprint_id: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+  label: "release after sprint. we may need to release during\na sprint, but we MUST release after"
+}
+
+product_release.product_id <-> product: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+article <-> team_meeting: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+  label: "Meeting minutes"
+}
+
+article.author <-> user: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+team <-> team_meeting.team_id: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+sprint.planning_meeting <-> team_meeting: {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+sprint.review_meeting <-> team_meeting: {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+sprint.retro_meeting <-> team_meeting: {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+team <-> team_meeting: {
+  label: "Daily Meeting"
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+team_meeting <-> user: {
+  label: "participants"
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+comment <-> task: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+comment <-> article: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+comment.author <-> user: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+team.id <-> sprint.team_id: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+team.scrum_master <-> user: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+product.owner <-> user: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+product <-> team: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+task: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  type: 'EPIC | STORY | TASK'
+  title: varchar(255)
+  descripton: text
+  product_id: int {constraint: foreign_key}
+}
+
+task_relation: {
+  shape: sql_table
+  type: varchar(255)
+  parent: id {constraint: foreign_key}
+  child: id {constraint: foreign_key}
+}
+
+task_relation.parent <-> task: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+task_relation.child <-> task: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+product.id <-> task.product_id: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+  label: "Product Backlog"
+}
+
+sprint.id <-> task.id: {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+  label: "Sprint Backlog"
+}
+
+task_changes: {
+  shape: sql_table
+  task_id: int {constraint: foreign_key}
+  field_name: varchar(255)
+  previous_value: json
+  new_value: json
+  changed_by: id {constraint: foreign_key}
+  changed_at: timestamp_tz
+}
+
+task_changes.task_id <-> task: {
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+  source-arrowhead: {
+    shape: cf-many
+  }
+}
+task_changes.changed_by <-> user: {
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+  source-arrowhead: {
+    shape: cf-many
+  }
+}
