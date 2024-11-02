@@ -242,7 +242,7 @@ product.owner <-> user: {
 task: {
   shape: sql_table
   id: serial {constraint: primary_key}
-  type: 'EPIC | STORY | TASK'
+  type: text
   title: text
   descripton: text
   product_id: integer {constraint: foreign_key}
