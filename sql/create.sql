@@ -3,6 +3,7 @@ CREATE TABLE "user" (
     username TEXT UNIQUE NOT NULL,
     full_name TEXT,
     password TEXT NOT NULL
+    updated_at TIMESTAMPTZ
 );
 
 CREATE TABLE team (
@@ -99,4 +100,16 @@ CREATE TABLE team_meeting_user (
     PRIMARY KEY (team_meeting_id, user_id)
 );
 
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at := NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER user_set_updated_at
+BEFORE INSERT OR UPDATE ON "user"
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
 
