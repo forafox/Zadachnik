@@ -56,7 +56,7 @@
   Заметки {constraint: foreign_key}
 }
 
-"Релизы продукта".Заметки <-> Статья: {
+"Релизы продукта".Заметки <-> Статья: Принадлежит {
   source-arrowhead: {
     shape: cf-many
   }
@@ -73,7 +73,7 @@
   Комментарий
 }
 
-"Изменения релизов".Релиз <-> "Релизы продукта": {
+"Изменения релизов".Релиз <-> "Релизы продукта": Принадлежит {
   source-arrowhead: {
     shape: cf-many
   }
@@ -82,7 +82,7 @@
   }
 }
 
-"Изменения релизов".Задание <-> Задание: {
+"Изменения релизов".Задание <-> Задание: Принадлежит {
   source-arrowhead: {
     shape: cf-many
   }
@@ -91,36 +91,16 @@
   }
 }
 
-Спринт <-> "Релизы продукта".Спринт: {
+Спринт <-> "Релизы продукта".Спринт: Порождается {
   source-arrowhead: {
     shape: cf-one-required
   }
   target-arrowhead: {
     shape: cf-many
   }
-  label: "release after sprint. we may need to release during\na sprint, but we MUST release after"
 }
 
-"Релизы продукта".Продукт <-> Продукт: {
-  source-arrowhead: {
-    shape: cf-many
-  }
-  target-arrowhead: {
-    shape: cf-one-required
-  }
-}
-
-Статья <-> "Командное собрание": {
-  source-arrowhead: {
-    shape: cf-many
-  }
-  target-arrowhead: {
-    shape: cf-one
-  }
-  label: "Meeting minutes"
-}
-
-Статья.Автор <-> Пользователь: {
+"Релизы продукта".Продукт <-> Продукт: Принадлежит {
   source-arrowhead: {
     shape: cf-many
   }
@@ -129,7 +109,16 @@
   }
 }
 
-Команда <-> "Командное собрание".Команда: {
+Статья <-> "Командное собрание": Обсуждается в рамках{
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+Статья.Автор <-> Пользователь: является {
   source-arrowhead: {
     shape: cf-many
   }
@@ -138,7 +127,16 @@
   }
 }
 
-Спринт."Планировочное собрание" <-> "Командное собрание": {
+Команда <-> "Командное собрание".Команда: проводится{
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+Спринт."Планировочное собрание" <-> "Командное собрание": проводится в рамках {
   source-arrowhead: {
     shape: cf-one
   }
@@ -147,7 +145,7 @@
   }
 }
 
-Спринт."Ревью собрание" <-> "Командное собрание": {
+Спринт."Ревью собрание" <-> "Командное собрание": проводится в рамках {
   source-arrowhead: {
     shape: cf-one
   }
@@ -156,7 +154,7 @@
   }
 }
 
-Спринт."Ретро собрание" <-> "Командное собрание": {
+Спринт."Ретро собрание" <-> "Командное собрание": проводится в рамках {
   source-arrowhead: {
     shape: cf-one
   }
@@ -165,8 +163,7 @@
   }
 }
 
-Команда <-> "Командное собрание": {
-  label: "Daily Meeting"
+Команда <-> "Командное собрание": проводит {
   source-arrowhead: {
     shape: cf-one
   }
@@ -175,7 +172,7 @@
   }
 }
 
-"Командное собрание" <-> Пользователь: {
+"Командное собрание" <-> Пользователь: участвует {
   label: "participants"
   source-arrowhead: {
     shape: cf-many
@@ -185,7 +182,7 @@
   }
 }
 
-Комментарий <-> Задание: {
+Комментарий <-> Задание: принадлежит {
   source-arrowhead: {
     shape: cf-many
   }
@@ -194,7 +191,7 @@
   }
 }
 
-Комментарий <-> Статья: {
+Комментарий <-> Статья: принадлежит {
   source-arrowhead: {
     shape: cf-many
   }
@@ -203,7 +200,7 @@
   }
 }
 
-Комментарий. <-> Пользователь: {
+Комментарий. <-> Пользователь: от кого {
   source-arrowhead: {
     shape: cf-many
   }
@@ -221,7 +218,7 @@
   }
 }
 
-Команда."Скрам Мастер" <-> Пользователь: {
+Команда."Скрам Мастер" <-> Пользователь: является {
   source-arrowhead: {
     shape: cf-many
   }
@@ -230,7 +227,7 @@
   }
 }
 
-Продукт.Владелец <-> Пользователь: {
+Продукт.Владелец <-> Пользователь: является {
   source-arrowhead: {
     shape: cf-many
   }
@@ -239,7 +236,7 @@
   }
 }
 
-Продукт <-> Команда: {
+Продукт <-> Команда: разрабатывается {
   source-arrowhead: {
     shape: cf-many
   }
@@ -257,14 +254,14 @@
   Продукт {constraint: foreign_key}
 }
 
-"Сложные задания": {
+"Связи заданий": {
   shape: sql_table
   Тип
-  Старший {constraint: foreign_key}
-  Младший {constraint: foreign_key}
+  Источник {constraint: foreign_key}
+  Цель {constraint: foreign_key}
 }
 
-"Сложные задания".Старший <-> Задание: {
+"Связи заданий".Источник <-> Задание: {
   source-arrowhead: {
     shape: cf-many
   }
@@ -273,7 +270,7 @@
   }
 }
 
-"Сложные задания".младший <-> Задание: {
+"Связи заданий".Цель <-> Задание: {
   source-arrowhead: {
     shape: cf-many
   }
@@ -289,7 +286,6 @@
   target-arrowhead: {
     shape: cf-many
   }
-  label: "Product Backlog"
 }
 
 Спринт.ID <-> Задание.ID: {
@@ -299,7 +295,6 @@
   target-arrowhead: {
     shape: cf-many
   }
-  label: "Sprint Backlog"
 }
 
 "Изменения заданий": {
@@ -320,7 +315,7 @@
     shape: cf-many
   }
 }
-"Изменения заданий"."Кем изменено" <-> Пользователь: {
+"Изменения заданий"."Кем изменено" <-> Пользователь: кем {
   target-arrowhead: {
     shape: cf-one-required
   }
