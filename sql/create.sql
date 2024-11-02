@@ -1,7 +1,8 @@
 CREATE TABLE "user" (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
-    full_name TEXT
+    full_name TEXT,
+    password TEXT NOT NULL
 );
 
 CREATE TABLE team (

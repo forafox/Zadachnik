@@ -1,8 +1,8 @@
 
-INSERT INTO "user" (username, full_name) VALUES
-('jdoe', 'John Doe'),
-('asmith', 'Alice Smith'),
-('bjones', 'Bob Jones');
+INSERT INTO "user" (username, full_name, password) VALUES
+('jdoe', 'John Doe', 'hash'),
+('asmith', 'Alice Smith', 'password'),
+('bjones', 'Bob Jones', 'password');
 
 
 INSERT INTO team (title, scrum_master) VALUES
