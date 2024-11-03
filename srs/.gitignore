@@ -31,3 +31,5 @@
 *.glo
 *.glsdefs
 *.ist
+*.png
+.deps.d
