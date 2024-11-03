@@ -21,7 +21,7 @@ clean:
 	latexmk -C main.tex 
 
 format:
-	latexindent src/*.tex -w
+	latexindent -w -m -l latexindent.yaml src/*.tex 
 	rm -rf src/*.bak*
 
 spell:
