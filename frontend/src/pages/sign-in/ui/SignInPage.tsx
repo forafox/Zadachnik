@@ -1,11 +1,40 @@
-import { Card, CardHeader, CardTitle } from "@/shared/ui/card.tsx";
+import { Button } from "@/shared/components/ui/button.tsx";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card.tsx";
+import { Input } from "@/shared/components/ui/input";
+import { Label } from "@/shared/components/ui/label"
 
 export function SignInPage() {
-  return <Card className="max-w-md mt-8 mx-auto">
+  return <Card className="max-w-md w-full mx-auto mt-8">
     <CardHeader>
       <CardTitle>
-        Вход в систему
+        Sign In
       </CardTitle>
+      <CardDescription>
+        Enter your credentials below to enter the system
+      </CardDescription>
     </CardHeader>
+      <CardContent className="grid gap-4 [&>*]:grid [&>*]:gap-2">
+        <div>
+          <Label>
+            Username
+          </Label>
+          <Input />
+        </div>
+        <div>
+          <Label>
+          Password
+          </Label>
+          <Input />
+        </div>
+      </CardContent>
+    <CardFooter className="grid gap-4">
+      <Button className="w-full">
+        Sign In
+      </Button>
+      <span className="text-center">
+        Don't have an account?
+        <Button variant="link">Sign Up</Button>
+      </span>
+    </CardFooter>
   </Card>
 }
