@@ -28,7 +28,7 @@
       ansible.builtin.git:
         dest: /opt/is/zadachnik
         repo: https://github.com/FEgor04/is-course-work.git
-        version: main
+        version: ci-cd-init
         force: true
     - name: Set git repo permissions
       ansible.builtin.file:
