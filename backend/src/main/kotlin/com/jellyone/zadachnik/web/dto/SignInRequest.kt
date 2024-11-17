@@ -1,4 +1,6 @@
 package com.jellyone.zadachnik.web.dto
 
-class SignInRequest {
-}
+data class SignInRequest(
+    val username: String,
+    val password: String
+)

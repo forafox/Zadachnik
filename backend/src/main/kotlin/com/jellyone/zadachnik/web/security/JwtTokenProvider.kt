@@ -75,7 +75,7 @@ class JwtTokenProvider(
             throw RuntimeException("Invalid refresh token")
         }
         val userId = getId(refreshToken).toLong()
-        val user = userService.getByUserId(userId)
+        val user = userService.getById(userId)
 
         if (user != null) {
             return JwtResponse(

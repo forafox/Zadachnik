@@ -1,13 +1,21 @@
 package com.jellyone.zadachnik.domain
 
 import com.jellyone.zadachnik.domain.enums.Role
+import jakarta.persistence.*
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
+@Entity
+@Table(name = "users")
 data class User(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
+    @Column
     private val username: String,
+    @Column
     private val password: String,
+    @Column(name = "fullname")
     private val fullName: String,
     val role: Role
 ) : UserDetails {
@@ -26,19 +34,19 @@ data class User(
     }
 
     override fun isAccountNonExpired(): Boolean {
-        return false
+        return true
     }
 
     override fun isAccountNonLocked(): Boolean {
-        return false
+        return true
     }
 
     override fun isCredentialsNonExpired(): Boolean {
-        return false
+        return true
     }
 
     override fun isEnabled(): Boolean {
-        return false
+        return true
     }
 
 }

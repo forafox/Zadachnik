@@ -18,7 +18,8 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme
         Server(url = "http://localhost:8080", description = "Default Server URL")
     ],
     tags = [
-        Tag(name = "User Management", description = "API for users")
+        Tag(name = "Authorization and Registration", description = "API for users"),
+        Tag(name = "User Management", description = "API for users"),
     ]
 )
 

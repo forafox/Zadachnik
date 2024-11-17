@@ -24,13 +24,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity()
-class ApplicationConfig(
+@EnableMethodSecurity
+class SecurityConfig(
     @Lazy private val tokenProvider: JwtTokenProvider,
     private val applicationContext: ApplicationContext,
-    private val authenticationFacade: IAuthenticationFacade,
-    @Lazy private val userService: UserService,
-    private val requestIdFilter: RequestIdFilter
 ) {
 
     @Bean
@@ -60,9 +57,8 @@ class ApplicationConfig(
                     .anyRequest().authenticated()
             }
             .anonymous { it.disable() }
-            .addFilterBefore(requestIdFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(
-                JwtTokenFilter(tokenProvider, authenticationFacade, userService),
+                JwtTokenFilter(tokenProvider),
                 UsernamePasswordAuthenticationFilter::class.java
             )
 

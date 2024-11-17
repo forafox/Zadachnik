@@ -1,4 +1,4 @@
-CREATE TABLE "user"
+CREATE TABLE users
 (
     id       SERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
@@ -11,7 +11,15 @@ CREATE TABLE team
 (
     id           SERIAL PRIMARY KEY,
     title        TEXT UNIQUE NOT NULL,
-    scrum_master INTEGER REFERENCES "user" (id)
+    scrum_master INTEGER REFERENCES users (id)
+);
+
+CREATE TABLE team_meeting
+(
+    id      SERIAL PRIMARY KEY,
+    title   TEXT,
+    agenda  TEXT,
+    team_id INTEGER REFERENCES team (id)
 );
 
 CREATE TABLE product
@@ -20,7 +28,7 @@ CREATE TABLE product
     short_name  TEXT UNIQUE NOT NULL,
     title       TEXT,
     description TEXT,
-    owner       INTEGER REFERENCES "user" (id)
+    owner       INTEGER REFERENCES users (id)
 );
 
 CREATE TABLE sprint
@@ -32,28 +40,29 @@ CREATE TABLE sprint
     retro_meeting    INTEGER REFERENCES team_meeting (id)
 );
 
-CREATE TABLE comment
-(
-    id         SERIAL PRIMARY KEY,
-    author     INTEGER REFERENCES "user" (id),
-    content    TEXT,
-    article_id INTEGER REFERENCES article (id),
-    task_id    INTEGER REFERENCES task (id)
-);
-
-CREATE TABLE team_meeting
-(
-    id      SERIAL PRIMARY KEY,
-    title   TEXT,
-    agenda  TEXT,
-    team_id INTEGER REFERENCES team (id)
-);
-
 CREATE TABLE article
 (
     id      SERIAL PRIMARY KEY,
     content TEXT,
-    author  INTEGER REFERENCES "user" (id)
+    author  INTEGER REFERENCES users (id)
+);
+
+CREATE TABLE task
+(
+    id          SERIAL PRIMARY KEY,
+    type        TEXT,
+    title       TEXT,
+    description TEXT,
+    product_id  INTEGER REFERENCES product (id)
+);
+
+CREATE TABLE comment
+(
+    id         SERIAL PRIMARY KEY,
+    author     INTEGER REFERENCES users (id),
+    content    TEXT,
+    article_id INTEGER REFERENCES article (id),
+    task_id    INTEGER REFERENCES task (id)
 );
 
 CREATE TABLE product_release
@@ -73,15 +82,6 @@ CREATE TABLE release_changelog_entry
     PRIMARY KEY (release_id, task_id)
 );
 
-CREATE TABLE task
-(
-    id          SERIAL PRIMARY KEY,
-    type        TEXT,
-    title       TEXT,
-    description TEXT,
-    product_id  INTEGER REFERENCES product (id)
-);
-
 CREATE TABLE task_relation
 (
     type   TEXT,
@@ -96,7 +96,7 @@ CREATE TABLE task_changes
     field_name     TEXT,
     previous_value JSON,
     new_value      JSON,
-    changed_by     INTEGER REFERENCES "user" (id),
+    changed_by     INTEGER REFERENCES users (id),
     changed_at     TIMESTAMPTZ,
     PRIMARY KEY (task_id, field_name, changed_at)
 );
@@ -111,6 +111,6 @@ CREATE TABLE product_teams
 CREATE TABLE team_meeting_user
 (
     team_meeting_id INTEGER REFERENCES team_meeting (id),
-    user_id         INTEGER REFERENCES "user" (id),
+    user_id         INTEGER REFERENCES users (id),
     PRIMARY KEY (team_meeting_id, user_id)
 );

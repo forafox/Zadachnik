@@ -6,16 +6,16 @@ import com.jellyone.zadachnik.exception.ResourceAlreadyExistsException
 import com.jellyone.zadachnik.exception.ResourceNotFoundException
 import com.jellyone.zadachnik.repository.UserRepository
 import com.jellyone.zadachnik.service.UserService
-import com.jellyone.zadachnik.web.security.principal.IAuthenticationFacade
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
-    private val autenticationFacade: IAuthenticationFacade
+    private val passwordEncoder: PasswordEncoder
 ) : UserService {
 
-    override fun create(username: String, fullName: String, password: String) {
+    override fun register(username: String, fullName: String, password: String) {
 
         checkUserAlreadyExists(username)
 
@@ -23,7 +23,7 @@ class UserServiceImpl(
             id = 0,
             username = username,
             fullName = fullName,
-            password = password,
+            password = passwordEncoder.encode(password),
             role = Role.USER
         )
         userRepository.save(user)

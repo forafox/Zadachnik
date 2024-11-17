@@ -16,9 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.GenericFilterBean
 
 class JwtTokenFilter(
-    private val jwtTokenProvider: JwtTokenProvider,
-    private val authenticationFacade: IAuthenticationFacade,
-    private val userService: UserService
+    private val jwtTokenProvider: JwtTokenProvider
 ) : GenericFilterBean() {
 
     private val allowedPaths = arrayOf("docs", "swagger", "h2", "auth")
@@ -52,9 +50,6 @@ class JwtTokenFilter(
                     authentication?.let {
                         SecurityContextHolder.getContext().authentication = it
                     }
-                }
-                if (jwtTokenProvider.getAuthorities(bearerToken).contains(Role.ADMIN.toString())) {
-                    authenticationFacade.setAdminRole()
                 }
             } else {
                 val httpResponse = servletResponse as HttpServletResponse
