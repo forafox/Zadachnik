@@ -1,9 +1,10 @@
 CREATE TABLE "user"
 (
-    id        SERIAL PRIMARY KEY,
-    username  TEXT UNIQUE NOT NULL,
-    full_name TEXT,
-    password  TEXT        NOT NULL
+    id       SERIAL PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
+    fullName TEXT,
+    password TEXT        NOT NULL,
+    role     TEXT        NOT NULL
 );
 
 CREATE TABLE team
