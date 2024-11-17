@@ -1,4 +1,4 @@
- name: Prepare user
+- name: Prepare user
   hosts: staging
   become: true
   tasks:
