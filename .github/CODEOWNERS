@@ -1,0 +1,7 @@
+backend @forafox
+frontend @fegor04
+traefik @fegor04
+ansible @fegor04
+*.yaml @fegor04
+Makefile @fegor04
+.github @fegor04
