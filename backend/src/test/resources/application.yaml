@@ -3,6 +3,6 @@ spring:
     import: optional:file:.env[.properties]
 security:
   jwt:
-    secret: ${JWT_SECRET}
-    access: ${JWT_ACCESS_TTL}
-    refresh: ${JWT_REFRESH_TTL}
+    secret: amF0amhvaWFob2loanE5ZXdqMDlyZWlvZmppZmppc2RqZnBkamZwb3Nkam9zZGZramZvcGpzCBA
+    access: 9900000
+    refresh: 2599000000
