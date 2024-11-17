@@ -1,0 +1,43 @@
+- name: Deploy to helios
+  hosts: prod
+  vars:
+    jar_src: ../backend/build/libs/zadachnik-{{version}}.jar
+    postgres_host: localhost
+    staging_host: zadachnik.efedorov.spb.su
+    registry_uri: fegor04
+  tasks:
+    - name: Make sure zadachnik directory exists
+      ansible.builtin.file:
+        path: /home/studs/s367581/is/zadachnik
+        state: directory
+        mode: u=rwx,go=rx
+    - name: Copy zadachnik jar to prod
+      ansible.builtin.copy:
+        src: '{{ jar_src }}'
+        dest: /home/studs/s367581/is/zadachnik/zadachnik-{{ version }}.jar
+        mode: u=rw,go=r
+    - name: Copy start script
+      ansible.builtin.template:
+        src: ./start.j2
+        dest: /home/studs/s367581/is/zadachnik/start.sh
+        mode: u=rwx,go-rwx
+    - name: Copy stop script
+      ansible.builtin.template:
+        src: ./stop.j2
+        dest: /home/studs/s367581/is/zadachnik/stop.sh
+        mode: u=rwx,go-rwx
+    - name: Kill previous version
+      ignore_errors: true
+      ansible.builtin.shell:
+        cmd: /home/studs/s367581/is/zadachnik/stop.sh
+        removes: /home/studs/s367581/is/zadachnik/pidfile
+    - name: Copy configuration
+      ansible.builtin.template:
+        src: ./env.j2
+        dest: /home/studs/s367581/is/zadachnik/.env
+        mode: u=rw,go-rwx
+    - name: Start new version
+      ansible.builtin.shell:
+        chdir: /home/studs/s367581/is/zadachnik
+        cmd: ./start.sh
+        creates: /home/studs/s367581/is/zadachnik/pidfile

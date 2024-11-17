@@ -3,8 +3,8 @@
 
 include .env
 
-FRONTEND_IMAGE_NAME ?= is1-frontend
-BACKEND_IMAGE_NAME ?= is1-backend
+FRONTEND_IMAGE_NAME ?= zadachnik-frontend
+BACKEND_IMAGE_NAME ?= zadachnik-backend
 
 # Version of frontend component
 # They are separated so that you could update backend and frontend
@@ -58,6 +58,7 @@ build-frontend-dist:
 
 build-backend-jar:
 	cd backend && ./gradlew bootJar
+
 
 deploy-helios: 
 	cd ansible && \

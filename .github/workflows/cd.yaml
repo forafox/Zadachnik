@@ -1,8 +1,8 @@
-name: ci
+name: cd
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main","ci-cd-init" ]
 
 jobs:
   image-frontend:
@@ -59,7 +59,7 @@ jobs:
           mkdir -p ~/.ssh && \
           echo "${{ secrets.STAGING_SSH_KEY }}" > ~/.ssh/cloudru-efedorov && \
           chmod 600 ~/.ssh/cloudru-efedorov && \
-          ssh-keyscan lab1.efedorov.spb.su >> ~/.ssh/known_hosts
+          ssh-keyscan zadachnik.efedorov.spb.su >> ~/.ssh/known_hosts
       - name: Deploy with ansible
         working-directory: ./ansible
         run: >
