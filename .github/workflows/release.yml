@@ -64,7 +64,7 @@ jobs:
     - name: Upload backend jar
       uses: actions/upload-artifact@v4
       with:
-        path: ./backend/build/libs/lab1-${{ env.VERSION }}.jar
+        path: ./backend/build/libs/zadachnik-${{ env.VERSION }}.jar
         name: backend-${{ env.VERSION }}.jar
 
   deploy:
