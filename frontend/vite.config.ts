@@ -6,10 +6,7 @@ import tsrConfig from "./tsr.config.json";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    TanStackRouterVite(tsrConfig),
-  ],
+  plugins: [react(), TanStackRouterVite(tsrConfig)],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
