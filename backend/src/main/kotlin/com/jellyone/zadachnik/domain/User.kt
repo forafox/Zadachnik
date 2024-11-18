@@ -49,4 +49,7 @@ data class User(
         return true
     }
 
+    fun getFullName(): String {
+        return fullName
+    }
 }
