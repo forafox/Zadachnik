@@ -25,7 +25,7 @@ import { signUpRequestSchema, useSignInMutation } from "../api";
 
 const schema = signUpRequestSchema;
 
-export function SignUpPage() {
+export function SignUpPage({ path }: { path ?: string }) {
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -37,7 +37,7 @@ export function SignUpPage() {
     mutate(values, {
       onSuccess: () => {
         void navigate({
-          to: "/",
+          to: path ?? "/tasks",
         });
       },
     });
@@ -87,7 +87,8 @@ export function SignUpPage() {
             <span className="text-center">
               {t("actions.signIn.description")}
               <Button variant="link" type="button" asChild>
-                <Link to="/sign-in">{t("actions.signIn.label")}</Link>
+                <Link to="/sign-in" from="/sign-up" search={(prev) => prev}>
+                  {t("actions.signIn.label")}</Link>
               </Button>
             </span>
           </CardFooter>
@@ -98,7 +99,7 @@ export function SignUpPage() {
 }
 
 function useSignInError(error: Error | null) {
-  const { t } = useTranslation("common", { keyPrefix: "signUp" });
+  const { t } = useTranslation("auth");
 
   if (!error) {
     return undefined;

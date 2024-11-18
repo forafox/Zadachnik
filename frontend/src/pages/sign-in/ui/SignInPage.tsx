@@ -25,7 +25,7 @@ import { signInRequestSchema, useSignInMutation } from "../api";
 
 const schema = signInRequestSchema;
 
-export function SignInPage() {
+export function SignInPage({ path }: { path?: string }) {
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -37,7 +37,7 @@ export function SignInPage() {
     mutate(values, {
       onSuccess: () => {
         void navigate({
-          to: "/",
+          to: path ?? "/tasks",
         });
       },
     });
@@ -87,7 +87,9 @@ export function SignInPage() {
             <span className="text-center">
               {t("actions.signUp.description")}
               <Button variant="link" type="button" asChild>
-                <Link to="/sign-up">{t("actions.signUp.label")}</Link>
+                <Link to="/sign-up" from="/sign-in" search={(prev) => prev}>
+                  {t("actions.signUp.label")}
+                </Link>
               </Button>
             </span>
           </CardFooter>
@@ -98,14 +100,13 @@ export function SignInPage() {
 }
 
 function useSignInError(error: Error | null) {
-  const { t } = useTranslation("common", { keyPrefix: "signIn" });
+  const { t } = useTranslation("auth");
 
   if (!error) {
     return undefined;
   }
 
   if (error instanceof AxiosError) {
-    console.log(error);
     if (error.response?.status == 401) {
       return t("feedback.wrongUsernameOrPassword.label");
     }
