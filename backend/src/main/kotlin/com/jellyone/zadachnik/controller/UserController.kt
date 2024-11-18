@@ -40,6 +40,6 @@ class UserController(
     )
     fun me(principal: Principal): GetMeResponse {
         val user = userService.getByUsername(principal.name)
-        return GetMeResponse(principal.name, user.id, user.role)
+        return GetMeResponse(principal.name, user.getFullName(), user.id, user.role)
     }
 }
