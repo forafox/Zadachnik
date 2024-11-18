@@ -24,7 +24,7 @@ import {
 } from "@/shared/components/ui/sidebar.tsx";
 
 type Props = {
-  principalSlot ?: React.ReactNode;
+  principalSlot?: React.ReactNode;
 };
 
 export function AppSidebar({ principalSlot }: Props) {

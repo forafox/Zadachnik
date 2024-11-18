@@ -18,7 +18,7 @@ export function useSignInMutation() {
     },
     onSuccess: (data) => {
       setAccessToken(data.accessToken);
-      setRefreshToken(data.refreshToken)
+      setRefreshToken(data.refreshToken);
     },
   });
 }
