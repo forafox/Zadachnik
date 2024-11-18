@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import z from "zod";
@@ -34,6 +35,8 @@ export function SignInPage() {
     mutate(values);
   }
 
+  const errorText = useSignInError(error);
+
   return (
     <Card className="mx-auto mt-8 w-full max-w-md">
       <Form {...form}>
@@ -67,7 +70,7 @@ export function SignInPage() {
                 </FormItem>
               )}
             />
-            {error && <SignInError />}
+            {error && <p className="text-destructive">{errorText}</p>}
           </CardContent>
           <CardFooter className="grid gap-4">
             <Button type="submit" loading={isPending} className="w-full">
@@ -85,7 +88,20 @@ export function SignInPage() {
     </Card>
   );
 }
-function SignInError() {
+
+function useSignInError(error: Error | null) {
   const { t } = useTranslation("common", { keyPrefix: "signIn" });
-  return <p className="text-destructive">{t("feedback.genericError.label")}</p>;
+
+  if (!error) {
+    return undefined;
+  }
+
+  if (error instanceof AxiosError) {
+    console.log(error);
+    if (error.response?.status == 401) {
+      return t("feedback.wrongUsernameOrPassword.label");
+    }
+  }
+
+  return t("feedback.genericError.label");
 }

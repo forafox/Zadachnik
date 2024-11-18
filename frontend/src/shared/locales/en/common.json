@@ -21,8 +21,9 @@
     },
     "feedback": {
       "genericError": {
-        "label": "An error has occured!"
-      }
+        "label": "An error has occurred!"
+      },
+      "wrongUsernameOrPassword": {"label": "Wrong username or password" }
     }
   }
 }
