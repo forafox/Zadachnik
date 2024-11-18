@@ -1,0 +1,28 @@
+{
+  "signIn": {
+    "title": "Sign In",
+    "description": "Enter your credentials below to enter the system",
+    "items": {
+      "username": {
+        "label": "Username"
+      },
+      "password": {
+        "label": "Password"
+      }
+    },
+    "actions": {
+      "signIn": {
+        "label": "Sign In"
+      },
+      "signUp": {
+        "description": "Don't have an account yet?",
+        "label": "Sign Up"
+      }
+    },
+    "feedback": {
+      "genericError": {
+        "label": "An error has occured!"
+      }
+    }
+  }
+}

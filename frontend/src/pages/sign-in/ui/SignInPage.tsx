@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import z from "zod";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
@@ -27,6 +28,7 @@ export function SignInPage() {
     resolver: zodResolver(schema),
   });
   const { mutate, isPending, error } = useSignInMutation();
+  const { t } = useTranslation("common", { keyPrefix: "signIn" });
 
   function handleSubmit(values: z.infer<typeof schema>) {
     mutate(values);
@@ -37,10 +39,8 @@ export function SignInPage() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <CardHeader>
-            <CardTitle>Sign In</CardTitle>
-            <CardDescription>
-              Enter your credentials below to enter the system
-            </CardDescription>
+            <CardTitle>{t("title")}</CardTitle>
+            <CardDescription>{t("description")}</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4 [&>*]:grid [&>*]:gap-2">
             <FormField
@@ -48,7 +48,7 @@ export function SignInPage() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>{t("items.username.label")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -60,7 +60,7 @@ export function SignInPage() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t("items.password.label")}</FormLabel>
                   <FormControl>
                     <Input {...field} type="password" />
                   </FormControl>
@@ -71,11 +71,13 @@ export function SignInPage() {
           </CardContent>
           <CardFooter className="grid gap-4">
             <Button type="submit" loading={isPending} className="w-full">
-              Sign In
+              {t("actions.signIn.label")}
             </Button>
             <span className="text-center">
-              Don't have an account?
-              <Button variant="link">Sign Up</Button>
+              {t("actions.signUp.description")}
+              <Button variant="link" type="button">
+                {t("actions.signUp.label")}
+              </Button>
             </span>
           </CardFooter>
         </form>
@@ -84,5 +86,6 @@ export function SignInPage() {
   );
 }
 function SignInError() {
-  return <p className="text-destructive">An error has occurred!</p>;
+  const { t } = useTranslation("common", { keyPrefix: "signIn" });
+  return <p className="text-destructive">{t("feedback.genericError.label")}</p>;
 }
