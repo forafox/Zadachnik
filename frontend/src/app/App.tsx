@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { initReactI18next } from "react-i18next";
 import auth from "@/shared/locales/en/auth.json";
+import principal from "@/shared/locales/en/principal.json";
 import { routeTree } from "@/routeTree.gen";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ export const defaultNS = "common";
 export const resources = {
   en: {
     auth,
+    principal,
   },
 } as const;
 

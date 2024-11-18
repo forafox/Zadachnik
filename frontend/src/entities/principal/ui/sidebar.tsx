@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import {
   BadgeCheck,
   Bell,
@@ -7,6 +8,7 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { getPrincipalQueryOptions } from "@/entities/principal";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar.tsx";
 import {
@@ -28,6 +30,7 @@ import {
 export function PrincipalSidebarFooter() {
   const { data } = useSuspenseQuery(getPrincipalQueryOptions);
   const { isMobile } = useSidebar();
+  const { t } = useTranslation("principal");
 
   const { fullName, username } = data;
   const avatarFallback = fullName
@@ -79,28 +82,30 @@ export function PrincipalSidebarFooter() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
-                Upgrade to Pro
+                {t("sidebarMenu.actions.upgradeToPro.label")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem asChild>
+                <Link to="/me">
+                  <BadgeCheck />
+                  {t("sidebarMenu.actions.profile.label")}
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
-                Billing
+                {t("sidebarMenu.actions.billing.label")}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
-                Notifications
+                {t("sidebarMenu.actions.notifications.label")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut />
-              Log out
+              {t("sidebarMenu.actions.logOut.label")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -16,3 +16,5 @@ export const getPrincipalQueryOptions = queryOptions({
     return principalSchema.parse(data);
   },
 });
+
+export type Principal = z.infer<typeof principalSchema>;

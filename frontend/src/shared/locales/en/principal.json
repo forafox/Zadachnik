@@ -1,0 +1,33 @@
+{
+  "profilePage": {
+    "title": "Profile",
+    "description": "Here you can view your profile settings"
+  },
+  "sidebarMenu": {
+    "actions": {
+      "upgradeToPro": {
+        "label": "Upgrade to Pro"
+      },
+      "profile": {
+        "label": "Profile"
+      },
+      "billing": {
+        "label": "Billing"
+      },
+      "notifications": {
+        "label": "Notifications"
+      },
+      "logOut": {
+        "label": "Log Out"
+      }
+    }
+  },
+  "items": {
+    "fullName": {
+      "label": "Full Name"
+    },
+    "username": {
+      "label": "Username"
+    }
+  }
+}
