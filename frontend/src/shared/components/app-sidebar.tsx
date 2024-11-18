@@ -23,7 +23,11 @@ import {
   SidebarSeparator,
 } from "@/shared/components/ui/sidebar.tsx";
 
-export function AppSidebar() {
+type Props = {
+  principalSlot?: React.ReactNode;
+};
+
+export function AppSidebar({ principalSlot }: Props) {
   return (
     <Sidebar>
       <SidebarHeader>
@@ -39,7 +43,7 @@ export function AppSidebar() {
         <SidebarSeparator />
         <SidebarProducts />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="gap-4">
         <Card className="shadow-none">
           <CardHeader>
             <CardTitle>
@@ -54,6 +58,7 @@ export function AppSidebar() {
             <Button className="w-full">Join</Button>
           </CardFooter>
         </Card>
+        {principalSlot}
       </SidebarFooter>
     </Sidebar>
   );

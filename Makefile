@@ -9,13 +9,13 @@ BACKEND_IMAGE_NAME ?= zadachnik-backend
 # Version of frontend component
 # They are separated so that you could update backend and frontend
 # independetly
-FRONTEND_VERSION ?= 0.0.2
+FRONTEND_VERSION ?= 0.1.1
 BACKEND_VERSION ?= 0.3.1
 
 # Version of application that will be deployed to Customer server (i.e. Helios)
 VERSION ?= 0.0.1
 
-REGISTRY_URI ?= registry
+REGISTRY_URI ?= fegor04
 
 FRONTEND_IMAGE = ${REGISTRY_URI}/${FRONTEND_IMAGE_NAME}:${FRONTEND_VERSION}
 BACKEND_IMAGE = ${REGISTRY_URI}/${BACKEND_IMAGE_NAME}:${BACKEND_VERSION}
