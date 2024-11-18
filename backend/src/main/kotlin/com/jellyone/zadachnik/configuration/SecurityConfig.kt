@@ -1,10 +1,8 @@
 package com.jellyone.zadachnik.configuration
 
-import com.jellyone.zadachnik.service.UserService
 import com.jellyone.zadachnik.web.security.JwtTokenFilter
 import com.jellyone.zadachnik.web.security.JwtTokenProvider
 import com.jellyone.zadachnik.web.security.expression.CustomSecurityExpressionHandler
-import com.jellyone.zadachnik.web.security.principal.IAuthenticationFacade
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

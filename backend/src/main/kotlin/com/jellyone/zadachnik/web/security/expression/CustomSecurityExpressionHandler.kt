@@ -1,6 +1,6 @@
 package com.jellyone.zadachnik.web.security.expression
 
-import com.jellyone.zadachnik.service.impl.UserServiceImpl
+import com.jellyone.zadachnik.service.UserService
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler
@@ -24,7 +24,7 @@ class CustomSecurityExpressionHandler : DefaultMethodSecurityExpressionHandler()
             setTrustResolver(trustResolver)
             setPermissionEvaluator(permissionEvaluator)
             setRoleHierarchy(roleHierarchy)
-            setUserService(applicationContext.getBean(UserServiceImpl::class.java))
+            setUserService(applicationContext.getBean(UserService::class.java))
         }
         return root
     }
