@@ -67,7 +67,7 @@ export function SignInPage() {
                 </FormItem>
               )}
             />
-            {error && <SignInError error={error} />}
+            {error && <SignInError />}
           </CardContent>
           <CardFooter className="grid gap-4">
             <Button type="submit" loading={isPending} className="w-full">
@@ -83,6 +83,6 @@ export function SignInPage() {
     </Card>
   );
 }
-function SignInError({ error }: { error: Error }) {
-  return <p className="text-destructive">An error has occured!</p>;
+function SignInError() {
+  return <p className="text-destructive">An error has occurred!</p>;
 }
