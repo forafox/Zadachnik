@@ -25,7 +25,7 @@ import { signUpRequestSchema, useSignInMutation } from "../api";
 
 const schema = signUpRequestSchema;
 
-export function SignUpPage({ path }: { path ?: string }) {
+export function SignUpPage({ path }: { path?: string }) {
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -54,6 +54,18 @@ export function SignUpPage({ path }: { path ?: string }) {
             <CardDescription>{t("signUp.description")}</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4 [&>*]:grid [&>*]:gap-2">
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("items.fullName.label")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="username"
@@ -88,7 +100,8 @@ export function SignUpPage({ path }: { path ?: string }) {
               {t("actions.signIn.description")}
               <Button variant="link" type="button" asChild>
                 <Link to="/sign-in" from="/sign-up" search={(prev) => prev}>
-                  {t("actions.signIn.label")}</Link>
+                  {t("actions.signIn.label")}
+                </Link>
               </Button>
             </span>
           </CardFooter>
