@@ -11,8 +11,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => (
     <>
       <Outlet />
-      {import.meta.env.PROD && <TanStackRouterDevtools />}
-      {import.meta.env.PROD && <ReactQueryDevtools />}
+      {import.meta.env.DEV && <TanStackRouterDevtools />}
+      {import.meta.env.DEV && <ReactQueryDevtools />}
     </>
   ),
 });
