@@ -21,11 +21,11 @@ import {
   FormLabel,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
-import { signInRequestSchema, useSignInMutation } from "../api";
+import { signUpRequestSchema, useSignInMutation } from "../api";
 
-const schema = signInRequestSchema;
+const schema = signUpRequestSchema;
 
-export function SignInPage() {
+export function SignUpPage() {
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -50,8 +50,8 @@ export function SignInPage() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <CardHeader>
-            <CardTitle>{t("signIn.title")}</CardTitle>
-            <CardDescription>{t("signIn.description")}</CardDescription>
+            <CardTitle>{t("signUp.title")}</CardTitle>
+            <CardDescription>{t("signUp.description")}</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4 [&>*]:grid [&>*]:gap-2">
             <FormField
@@ -82,12 +82,12 @@ export function SignInPage() {
           </CardContent>
           <CardFooter className="grid gap-4">
             <Button type="submit" loading={isPending} className="w-full">
-              {t("actions.signIn.label")}
+              {t("actions.signUp.label")}
             </Button>
             <span className="text-center">
-              {t("actions.signUp.description")}
+              {t("actions.signIn.description")}
               <Button variant="link" type="button" asChild>
-                <Link to="/sign-up">{t("actions.signUp.label")}</Link>
+                <Link to="/sign-in">{t("actions.signIn.label")}</Link>
               </Button>
             </span>
           </CardFooter>
@@ -98,7 +98,7 @@ export function SignInPage() {
 }
 
 function useSignInError(error: Error | null) {
-  const { t } = useTranslation("common", { keyPrefix: "signIn" });
+  const { t } = useTranslation("common", { keyPrefix: "signUp" });
 
   if (!error) {
     return undefined;

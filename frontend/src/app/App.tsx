@@ -5,7 +5,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { initReactI18next } from "react-i18next";
-import common from "@/shared/locales/en/common.json";
+import auth from "@/shared/locales/en/auth.json";
 import { routeTree } from "@/routeTree.gen";
 
 const queryClient = new QueryClient();
@@ -21,13 +21,12 @@ declare module "@tanstack/react-router" {
 export const defaultNS = "common";
 export const resources = {
   en: {
-    common,
+    auth,
   },
 } as const;
 
 i18n.use(initReactI18next).init({
   lng: "en",
-  ns: ["common"],
   defaultNS,
   resources,
 });
