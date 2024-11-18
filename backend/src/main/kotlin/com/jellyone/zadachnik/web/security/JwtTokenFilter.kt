@@ -1,8 +1,5 @@
 package com.jellyone.zadachnik.web.security
 
-import com.jellyone.zadachnik.domain.enums.Role
-import com.jellyone.zadachnik.service.UserService
-import com.jellyone.zadachnik.web.security.principal.IAuthenticationFacade
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.security.SignatureException
