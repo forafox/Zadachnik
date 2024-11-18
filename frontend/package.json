@@ -9,7 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prettier": "prettier . --write",
-    "generate-routes": "tsr generate"
+    "generate-routes": "tsr generate",
+    "swagger": "swagger-typescript-api --union-enums --add-readonly --axios --another-array-type -p http://localhost:8080/v3/api-docs -o ./src/shared -n api.gen.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.2",
@@ -17,9 +18,9 @@
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
-    "@tanstack/react-query": "^5.60.2",
-    "@tanstack/react-query-devtools": "^5.60.2",
-    "@tanstack/react-router": "^1.81.9",
+    "@tanstack/react-query": "^5.60.5",
+    "@tanstack/react-query-devtools": "^5.60.5",
+    "@tanstack/react-router": "^1.82.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.376.0",
@@ -31,7 +32,7 @@
   "devDependencies": {
     "@conarti/eslint-plugin-feature-sliced": "^1.0.5",
     "@tanstack/router-cli": "^1.81.9",
-    "@tanstack/router-devtools": "^1.81.9",
+    "@tanstack/router-devtools": "^1.82.0",
     "@tanstack/router-vite-plugin": "^1.81.9",
     "@types/node": "^20.17.6",
     "@types/react": "^18.3.12",
@@ -49,6 +50,7 @@
     "postcss": "^8.4.49",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.5.14",
+    "swagger-typescript-api": "^13.0.23",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3",
     "vite": "^5.4.11"
