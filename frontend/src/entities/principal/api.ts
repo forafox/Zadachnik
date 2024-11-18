@@ -4,6 +4,7 @@ import { api } from "@/shared/api";
 
 export const principalSchema = z.object({
   username: z.string(),
+  fullName: z.string(),
   id: z.number(),
   role: z.enum(["ADMIN", "USER"]),
 });

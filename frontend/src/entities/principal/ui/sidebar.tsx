@@ -8,11 +8,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { getPrincipalQueryOptions } from "@/entities/principal";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/shared/components/ui/avatar.tsx";
+import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,8 +29,7 @@ export function PrincipalSidebarFooter() {
   const { data } = useSuspenseQuery(getPrincipalQueryOptions);
   const { isMobile } = useSidebar();
 
-  const username = data.username;
-  const fullName = "Egor Fedorov";
+  const { fullName, username } = data;
   const avatarFallback = fullName
     .split(" ")
     .map((word) => word[0])
