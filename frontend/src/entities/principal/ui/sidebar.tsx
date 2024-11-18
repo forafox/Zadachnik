@@ -93,9 +93,11 @@ export function PrincipalSidebarFooter() {
                   {t("sidebarMenu.actions.profile.label")}
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                {t("sidebarMenu.actions.billing.label")}
+              <DropdownMenuItem asChild disabled>
+                <Link disabled>
+                  <CreditCard />
+                  {t("sidebarMenu.actions.billing.label")}
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
