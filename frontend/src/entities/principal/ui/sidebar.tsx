@@ -51,7 +51,7 @@ export function PrincipalSidebarFooter() {
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{fullName}</span>
-                <span className="truncate text-xs">{username}</span>
+                <span className="truncate text-xs">@{username}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -71,7 +71,7 @@ export function PrincipalSidebarFooter() {
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{fullName}</span>
-                  <span className="truncate text-xs">{username}</span>
+                  <span className="truncate text-xs">@{username}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
