@@ -1,6 +1,7 @@
 package com.jellyone.zadachnik.service
 
 import com.jellyone.zadachnik.domain.Product
+import com.jellyone.zadachnik.exception.ResourceNotFoundException
 import com.jellyone.zadachnik.repository.ProductRepository
 import org.springframework.stereotype.Service
 
@@ -19,5 +20,9 @@ class ProductService(
                 owner = userService.getByUsername(ownerUsername)
             )
         )
+    }
+
+    fun getProductById(id: Long): Product {
+        return productRepository.findById(id).orElseThrow { ResourceNotFoundException("Product with id $id not found") }
     }
 }

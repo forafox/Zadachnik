@@ -2,7 +2,6 @@ package com.jellyone.zadachnik.controller
 
 import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.ProductService
-import com.jellyone.zadachnik.service.UserService
 import com.jellyone.zadachnik.web.dto.auth.JwtResponse
 import com.jellyone.zadachnik.web.request.CreateProductRequest
 import com.jellyone.zadachnik.web.response.ProductResponse
@@ -16,10 +15,8 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import lombok.RequiredArgsConstructor
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.ErrorResponse
+import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
@@ -58,5 +55,36 @@ class ProductController(
             title = request.title,
             ownerUsername = principal.name
         ).toResponse()
+    }
+
+    @GetMapping("/{id}")
+    @Operation(
+        summary = "Get product by id",
+        description = "Get product by id",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Product found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ProductResponse::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Product not found",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class)
+                    )
+                ]
+            )
+        ]
+    )
+    fun getProductById(@PathVariable id: Long): ProductResponse {
+        return productService.getProductById(id).toResponse()
     }
 }
