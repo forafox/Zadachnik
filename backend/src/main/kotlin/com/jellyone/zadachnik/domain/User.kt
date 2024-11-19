@@ -16,7 +16,7 @@ data class User(
     @Column
     private val password: String,
     @Column(name = "fullname")
-    private val fullName: String,
+    val fullName: String,
     val role: Role
 ) : UserDetails {
     override fun getAuthorities(): Collection<SimpleGrantedAuthority> {
@@ -47,9 +47,5 @@ data class User(
 
     override fun isEnabled(): Boolean {
         return true
-    }
-
-    fun getFullName(): String {
-        return fullName
     }
 }
