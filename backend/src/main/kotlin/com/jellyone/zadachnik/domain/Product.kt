@@ -1,18 +1,17 @@
 package com.jellyone.zadachnik.domain
 
 import jakarta.persistence.*
-import lombok.Data
 
 @Entity
 @Table(name = "product")
-class Product(
+data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
-    @Column(unique = true)
-    val shortName: String,
-    @Column
-    val title: String?,
+    @Column(unique = true, nullable = false)
+    val ticker: String,
+    @Column(nullable = false)
+    val title: String,
     @Column
     val description: String?,
     @ManyToOne

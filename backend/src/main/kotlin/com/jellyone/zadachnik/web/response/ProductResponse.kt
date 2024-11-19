@@ -4,15 +4,21 @@ import com.jellyone.zadachnik.domain.Product
 
 class ProductResponse(
     val id: Long,
-    val shortName: String,
-    val title: String?,
+    val ticker: String,
+    val title: String,
     val description: String?,
     val owner: UserResponse,
 )
 
+data class UpdateProductRequest(
+    val ticker: String,
+    val title: String,
+    val description: String?,
+)
+
 fun Product.toResponse() = ProductResponse(
     id = id,
-    shortName = shortName,
+    ticker = ticker,
     title = title,
     description = description,
     owner = owner.toResponse()
