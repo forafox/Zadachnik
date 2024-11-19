@@ -4,14 +4,15 @@ import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.ProductService
 import com.jellyone.zadachnik.web.dto.auth.JwtResponse
 import com.jellyone.zadachnik.web.request.CreateProductRequest
+import com.jellyone.zadachnik.web.request.UpdateProductRequest
 import com.jellyone.zadachnik.web.response.ProductResponse
-import com.jellyone.zadachnik.web.response.UpdateProductRequest
 import com.jellyone.zadachnik.web.response.toResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import lombok.RequiredArgsConstructor
@@ -21,6 +22,7 @@ import org.springframework.web.ErrorResponse
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
+@SecurityRequirement(name = "JWT")
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor

@@ -10,12 +10,6 @@ class ProductResponse(
     val owner: UserResponse,
 )
 
-data class UpdateProductRequest(
-    val ticker: String,
-    val title: String,
-    val description: String?,
-)
-
 fun Product.toResponse() = ProductResponse(
     id = id,
     ticker = ticker,
