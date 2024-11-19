@@ -12,11 +12,11 @@ data class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     @Column
-    private val username: String,
+    val username: String,
     @Column
-    private val password: String,
+    val password: String,
     @Column(name = "fullname")
-    private val fullName: String,
+    val fullName: String,
     val role: Role
 ) : UserDetails {
     override fun getAuthorities(): Collection<SimpleGrantedAuthority> {

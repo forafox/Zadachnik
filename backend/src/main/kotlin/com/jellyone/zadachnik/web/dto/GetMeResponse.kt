@@ -3,7 +3,7 @@ package com.jellyone.zadachnik.web.dto
 import com.jellyone.zadachnik.domain.enums.Role
 import io.swagger.v3.oas.annotations.media.Schema
 
-@Schema(description = "DTO for read operations on Car")
+@Schema(description = "DTO for read operations on the current user")
 data class GetMeResponse(
     @Schema(description = "The username of the user", example = "j.doe")
     val username: String,
