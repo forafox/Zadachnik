@@ -84,7 +84,7 @@ export function ProductIndexPage({
                 <DialogTrigger asChild>
                   <Button size="sm" variant="outline">
                     <Pencil />
-                    {t("actions.edit.label")}
+                    {t("actions.edit.trigger")}
                   </Button>
                 </DialogTrigger>
                 <EditProductDialogContent product={product} />
@@ -93,7 +93,7 @@ export function ProductIndexPage({
           </div>
         </CardContent>
         <Separator orientation="horizontal" />
-        <CardContent>
+        <CardContent className="py-4">
           <div>
             <h6>{t("items.participants.label")}</h6>
             <ul>

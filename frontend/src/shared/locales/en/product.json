@@ -43,7 +43,8 @@
     },
     "edit": {
       "title": "Edit Product",
-      "label": "Save"
+      "label": "Save",
+      "trigger": "Edit"
     }
   },
   "indexPage": {

@@ -71,7 +71,7 @@ export function EditProductDialogContent({ product }: { product: Values }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.description.label")}</FormLabel>
-                  <Textarea {...field} />
+                  <Textarea className="h-40" {...field} />
                 </FormItem>
               )}
             />
