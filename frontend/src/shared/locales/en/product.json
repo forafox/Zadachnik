@@ -20,5 +20,8 @@
     "participants": {
       "label": "Participants"
     }
+  },
+  "products": {
+    "label": "Products"
   }
 }

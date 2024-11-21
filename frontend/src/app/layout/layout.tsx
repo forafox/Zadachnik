@@ -6,6 +6,10 @@ import { PrincipalSidebarFooter } from "@/entities/principal";
 import { ProductsSidebar, ProductsSidebarSkeleton } from "@/entities/product";
 import { AppSidebar } from "@/shared/components/app-sidebar.tsx";
 import {
+  SidebarBreadcrumbs,
+  SidebarBreadcrumbsProvider,
+} from "@/shared/components/sidebar-breadcrumbs.tsx";
+import {
   SidebarGroup,
   SidebarGroupAction,
   SidebarGroupContent,
@@ -18,18 +22,21 @@ import {
 export const Layout = () => {
   return (
     <SidebarProvider>
-      <AppSidebar
-        principalSlot={<PrincipalSidebarFooter />}
-        productsSlot={<SidebarProducts />}
-      />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger />
-        </header>
-        <main className="p-4">
-          <Outlet />
-        </main>
-      </SidebarInset>
+      <SidebarBreadcrumbsProvider>
+        <AppSidebar
+          principalSlot={<PrincipalSidebarFooter />}
+          productsSlot={<SidebarProducts />}
+        />
+        <SidebarInset>
+          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+            <SidebarTrigger />
+            <SidebarBreadcrumbs />
+          </header>
+          <main className="p-4">
+            <Outlet />
+          </main>
+        </SidebarInset>
+      </SidebarBreadcrumbsProvider>
     </SidebarProvider>
   );
 };
