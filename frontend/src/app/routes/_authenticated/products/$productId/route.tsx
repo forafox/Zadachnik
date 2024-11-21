@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { getProductByIdQueryOptions } from "@/entities/product";
 import { UserHoverCard } from "@/entities/user";
 import {
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/_authenticated/products/$productId")({
 });
 
 function RouteComponent() {
+  const { t } = useTranslation("product");
   const product = Route.useLoaderData();
 
   return (
@@ -35,8 +37,17 @@ function RouteComponent() {
         <Separator orientation="horizontal" />
         <CardContent>
           <p>
-            Owned by
+            {t("items.owner.label")}
             <UserHoverCard user={product.owner} />
+          </p>
+          <p>
+            {t("items.participants.label")}
+            <ul>
+              <li>TBD</li>
+              <li>TBD</li>
+              <li>TBD</li>
+              <li>TBD</li>
+            </ul>
           </p>
         </CardContent>
       </Card>

@@ -13,6 +13,12 @@
     },
     "releases": {
       "label": "Releases"
+    },
+    "owner": {
+      "label": "Product Owner"
+    },
+    "participants": {
+      "label": "Participants"
     }
   }
 }
