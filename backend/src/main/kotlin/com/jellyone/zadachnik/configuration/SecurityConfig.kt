@@ -2,6 +2,7 @@ package com.jellyone.zadachnik.configuration
 
 import com.jellyone.zadachnik.web.security.JwtTokenFilter
 import com.jellyone.zadachnik.web.security.JwtTokenProvider
+import com.jellyone.zadachnik.web.security.RequestIdFilter
 import com.jellyone.zadachnik.web.security.expression.CustomSecurityExpressionHandler
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -26,6 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig(
     @Lazy private val tokenProvider: JwtTokenProvider,
     private val applicationContext: ApplicationContext,
+    private val requestIdFilter: RequestIdFilter,
 ) {
 
     @Bean
@@ -55,6 +57,7 @@ class SecurityConfig(
                     .anyRequest().authenticated()
             }
             .anonymous { it.disable() }
+            .addFilterBefore(requestIdFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(
                 JwtTokenFilter(tokenProvider),
                 UsernamePasswordAuthenticationFilter::class.java
