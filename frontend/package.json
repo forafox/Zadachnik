@@ -17,6 +17,7 @@
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
+    "@radix-ui/react-hover-card": "^1.1.2",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@conarti/eslint-plugin-feature-sliced": "^1.0.5",
+    "@tailwindcss/typography": "^0.5.15",
     "@tanstack/router-cli": "^1.81.9",
     "@tanstack/router-devtools": "^1.82.0",
     "@tanstack/router-vite-plugin": "^1.81.9",

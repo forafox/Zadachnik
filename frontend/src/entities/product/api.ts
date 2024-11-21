@@ -45,3 +45,12 @@ export const getProductsQueryOptions = (
     },
   });
 };
+
+export const getProductByIdQueryOptions = (id: number) =>
+  queryOptions({
+    queryKey: ["products", "detail", id],
+    queryFn: async () => {
+      const { data } = await api.api.getProductById(id);
+      return detailedProductSchema.parse(data);
+    },
+  });

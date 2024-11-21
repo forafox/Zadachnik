@@ -6,3 +6,5 @@ export const userSchema = z.object({
   username: z.string(),
   role: z.enum(["ADMIN", "USER"]),
 });
+
+export type User = z.infer<typeof userSchema>;
