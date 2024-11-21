@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -22,6 +22,10 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
+import { Button } from "@/shared/components/ui/button.tsx";
+import { Pencil } from "lucide-react";
+import { Badge } from "@/shared/components/ui/badge.tsx";
+import { getPrincipalQueryOptions } from "@/entities/principal";
 
 export function ProductIndexPage({
   product: initialProduct,
@@ -33,6 +37,7 @@ export function ProductIndexPage({
     initialData: initialProduct,
   });
   const { t } = useTranslation("product");
+  const {data: principal} = useSuspenseQuery(getPrincipalQueryOptions)
 
   return (
     <div className="prose mx-auto">
@@ -63,12 +68,24 @@ export function ProductIndexPage({
           <CardDescription>{product.description}</CardDescription>
         </CardHeader>
         <Separator orientation="horizontal" />
+        <CardContent className="py-4 gap-4 flex items-center">
+
+          <UserHoverCard user={product.owner} />
+          <Badge className="bg-orange-200 text-orange-500 hover:bg-orange-100">
+            {t('indexPage.closedIssues', {val: product.openIssues/product.totalIssues})}
+          </Badge>
+          <div className="ml-auto">
+            {principal.id == product.owner.id &&
+              <Button size="sm" variant="outline">
+                <Pencil />
+                {t('actions.edit.label')}
+              </Button>
+            }
+          </div>
+        </CardContent>
+        <Separator orientation="horizontal" />
         <CardContent>
-          <p>
-            <h6>{t("items.owner.label")}</h6>
-            <UserHoverCard user={product.owner} />
-          </p>
-          <p>
+          <div>
             <h6>{t("items.participants.label")}</h6>
             <ul>
               <li>TBD</li>
@@ -76,7 +93,7 @@ export function ProductIndexPage({
               <li>TBD</li>
               <li>TBD</li>
             </ul>
-          </p>
+          </div>
         </CardContent>
       </Card>
     </div>

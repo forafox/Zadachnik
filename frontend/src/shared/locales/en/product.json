@@ -24,27 +24,26 @@
     "releases": {
       "label": "Releases"
     },
-    "owner": {
-      "label": "Product Owner"
-    },
     "participants": {
       "label": "Participants"
-    }
-  },
-  "products": {
-    "label": "Products"
-  },
-  "create": {
-    "label": "Create Product",
-    "actions": {
-      "create": {
-        "label": "Create"
-      }
     }
   },
   "feedback": {
     "genericError": {
       "label": "An error has occured!"
     }
+  },
+  "actions": {
+    "create": {
+      "title": "Create Product",
+      "label": "Create"
+    },
+    "edit": {
+      "title": "Edit Product",
+      "label": "Edit"
+    }
+  },
+  "indexPage": {
+    "closedIssues": "{{val, number(style: percent)}} closed issues"
   }
 }

@@ -14,6 +14,9 @@ export const productSchema = z.object({
   ticker: z.string(),
   description: z.string().nullish(),
   owner: userSchema,
+  // @TODO: remove .catch after backend implementation
+  openIssues: z.number().catch(232),
+  totalIssues: z.number().catch(421),
 });
 
 export type Product = z.infer<typeof productSchema>;
