@@ -25,9 +25,10 @@ import {
 
 type Props = {
   principalSlot?: React.ReactNode;
+  productsSlot?: React.ReactNode;
 };
 
-export function AppSidebar({ principalSlot }: Props) {
+export function AppSidebar({ principalSlot, productsSlot }: Props) {
   return (
     <Sidebar>
       <SidebarHeader>
@@ -41,7 +42,7 @@ export function AppSidebar({ principalSlot }: Props) {
       <SidebarContent>
         <SidebarTeams />
         <SidebarSeparator />
-        <SidebarProducts />
+        {productsSlot}
       </SidebarContent>
       <SidebarFooter className="gap-4">
         <Card className="shadow-none">
@@ -81,27 +82,6 @@ function SidebarTeams() {
               </SidebarMenuSubItem>
               <SidebarMenuSubItem>
                 <SidebarMenuSubButton>Sprints</SidebarMenuSubButton>
-              </SidebarMenuSubItem>
-            </SidebarMenuSub>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
-  );
-}
-
-function SidebarProducts() {
-  return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Your Products</SidebarGroupLabel>
-      <SidebarGroupContent>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>Zadachnik</SidebarMenuButton>
-            <SidebarMenuSub>
-              <SidebarMenuSubItem>
-                <SidebarMenuSubButton>Issues</SidebarMenuSubButton>
-                <SidebarMenuSubButton>Releases</SidebarMenuSubButton>
               </SidebarMenuSubItem>
             </SidebarMenuSub>
           </SidebarMenuItem>
