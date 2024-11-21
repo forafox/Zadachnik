@@ -1,12 +1,11 @@
-import * as React from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  '/_authenticated/products/$productId/releases',
+  "/_authenticated/products/$productId/releases",
 )({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return 'Hello /_authenticated/products/$productId/releases!'
+  return "Hello /_authenticated/products/$productId/releases!";
 }

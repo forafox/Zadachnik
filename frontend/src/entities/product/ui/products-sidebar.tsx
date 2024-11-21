@@ -36,7 +36,10 @@ function ProductSidebarEntry({ product }: { product: Product }) {
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild>
-        <Link to={`/products/$productId`} params={{productId: String(product.id)}}>
+        <Link
+          to={`/products/$productId`}
+          params={{ productId: String(product.id) }}
+        >
           {product.title}
           <SidebarMenuBadge>[{product.ticker}]</SidebarMenuBadge>
         </Link>

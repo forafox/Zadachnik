@@ -1,8 +1,3 @@
-import { Link } from "@tanstack/react-router";
-import { Plane, Plus } from "lucide-react";
-import { Suspense } from "react";
-import { useTranslation } from "react-i18next";
-import { ProductsSidebar, ProductsSidebarSkeleton } from "@/entities/product";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   Card,
@@ -16,7 +11,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -31,9 +25,10 @@ import {
 
 type Props = {
   principalSlot?: React.ReactNode;
+  productsSlot?: React.ReactNode;
 };
 
-export function AppSidebar({ principalSlot }: Props) {
+export function AppSidebar({ principalSlot, productsSlot }: Props) {
   return (
     <Sidebar>
       <SidebarHeader>
@@ -47,7 +42,7 @@ export function AppSidebar({ principalSlot }: Props) {
       <SidebarContent>
         <SidebarTeams />
         <SidebarSeparator />
-        <SidebarProducts />
+        {productsSlot}
       </SidebarContent>
       <SidebarFooter className="gap-4">
         <Card className="shadow-none">
@@ -91,28 +86,6 @@ function SidebarTeams() {
             </SidebarMenuSub>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
-  );
-}
-
-function SidebarProducts() {
-  const { t } = useTranslation("product");
-  return (
-    <SidebarGroup>
-      <SidebarGroupLabel asChild>
-        <Link to="/products">{t("sidebar.title")}</Link>
-      </SidebarGroupLabel>
-      <SidebarGroupAction title={t("sidebar.actions.create.label")} asChild>
-        <Link to="/products/create">
-          <Plus />
-          <span className="sr-only">{t("sidebar.actions.create.label")}</span>
-        </Link>
-      </SidebarGroupAction>
-      <SidebarGroupContent>
-        <Suspense fallback={<ProductsSidebarSkeleton />}>
-          <ProductsSidebar />
-        </Suspense>
       </SidebarGroupContent>
     </SidebarGroup>
   );
