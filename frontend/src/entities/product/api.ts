@@ -12,7 +12,7 @@ export const productSchema = z.object({
   id: z.number(),
   title: z.string(),
   ticker: z.string(),
-  description: z.string().optional(),
+  description: z.string().nullish(),
   owner: userSchema,
 });
 

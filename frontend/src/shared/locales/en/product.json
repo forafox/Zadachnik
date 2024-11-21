@@ -8,6 +8,16 @@
     }
   },
   "items": {
+    "title": {
+      "label": "Title"
+    },
+    "description": {
+      "label": "Description"
+    },
+    "ticker": {
+      "label": "Ticker",
+      "description": "This tag will be used as a short name for tasks in this product, i.e. [PROD-1]"
+    },
     "issues": {
       "label": "Issues"
     },
@@ -23,5 +33,18 @@
   },
   "products": {
     "label": "Products"
+  },
+  "create": {
+    "label": "Create Product",
+    "actions": {
+      "create": {
+        "label": "Create"
+      }
+    }
+  },
+  "feedback": {
+    "genericError": {
+      "label": "An error has occured!"
+    }
   }
 }

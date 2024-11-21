@@ -2,6 +2,7 @@ import { Link, Outlet } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { Suspense } from "react";
 import { useTranslation } from "react-i18next";
+import { CreateProductDialogContent } from "@/widgets/create-product-dialog";
 import { PrincipalSidebarFooter } from "@/entities/principal";
 import { ProductsSidebar, ProductsSidebarSkeleton } from "@/entities/product";
 import { AppSidebar } from "@/shared/components/app-sidebar.tsx";
@@ -9,6 +10,7 @@ import {
   SidebarBreadcrumbs,
   SidebarBreadcrumbsProvider,
 } from "@/shared/components/sidebar-breadcrumbs.tsx";
+import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog.tsx";
 import {
   SidebarGroup,
   SidebarGroupAction,
@@ -48,12 +50,15 @@ function SidebarProducts() {
       <SidebarGroupLabel asChild>
         <Link to="/products">{t("sidebar.title")}</Link>
       </SidebarGroupLabel>
-      <SidebarGroupAction title={t("sidebar.actions.create.label")} asChild>
-        <Link to="/products/create">
-          <Plus />
-          <span className="sr-only">{t("sidebar.actions.create.label")}</span>
-        </Link>
-      </SidebarGroupAction>
+      <Dialog>
+        <SidebarGroupAction title={t("sidebar.actions.create.label")} asChild>
+          <DialogTrigger>
+            <Plus />
+            <span className="sr-only">{t("sidebar.actions.create.label")}</span>
+          </DialogTrigger>
+        </SidebarGroupAction>
+        <CreateProductDialogContent />
+      </Dialog>
       <SidebarGroupContent>
         <Suspense fallback={<ProductsSidebarSkeleton />}>
           <ProductsSidebar />
