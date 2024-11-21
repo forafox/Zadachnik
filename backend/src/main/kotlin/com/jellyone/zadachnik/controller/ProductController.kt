@@ -2,7 +2,6 @@ package com.jellyone.zadachnik.controller
 
 import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.ProductService
-import com.jellyone.zadachnik.web.dto.auth.JwtResponse
 import com.jellyone.zadachnik.web.request.CreateProductRequest
 import com.jellyone.zadachnik.web.request.UpdateProductRequest
 import com.jellyone.zadachnik.web.response.ProductResponse
@@ -30,11 +29,6 @@ import java.security.Principal
 @Tag(name = "Products API")
 @ApiResponses(
     ApiResponse(
-        responseCode = "200",
-        description = "Successful operation",
-        content = [Content(schema = Schema(implementation = JwtResponse::class), mediaType = "application/json")]
-    ),
-    ApiResponse(
         responseCode = "400",
         description = "Invalid input",
         content = [Content(schema = Schema(implementation = ErrorMessage::class), mediaType = "application/json")]
@@ -47,7 +41,19 @@ class ProductController(
     @Operation(
         summary = "Create Product",
         description = "Create a new product",
-        operationId = "createProduct"
+        operationId = "createProduct",
+        responses = [
+            io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "200",
+                description = "Product is created",
+                content = [
+                    io.swagger.v3.oas.annotations.media.Content(
+                        mediaType = "application/json",
+                        schema = io.swagger.v3.oas.annotations.media.Schema(implementation = ProductResponse::class)
+                    )
+                ]
+            )
+        ]
     )
     fun createProduct(
         @Valid @RequestBody request: CreateProductRequest,
@@ -142,8 +148,7 @@ class ProductController(
         value = [
             ApiResponse(
                 responseCode = "200",
-                description = "Products successfully retrieved",
-                content = [Content(schema = Schema(implementation = Page::class), mediaType = "application/json")]
+                description = "Products successfully retrieved"
             ),
             ApiResponse(responseCode = "400", description = "Bad request"),
             ApiResponse(responseCode = "500", description = "Internal server error")
