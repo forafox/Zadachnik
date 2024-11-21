@@ -57,19 +57,19 @@ export function ProductIndexPage({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
+            <span className="text-xl">{product.title}</span>
             <span className="text-sm font-medium">[{product.ticker}]</span>
-            <span>{product.title}</span>
           </CardTitle>
           <CardDescription>{product.description}</CardDescription>
         </CardHeader>
         <Separator orientation="horizontal" />
         <CardContent>
           <p>
-            {t("items.owner.label")}
+            <h6>{t("items.owner.label")}</h6>
             <UserHoverCard user={product.owner} />
           </p>
           <p>
-            {t("items.participants.label")}
+            <h6>{t("items.participants.label")}</h6>
             <ul>
               <li>TBD</li>
               <li>TBD</li>
