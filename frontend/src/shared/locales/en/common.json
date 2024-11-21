@@ -1,0 +1,7 @@
+{
+  "pagination": {
+    "rowsPerPage": {
+      "label": "Rows per page"
+    }
+  }
+}

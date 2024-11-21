@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { initReactI18next } from "react-i18next";
 import auth from "@/shared/locales/en/auth.json";
+import common from "@/shared/locales/en/common.json";
 import principal from "@/shared/locales/en/principal.json";
 import product from "@/shared/locales/en/product.json";
 import { routeTree } from "@/routeTree.gen";
@@ -26,6 +27,7 @@ export const resources = {
     auth,
     principal,
     product,
+    common,
   },
 } as const;
 
