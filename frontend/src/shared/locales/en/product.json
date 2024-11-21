@@ -17,6 +17,15 @@
     "description": {
       "label": "Description"
     },
+    "owner": {
+      "label": "Product Owner"
+    },
+    "totalIssues": {
+      "label": "Total Issues"
+    },
+    "openIssues": {
+      "label": "Open Issues"
+    },
     "ticker": {
       "label": "Ticker",
       "description": "This tag will be used as a short name for tasks in this product, i.e. [PROD-1]"
