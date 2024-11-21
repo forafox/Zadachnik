@@ -12,7 +12,10 @@ export const productSchema = z.object({
   id: z.number(),
   title: z.string(),
   ticker: z.string(),
-  description: z.string().nullish(),
+  description: z
+    .string()
+    .nullish()
+    .transform((x) => x ?? undefined),
   owner: userSchema,
   // @TODO: remove .catch after backend implementation
   openIssues: z.number().catch(232),

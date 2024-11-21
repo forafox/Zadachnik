@@ -1,4 +1,7 @@
 {
+  "products": {
+    "label": "Products"
+  },
   "sidebar": {
     "title": "Your Products",
     "actions": {
@@ -40,7 +43,7 @@
     },
     "edit": {
       "title": "Edit Product",
-      "label": "Edit"
+      "label": "Save"
     }
   },
   "indexPage": {

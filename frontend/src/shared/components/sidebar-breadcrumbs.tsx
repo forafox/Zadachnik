@@ -41,9 +41,8 @@ export const SetSidebarBreadcrumbs = ({
     );
   }
 
-  let prev = context.breadcrumbs;
-
   useEffect(() => {
+    let prev = context.breadcrumbs;
     context.setBreadcrumbs((preBreadcrumbs) => {
       prev = preBreadcrumbs;
       return children;

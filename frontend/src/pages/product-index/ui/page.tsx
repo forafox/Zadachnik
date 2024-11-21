@@ -1,12 +1,17 @@
+import { DialogTrigger } from "@radix-ui/react-dialog";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
+import { Pencil } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { EditProductDialogContent } from "@/widgets/edit-product-dialog";
+import { getPrincipalQueryOptions } from "@/entities/principal";
 import {
   DetailedProduct,
   getProductByIdQueryOptions,
 } from "@/entities/product";
 import { UserHoverCard } from "@/entities/user";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
+import { Badge } from "@/shared/components/ui/badge.tsx";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,6 +19,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/shared/components/ui/breadcrumb.tsx";
+import { Button } from "@/shared/components/ui/button.tsx";
 import {
   Card,
   CardContent,
@@ -21,11 +27,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
+import { Dialog } from "@/shared/components/ui/dialog.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
-import { Button } from "@/shared/components/ui/button.tsx";
-import { Pencil } from "lucide-react";
-import { Badge } from "@/shared/components/ui/badge.tsx";
-import { getPrincipalQueryOptions } from "@/entities/principal";
 
 export function ProductIndexPage({
   product: initialProduct,
@@ -37,7 +40,7 @@ export function ProductIndexPage({
     initialData: initialProduct,
   });
   const { t } = useTranslation("product");
-  const {data: principal} = useSuspenseQuery(getPrincipalQueryOptions)
+  const { data: principal } = useSuspenseQuery(getPrincipalQueryOptions);
 
   return (
     <div className="prose mx-auto">
@@ -68,19 +71,25 @@ export function ProductIndexPage({
           <CardDescription>{product.description}</CardDescription>
         </CardHeader>
         <Separator orientation="horizontal" />
-        <CardContent className="py-4 gap-4 flex items-center">
-
+        <CardContent className="flex items-center gap-4 py-4">
           <UserHoverCard user={product.owner} />
           <Badge className="bg-orange-200 text-orange-500 hover:bg-orange-100">
-            {t('indexPage.closedIssues', {val: product.openIssues/product.totalIssues})}
+            {t("indexPage.closedIssues", {
+              val: product.openIssues / product.totalIssues,
+            })}
           </Badge>
           <div className="ml-auto">
-            {principal.id == product.owner.id &&
-              <Button size="sm" variant="outline">
-                <Pencil />
-                {t('actions.edit.label')}
-              </Button>
-            }
+            {principal.id == product.owner.id && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="sm" variant="outline">
+                    <Pencil />
+                    {t("actions.edit.label")}
+                  </Button>
+                </DialogTrigger>
+                <EditProductDialogContent product={product} />
+              </Dialog>
+            )}
           </div>
         </CardContent>
         <Separator orientation="horizontal" />

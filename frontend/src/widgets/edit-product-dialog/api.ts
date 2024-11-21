@@ -2,7 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import z from "zod";
 import { api } from "@/shared/api";
 
-export const createProductRequest = z.object({
+export const editProductRequest = z.object({
+  id: z.number(),
   ticker: z.string(),
   title: z.string(),
   description: z
@@ -14,9 +15,9 @@ export const createProductRequest = z.object({
 export function useCreateProductMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (valuesRaw: z.infer<typeof createProductRequest>) => {
-      const values = createProductRequest.parse(valuesRaw);
-      return api.api.createProduct({
+    mutationFn: (valuesRaw: z.infer<typeof editProductRequest>) => {
+      const values = editProductRequest.parse(valuesRaw);
+      return api.api.updateProductById(values.id, {
         ...values,
         description: values.description ?? undefined,
       });
