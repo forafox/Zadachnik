@@ -6,16 +6,16 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSkeleton,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/shared/components/ui/sidebar.tsx";
 
 export function ProductsSidebar() {
-  const { t } = useTranslation("product");
-
   // @TODO: infinite scroll
   const { data } = useSuspenseQuery(
     getProductsQueryOptions({
@@ -25,16 +25,11 @@ export function ProductsSidebar() {
   );
 
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>{t("sidebar.title")}</SidebarGroupLabel>
-      <SidebarGroupContent>
-        <SidebarMenu>
-          {data.values.map((product) => (
-            <ProductSidebarEntry key={product.id} product={product} />
-          ))}
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
+    <SidebarMenu>
+      {data.values.map((product) => (
+        <ProductSidebarEntry key={product.id} product={product} />
+      ))}
+    </SidebarMenu>
   );
 }
 
@@ -44,9 +39,7 @@ function ProductSidebarEntry({ product }: { product: Product }) {
     <SidebarMenuItem>
       <SidebarMenuButton>
         {product.title}
-        <span className="ml-auto text-muted-foreground">
-          [{product.ticker}]
-        </span>
+        <SidebarMenuBadge>[{product.ticker}]</SidebarMenuBadge>
       </SidebarMenuButton>
       <SidebarMenuSub>
         <SidebarMenuSubItem>
@@ -57,5 +50,17 @@ function ProductSidebarEntry({ product }: { product: Product }) {
         </SidebarMenuSubItem>
       </SidebarMenuSub>
     </SidebarMenuItem>
+  );
+}
+
+export function ProductsSidebarSkeleton() {
+  return (
+    <SidebarMenu>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <SidebarMenuItem key={i}>
+          <SidebarMenuSkeleton showIcon />
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
   );
 }

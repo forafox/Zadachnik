@@ -1,4 +1,6 @@
-import { ProductsSidebar } from "@/entities/product";
+import { Suspense } from "react";
+import { useTranslation } from "react-i18next";
+import { ProductsSidebar, ProductsSidebarSkeleton } from "@/entities/product";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   Card,
@@ -23,7 +25,6 @@ import {
   SidebarMenuSubItem,
   SidebarSeparator,
 } from "@/shared/components/ui/sidebar.tsx";
-import { Suspense } from "react";
 
 type Props = {
   principalSlot?: React.ReactNode;
@@ -93,9 +94,15 @@ function SidebarTeams() {
 }
 
 function SidebarProducts() {
+  const { t } = useTranslation("product");
   return (
-    <Suspense>
-      <ProductsSidebar />
-    </Suspense>
+    <SidebarGroup>
+      <SidebarGroupLabel>{t("sidebar.title")}</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <Suspense fallback={<ProductsSidebarSkeleton />}>
+          <ProductsSidebar />
+        </Suspense>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }
