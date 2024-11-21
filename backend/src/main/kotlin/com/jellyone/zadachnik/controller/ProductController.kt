@@ -134,8 +134,7 @@ class ProductController(
             id = id,
             ticker = request.ticker,
             description = request.description,
-            title = request.title,
-            ownerUsername = principal.name
+            title = request.title
         ).toResponse()
     }
 
