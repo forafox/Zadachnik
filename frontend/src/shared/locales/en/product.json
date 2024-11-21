@@ -1,0 +1,13 @@
+{
+  "sidebar": {
+    "title": "Your Products"
+  },
+  "items": {
+    "issues": {
+      "label": "Issues"
+    },
+    "releases": {
+      "label": "Releases"
+    }
+  }
+}

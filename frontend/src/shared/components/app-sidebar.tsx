@@ -1,3 +1,4 @@
+import { ProductsSidebar } from "@/entities/product";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   Card,
@@ -22,6 +23,7 @@ import {
   SidebarMenuSubItem,
   SidebarSeparator,
 } from "@/shared/components/ui/sidebar.tsx";
+import { Suspense } from "react";
 
 type Props = {
   principalSlot?: React.ReactNode;
@@ -92,21 +94,8 @@ function SidebarTeams() {
 
 function SidebarProducts() {
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Your Products</SidebarGroupLabel>
-      <SidebarGroupContent>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>Zadachnik</SidebarMenuButton>
-            <SidebarMenuSub>
-              <SidebarMenuSubItem>
-                <SidebarMenuSubButton>Issues</SidebarMenuSubButton>
-                <SidebarMenuSubButton>Releases</SidebarMenuSubButton>
-              </SidebarMenuSubItem>
-            </SidebarMenuSub>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
+    <Suspense>
+      <ProductsSidebar />
+    </Suspense>
   );
 }
