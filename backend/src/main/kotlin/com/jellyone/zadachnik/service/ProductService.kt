@@ -33,7 +33,6 @@ class ProductService(
         ticker: String,
         description: String?,
         title: String,
-        ownerUsername: String
     ): Product {
         val product =
             productRepository.findById(id).orElseThrow { ResourceNotFoundException("Product with id $id not found") }
@@ -41,8 +40,7 @@ class ProductService(
             product.copy(
                 ticker = ticker,
                 description = description,
-                title = title,
-                owner = userService.getByUsername(ownerUsername)
+                title = title
             )
         )
     }
