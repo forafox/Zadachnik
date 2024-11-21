@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { CreateProductDialogContent } from "@/widgets/create-product-dialog";
 import { PrincipalSidebarFooter } from "@/entities/principal";
 import { ProductsSidebar, ProductsSidebarSkeleton } from "@/entities/product";
+import { defaultPagination } from "@/shared/api/schemas";
 import { AppSidebar } from "@/shared/components/app-sidebar.tsx";
 import {
   SidebarBreadcrumbs,
@@ -48,7 +49,9 @@ function SidebarProducts() {
   return (
     <SidebarGroup>
       <SidebarGroupLabel asChild>
-        <Link to="/products">{t("sidebar.title")}</Link>
+        <Link search={defaultPagination} to="/products">
+          {t("products.label")}
+        </Link>
       </SidebarGroupLabel>
       <Dialog>
         <SidebarGroupAction title={t("sidebar.actions.create.label")} asChild>

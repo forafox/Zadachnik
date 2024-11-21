@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import { defaultPagination } from "@/shared/api/schemas";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
 import {
   Breadcrumb,
@@ -20,7 +21,9 @@ function RouteComponent() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbLink asChild>
-              <Link to="/products">{t("products.label")}</Link>
+              <Link search={defaultPagination} to="/products">
+                {t("products.label")}
+              </Link>
             </BreadcrumbLink>
           </BreadcrumbList>
         </Breadcrumb>
