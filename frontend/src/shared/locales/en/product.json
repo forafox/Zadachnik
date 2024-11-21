@@ -1,6 +1,11 @@
 {
   "sidebar": {
-    "title": "Your Products"
+    "title": "Your Products",
+    "actions": {
+      "create": {
+        "label": "Add Product"
+      }
+    }
   },
   "items": {
     "issues": {

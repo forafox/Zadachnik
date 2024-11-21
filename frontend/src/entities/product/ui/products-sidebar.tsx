@@ -1,10 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { getProductsQueryOptions, Product } from "@/entities/product/api";
 import {
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuBadge,
   SidebarMenuButton,
@@ -37,15 +35,29 @@ function ProductSidebarEntry({ product }: { product: Product }) {
   const { t } = useTranslation("product");
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton>
-        {product.title}
-        <SidebarMenuBadge>[{product.ticker}]</SidebarMenuBadge>
+      <SidebarMenuButton asChild>
+        <Link to={`/products/$productId`} params={{productId: String(product.id)}}>
+          {product.title}
+          <SidebarMenuBadge>[{product.ticker}]</SidebarMenuBadge>
+        </Link>
       </SidebarMenuButton>
       <SidebarMenuSub>
         <SidebarMenuSubItem>
-          <SidebarMenuSubButton>{t("items.issues.label")}</SidebarMenuSubButton>
-          <SidebarMenuSubButton>
-            {t("items.releases.label")}
+          <SidebarMenuSubButton asChild>
+            <Link
+              to="/products/$productId/issues"
+              params={{ productId: String(product.id) }}
+            >
+              {t("items.issues.label")}
+            </Link>
+          </SidebarMenuSubButton>
+          <SidebarMenuSubButton asChild>
+            <Link
+              to="/products/$productId/releases"
+              params={{ productId: String(product.id) }}
+            >
+              {t("items.releases.label")}
+            </Link>
           </SidebarMenuSubButton>
         </SidebarMenuSubItem>
       </SidebarMenuSub>

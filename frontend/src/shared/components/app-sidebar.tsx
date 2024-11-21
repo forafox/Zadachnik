@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+import { Plane, Plus } from "lucide-react";
 import { Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { ProductsSidebar, ProductsSidebarSkeleton } from "@/entities/product";
@@ -14,6 +16,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -97,7 +100,15 @@ function SidebarProducts() {
   const { t } = useTranslation("product");
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>{t("sidebar.title")}</SidebarGroupLabel>
+      <SidebarGroupLabel asChild>
+        <Link to="/products">{t("sidebar.title")}</Link>
+      </SidebarGroupLabel>
+      <SidebarGroupAction title={t("sidebar.actions.create.label")} asChild>
+        <Link to="/products/create">
+          <Plus />
+          <span className="sr-only">{t("sidebar.actions.create.label")}</span>
+        </Link>
+      </SidebarGroupAction>
       <SidebarGroupContent>
         <Suspense fallback={<ProductsSidebarSkeleton />}>
           <ProductsSidebar />
