@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import z from "zod";
@@ -23,15 +24,29 @@ import { useCreateProductMutation } from "../api.ts";
 
 type Values = z.infer<typeof createProductRequest>;
 
-export function CreateProductDialogContent() {
+export function CreateProductDialogContent({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
   const form = useForm<Values>({
     resolver: zodResolver(createProductRequest),
   });
   const { t } = useTranslation("product");
   const { mutate, isPending, error } = useCreateProductMutation();
+  const navigate = useNavigate();
 
   function handleSubmit(values: Values) {
-    mutate(values);
+    mutate(values, {
+      onSuccess: ({ id }) => {
+        navigate({
+          to: "/products/$productId",
+          params: {
+            productId: String(id),
+          },
+        }).then(onClose);
+      },
+    });
   }
 
   return (

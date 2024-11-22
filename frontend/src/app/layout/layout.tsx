@@ -11,7 +11,7 @@ import {
   SidebarBreadcrumbs,
   SidebarBreadcrumbsProvider,
 } from "@/shared/components/sidebar-breadcrumbs.tsx";
-import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog.tsx";
+import { DialogTrigger } from "@/shared/components/ui/dialog.tsx";
 import {
   SidebarGroup,
   SidebarGroupAction,
@@ -21,6 +21,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/shared/components/ui/sidebar.tsx";
+import { useDialog } from "@/shared/hooks/use-dialog.tsx";
 
 export const Layout = () => {
   return (
@@ -46,6 +47,8 @@ export const Layout = () => {
 
 function SidebarProducts() {
   const { t } = useTranslation("product");
+  const { Dialog, onClose } = useDialog();
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel asChild>
@@ -60,7 +63,7 @@ function SidebarProducts() {
             <span className="sr-only">{t("sidebar.actions.create.label")}</span>
           </DialogTrigger>
         </SidebarGroupAction>
-        <CreateProductDialogContent />
+        <CreateProductDialogContent onClose={onClose} />
       </Dialog>
       <SidebarGroupContent>
         <Suspense fallback={<ProductsSidebarSkeleton />}>
