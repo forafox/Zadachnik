@@ -78,6 +78,23 @@ class ProductControllerTest {
     }
 
     @Test
+    fun createProductWithSameTickerShouldReturnConflict() {
+        val request = CreateProductRequest(
+            ticker = "PROD001",
+            title = "Test Product",
+            description = "This is a test product."
+        )
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .contentType(ContentType.JSON)
+            .body(request)
+            .`when`()
+            .post("/api/products")
+            .then()
+            .statusCode(HttpStatus.CONFLICT.value())
+    }
+
+    @Test
     fun getProductByIdShouldReturnOk() {
         val productId = 1
         val response = RestAssured.given()
