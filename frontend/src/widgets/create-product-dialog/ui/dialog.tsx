@@ -49,7 +49,7 @@ export function CreateProductDialogContent({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <DialogHeader>
-            <DialogTitle>{t("create.label")}</DialogTitle>
+            <DialogTitle>{t("actions.create.title")}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4 [&>*]:grid [&>*]:gap-2">
             <FormField
@@ -93,7 +93,7 @@ export function CreateProductDialogContent({
           </div>
           <DialogFooter>
             <Button loading={isPending} type="submit">
-              {t("create.actions.create.label")}
+              {t("actions.create.label")}
             </Button>
           </DialogFooter>
         </form>
