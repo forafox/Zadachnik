@@ -175,6 +175,26 @@ class ProductControllerTest {
     }
 
     @Test
+    fun getProductsOfCurrentUserShouldReturnOk() {
+        RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .queryParam("page", 0)
+            .queryParam("size", 10)
+            .`when`()
+            .get("/api/me/products")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .jsonPath()
+            .let { response ->
+                val content: List<Map<String, Any>> = response.getList("content")
+                assert(content.isNotEmpty()) { "Content should not be empty" }
+                assert(content[0]["id"] != null) { "First product should have an ID" }
+            }
+    }
+
+    @Test
     fun getProductsWithoutAuthShouldReturnUnauthorized() {
         RestAssured.given()
             .`when`()
@@ -210,4 +230,6 @@ class ProductControllerTest {
 
         jwtToken = response.accessToken
     }
+
+
 }

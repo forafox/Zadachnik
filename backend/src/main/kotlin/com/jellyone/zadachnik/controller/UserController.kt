@@ -1,8 +1,13 @@
 package com.jellyone.zadachnik.controller
 
+import com.jellyone.zadachnik.service.ProductService
+import com.jellyone.zadachnik.service.TeamService
 import com.jellyone.zadachnik.service.UserService
 import com.jellyone.zadachnik.web.dto.GetMeResponse
+import com.jellyone.zadachnik.web.response.ProductResponse
+import com.jellyone.zadachnik.web.response.TeamResponse
 import com.jellyone.zadachnik.web.response.UserResponse
+import com.jellyone.zadachnik.web.response.toResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -19,7 +24,9 @@ import java.security.Principal
 @Tag(name = "User Management")
 @SecurityRequirement(name = "JWT")
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val productService: ProductService,
+    private val teamService: TeamService
 ) {
 
     @GetMapping("/me")
@@ -84,6 +91,62 @@ class UserController(
         val users = userService.getUsers(search, page, size)
         return users.map { user ->
             UserResponse(user.id, user.username, user.fullName, user.role)
+        }
+    }
+
+    @GetMapping("/me/products")
+    @Operation(summary = "Get products of current user", description = "Get products of current user")
+    @ApiResponses(
+        value = [ApiResponse(
+            responseCode = "200",
+            description = "Products successfully retrieved",
+            content = [Content(schema = Schema(implementation = Page::class), mediaType = "application/json")]
+        ),
+            ApiResponse(responseCode = "400", description = "Bad request"),
+            ApiResponse(responseCode = "500", description = "Internal server error")
+        ]
+    )
+    fun getProductsOfCurrentUser(
+        @RequestParam(required = false, defaultValue = "0") page: Int,
+        @RequestParam(required = false, defaultValue = "10") size: Int,
+        principal: Principal
+    ): Page<ProductResponse> {
+        val products = productService.getProductsOfCurrentUser(page, size, principal.name)
+        return products.map { product ->
+            ProductResponse(
+                id = product.id,
+                ticker = product.ticker,
+                title = product.title,
+                description = product.description,
+                owner = product.owner.toResponse()
+            )
+        }
+    }
+
+    @GetMapping("/me/teams")
+    @Operation(summary = "Get teams of current user", description = "Get teams of current user")
+    @ApiResponses(
+        value = [ApiResponse(
+            responseCode = "200",
+            description = "Teams successfully retrieved",
+            content = [Content(schema = Schema(implementation = Page::class), mediaType = "application/json")]
+        ),
+            ApiResponse(responseCode = "400", description = "Bad request"),
+            ApiResponse(responseCode = "500", description = "Internal server error")
+        ]
+    )
+    fun getTeamsOfCurrentUser(
+        @RequestParam(required = false, defaultValue = "0") page: Int,
+        @RequestParam(required = false, defaultValue = "10") size: Int,
+        principal: Principal
+    ): Page<TeamResponse> {
+        val teams = teamService.getTeamsOfCurrentUser(page, size, principal.name)
+        return teams.map { team ->
+            TeamResponse(
+                id = team.id,
+                title = team.title,
+                scrumMaster = team.scrumMaster.toResponse()
+            )
         }
     }
 
