@@ -36,4 +36,9 @@ class TeamService(
     }
 
     fun getTeams(page: Int, size: Int): Page<Team> = teamRepository.findAll(PageRequest.of(page, size))
+
+    fun getTeamsOfCurrentUser(page: Int, size: Int, username: String): Page<Team> {
+        val user = userService.getByUsername(username)
+        return teamRepository.findAllByScrumMaster(PageRequest.of(page, size), user)
+    }
 }

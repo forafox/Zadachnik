@@ -49,4 +49,13 @@ class ProductService(
         page: Int,
         size: Int
     ): Page<Product> = productRepository.findAll(PageRequest.of(page, size))
+
+    fun getProductsOfCurrentUser(
+        page: Int,
+        size: Int,
+        username: String
+    ): Page<Product> {
+        val user = userService.getByUsername(username)
+        return productRepository.findAllByOwner(PageRequest.of(page, size), user)
+    }
 }

@@ -152,6 +152,28 @@ class TeamControllerTest {
         assert(content[0]["title"] == "Updated Team") { "Title of the first team should match the expected value" }
     }
 
+    @Order(6)
+    @Test
+    fun getTeamsOfCurrentUserShouldReturnOk() {
+        RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .queryParam("page", 0)
+            .queryParam("size", 10)
+            .`when`()
+            .get("/api/me/teams")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .jsonPath()
+            .let { response ->
+                val content: List<Map<String, Any>> = response.getList("content")
+                assert(content.isNotEmpty()) { "Content should not be empty" }
+                assert(content[0]["id"] != null) { "First team should have an ID" }
+            }
+    }
+
+
     private fun registerTestUser() {
         val signUpRequest = SignUpRequest(username = "testuser", fullName = "Test User", password = "password")
         RestAssured.given()
