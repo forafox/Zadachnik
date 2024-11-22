@@ -17,11 +17,11 @@ export function useEditProductMutation() {
   return useMutation({
     mutationFn: async (valuesRaw: z.infer<typeof editProductRequest>) => {
       const values = editProductRequest.parse(valuesRaw);
-      const {data} = await api.api.updateProductById(values.id, {
+      const { data } = await api.api.updateProductById(values.id, {
         ...values,
         description: values.description ?? undefined,
       });
-      return data
+      return data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
   });
