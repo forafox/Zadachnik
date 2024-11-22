@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import z from "zod";
 import { createProductRequest } from "@/widgets/create-product-dialog/api.ts";
+import { useNavigateToProduct } from "@/entities/product";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   DialogContent,
@@ -34,17 +34,12 @@ export function CreateProductDialogContent({
   });
   const { t } = useTranslation("product");
   const { mutate, isPending, error } = useCreateProductMutation();
-  const navigate = useNavigate();
+  const navigateToProduct = useNavigateToProduct();
 
   function handleSubmit(values: Values) {
     mutate(values, {
       onSuccess: ({ id }) => {
-        navigate({
-          to: "/products/$productId",
-          params: {
-            productId: String(id),
-          },
-        }).then(onClose);
+        navigateToProduct(id).then(onClose);
       },
     });
   }
