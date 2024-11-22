@@ -12,15 +12,16 @@ export const editProductRequest = z.object({
     .transform((x) => x ?? undefined),
 });
 
-export function useCreateProductMutation() {
+export function useEditProductMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (valuesRaw: z.infer<typeof editProductRequest>) => {
+    mutationFn: async (valuesRaw: z.infer<typeof editProductRequest>) => {
       const values = editProductRequest.parse(valuesRaw);
-      return api.api.updateProductById(values.id, {
+      const { data } = await api.api.updateProductById(values.id, {
         ...values,
         description: values.description ?? undefined,
       });
+      return data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
   });

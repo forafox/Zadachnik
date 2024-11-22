@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import z from "zod";
 import { createProductRequest } from "@/widgets/create-product-dialog/api.ts";
+import { useNavigateToProduct } from "@/entities/product";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   DialogContent,
@@ -23,15 +24,24 @@ import { useCreateProductMutation } from "../api.ts";
 
 type Values = z.infer<typeof createProductRequest>;
 
-export function CreateProductDialogContent() {
+export function CreateProductDialogContent({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
   const form = useForm<Values>({
     resolver: zodResolver(createProductRequest),
   });
   const { t } = useTranslation("product");
   const { mutate, isPending, error } = useCreateProductMutation();
+  const navigateToProduct = useNavigateToProduct();
 
   function handleSubmit(values: Values) {
-    mutate(values);
+    mutate(values, {
+      onSuccess: ({ id }) => {
+        navigateToProduct(id).then(onClose);
+      },
+    });
   }
 
   return (
@@ -76,7 +86,7 @@ export function CreateProductDialogContent() {
               )}
             />
             {error && (
-              <p className="text-descructive">
+              <p className="text-destructive">
                 <CreationError />
               </p>
             )}

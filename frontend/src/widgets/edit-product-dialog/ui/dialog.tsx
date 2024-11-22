@@ -18,20 +18,30 @@ import {
 } from "@/shared/components/ui/form.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
 import { Textarea } from "@/shared/components/ui/textarea.tsx";
-import { editProductRequest, useCreateProductMutation } from "../api.ts";
+import { editProductRequest, useEditProductMutation } from "../api.ts";
 
 type Values = z.infer<typeof editProductRequest>;
 
-export function EditProductDialogContent({ product }: { product: Values }) {
+export function EditProductDialogContent({
+  product,
+  onClose,
+}: {
+  product: Values;
+  onClose: () => void;
+}) {
   const form = useForm<Values>({
     defaultValues: product,
     resolver: zodResolver(editProductRequest),
   });
   const { t } = useTranslation("product");
-  const { mutate, isPending, error } = useCreateProductMutation();
+  const { mutate, isPending, error } = useEditProductMutation();
 
   function handleSubmit(values: Values) {
-    mutate(values);
+    mutate(values, {
+      onSuccess: () => {
+        onClose();
+      },
+    });
   }
 
   return (
@@ -76,8 +86,8 @@ export function EditProductDialogContent({ product }: { product: Values }) {
               )}
             />
             {error && (
-              <p className="text-descructive">
-                <CreationError />
+              <p className="text-destructive">
+                <EditError />
               </p>
             )}
           </div>
@@ -92,7 +102,7 @@ export function EditProductDialogContent({ product }: { product: Values }) {
   );
 }
 
-function CreationError() {
+function EditError() {
   const { t } = useTranslation("product");
   return t("feedback.genericError.label");
 }

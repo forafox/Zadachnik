@@ -14,12 +14,13 @@ export const createProductRequest = z.object({
 export function useCreateProductMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (valuesRaw: z.infer<typeof createProductRequest>) => {
+    mutationFn: async (valuesRaw: z.infer<typeof createProductRequest>) => {
       const values = createProductRequest.parse(valuesRaw);
-      return api.api.createProduct({
+      const { data } = await api.api.createProduct({
         ...values,
         description: values.description ?? undefined,
       });
+      return data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
   });
