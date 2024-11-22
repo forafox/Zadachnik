@@ -6,6 +6,7 @@ plugins {
     id("org.springframework.boot") version "3.3.4"
     id("io.spring.dependency-management") version "1.1.6"
     kotlin("plugin.jpa") version "1.9.25"
+    jacoco
 }
 
 fun removeVIfFirst(s: String) = if (s.startsWith("v")) s.removePrefix("v") else s
@@ -69,3 +70,47 @@ tasks.withType<Test> {
 tasks.withType<BootJar> {
     archiveFileName = "zadachnik-v$version.jar"
 }
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+tasks.jacocoTestCoverageVerification {
+    dependsOn(tasks.jacocoTestReport)
+
+    violationRules {
+        rule {
+            element = "CLASS"
+            includes = listOf("com.jellyone.zadachnik.*")
+            limit {
+                minimum = "0.7".toBigDecimal()
+            }
+        }
+    }
+
+    classDirectories.setFrom(
+        fileTree(
+            mapOf(
+                "dir" to "${buildDir}/classes/java/main",
+                "includes" to listOf("com/jellyone/zadachnik/**/*.class")
+            )
+        )
+    )
+
+    sourceDirectories.setFrom(files("src/main/java"))
+    additionalSourceDirs.setFrom(files("src/main/kotlin"))
+}
+
