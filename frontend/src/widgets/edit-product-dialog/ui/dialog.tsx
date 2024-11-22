@@ -86,8 +86,8 @@ export function EditProductDialogContent({
               )}
             />
             {error && (
-              <p className="text-descructive">
-                <CreationError />
+              <p className="text-destructive">
+                <EditError />
               </p>
             )}
           </div>
@@ -102,7 +102,7 @@ export function EditProductDialogContent({
   );
 }
 
-function CreationError() {
+function EditError() {
   const { t } = useTranslation("product");
   return t("feedback.genericError.label");
 }

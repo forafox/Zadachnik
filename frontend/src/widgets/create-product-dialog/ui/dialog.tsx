@@ -86,7 +86,7 @@ export function CreateProductDialogContent({
               )}
             />
             {error && (
-              <p className="text-descructive">
+              <p className="text-destructive">
                 <CreationError />
               </p>
             )}
