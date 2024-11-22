@@ -1,0 +1,62 @@
+{
+  "products": {
+    "label": "Products"
+  },
+  "sidebar": {
+    "title": "Your Products",
+    "actions": {
+      "create": {
+        "label": "Add Product"
+      }
+    }
+  },
+  "items": {
+    "title": {
+      "label": "Title"
+    },
+    "description": {
+      "label": "Description"
+    },
+    "owner": {
+      "label": "Product Owner"
+    },
+    "totalIssues": {
+      "label": "Total Issues"
+    },
+    "openIssues": {
+      "label": "Open Issues"
+    },
+    "ticker": {
+      "label": "Ticker",
+      "description": "This tag will be used as a short name for tasks in this product, i.e. [PROD-1]"
+    },
+    "issues": {
+      "label": "Issues"
+    },
+    "releases": {
+      "label": "Releases"
+    },
+    "participants": {
+      "label": "Participants"
+    }
+  },
+  "feedback": {
+    "genericError": {
+      "label": "An error has occured!"
+    }
+  },
+  "actions": {
+    "create": {
+      "title": "Create Product",
+      "label": "Create"
+    },
+    "edit": {
+      "title": "Edit Product",
+      "label": "Save",
+      "trigger": "Edit"
+    }
+  },
+  "indexPage": {
+    "closedIssues": "{{val, number(style: percent)}} closed issues"
+  }
+}
