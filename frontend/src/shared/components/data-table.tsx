@@ -1,5 +1,6 @@
 import { flexRender, Header, Table as RTable } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import {
   Table,
@@ -15,6 +16,8 @@ interface DataTableProps<TData> {
 }
 
 export function DataTable<TData>({ table }: DataTableProps<TData>) {
+  const { t } = useTranslation("common");
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -50,7 +53,7 @@ export function DataTable<TData>({ table }: DataTableProps<TData>) {
                   .reduce((a, b) => a + b, 0)}
                 className="h-24 text-center"
               >
-                Нет результатов
+                {t("table.feedback.noResults.label")}
               </TableCell>
             </TableRow>
           )}

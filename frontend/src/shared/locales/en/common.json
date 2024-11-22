@@ -3,5 +3,12 @@
     "rowsPerPage": {
       "label": "Rows per page"
     }
+  },
+  "table": {
+    "feedback": {
+      "noResults": {
+        "label": "No results"
+      }
+    }
   }
 }
