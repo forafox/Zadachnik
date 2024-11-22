@@ -28,8 +28,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
-import { Dialog } from "@/shared/components/ui/dialog.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
+import { useDialog } from "@/shared/hooks/use-dialog.tsx";
 
 export function ProductIndexPage({
   product: initialProduct,
@@ -42,6 +42,7 @@ export function ProductIndexPage({
   });
   const { t } = useTranslation("product");
   const { data: principal } = useSuspenseQuery(getPrincipalQueryOptions);
+  const { Dialog, onClose } = useDialog();
 
   return (
     <div className="prose mx-auto">
@@ -90,7 +91,7 @@ export function ProductIndexPage({
                     {t("actions.edit.trigger")}
                   </Button>
                 </DialogTrigger>
-                <EditProductDialogContent product={product} />
+                <EditProductDialogContent product={product} onClose={onClose} />
               </Dialog>
             )}
           </div>
