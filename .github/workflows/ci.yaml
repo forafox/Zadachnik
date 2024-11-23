@@ -49,3 +49,15 @@ jobs:
      
     - name: Build
       run: ./gradlew build
+
+    - name: Jacoco Report to PR
+      id: jacoco
+      uses: madrapps/jacoco-report@v1.7.1
+      with:
+        paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+      token: ${{ secrets.GITHUB_TOKEN }}
+      min-coverage-overall: 40
+      min-coverage-changed-files: 60
+      title: Code Coverage
+      update-comment: true
+
