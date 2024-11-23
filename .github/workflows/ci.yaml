@@ -31,6 +31,10 @@ jobs:
       run: pnpm run lint
 
   build-backend:
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     defaults:
       run:
         working-directory: ./backend
