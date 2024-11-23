@@ -33,3 +33,5 @@
 *.ist
 *.png
 .deps.d
+
+_minted-main
