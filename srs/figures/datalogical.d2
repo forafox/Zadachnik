@@ -40,7 +40,6 @@ team_meeting: {
   id: serial {constraint: primary_key}
   title: text
   agenda: text
-  team_id: integer {constraint: foreign_key}
 }
 
 article: {
@@ -130,14 +129,31 @@ article.author <-> user: {
   }
 }
 
-team <-> team_meeting.team_id: {
+team_dailies: {
+  shape: sql_table
+  team_id: integer
+  meeting_id: integer
+}
+
+team <-> team_dailies.team_id: {
   source-arrowhead: {
-    shape: cf-many
-  }
-  target-arrowhead: {
     shape: cf-one-required
   }
+  target-arrowhead: {
+    shape: cf-many
+  }
 }
+
+team_meeting <-> team_dailies.meeting_id: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+
 
 sprint.planning_meeting <-> team_meeting: {
   source-arrowhead: {
