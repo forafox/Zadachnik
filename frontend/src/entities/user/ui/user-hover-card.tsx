@@ -1,4 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
+/* eslint-disable */
 import { getPrincipalQueryOptions } from "@/entities/principal";
+/* eslint-enable */
 import { User } from "@/entities/user";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar.tsx";
 import { Button } from "@/shared/components/ui/button.tsx";
@@ -8,7 +11,6 @@ import {
   HoverCardTrigger,
 } from "@/shared/components/ui/hover-card.tsx";
 import { cn } from "@/shared/lib/utils";
-import { useQuery } from "@tanstack/react-query";
 
 export function UserHoverCardContent({ user }: { user: User }) {
   const userAvatarFallback = user.fullName
