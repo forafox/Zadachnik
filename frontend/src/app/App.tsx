@@ -7,9 +7,9 @@ import "./index.css";
 import { initReactI18next } from "react-i18next";
 import auth from "@/shared/locales/en/auth.json";
 import common from "@/shared/locales/en/common.json";
+import landing from "@/shared/locales/en/landing.json";
 import principal from "@/shared/locales/en/principal.json";
 import product from "@/shared/locales/en/product.json";
-import landing from "@/shared/locales/en/landing.json";
 import { routeTree } from "@/routeTree.gen";
 
 const queryClient = new QueryClient();

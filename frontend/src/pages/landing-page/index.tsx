@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/shared/components/ui/button";
 
 export function LandingPage() {
   const { t } = useTranslation("landing");
