@@ -1,14 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 export function LandingPage() {
+  const { t } = useTranslation("landing");
+
   const features = [
-    "Smart task organization for Scrum teams",
-    "Real-time collaboration tools",
-    "Sprint planning made easy",
-    "Customizable Scrum boards",
-    "Advanced analytics and reporting",
+    t("features.organization"),
+    t("features.collaboration"),
+    t("features.planning"),
+    t("features.boards"),
+    t("features.analytics"),
   ];
 
   return (
@@ -16,22 +19,21 @@ export function LandingPage() {
       <div className="container mx-auto px-4 py-16">
         <div className="mb-16 text-center">
           <h1 className="mb-6 text-5xl font-bold tracking-tight text-gray-900">
-            Zadachnik
+            {t("title")}
           </h1>
           <p className="mx-auto mb-8 max-w-2xl text-xl text-gray-600">
-            The intelligent task tracker designed specifically for Scrum teams
-            to streamline their agile workflow and boost productivity.
+            {t("description")}
           </p>
           <Button size="lg" className="gap-2" asChild>
             <Link to="/tasks">
-              Get Started <ArrowRight className="h-4 w-4" />
+              {t("getStarted")} <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
         </div>
 
         <div className="mx-auto max-w-2xl">
           <h2 className="mb-6 text-center text-3xl font-bold">
-            Everything you need to manage your Scrum process
+            {t("featuresTitle")}
           </h2>
           <ul className="space-y-4">
             {features.map((feature) => (

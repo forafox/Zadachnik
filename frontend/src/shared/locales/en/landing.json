@@ -1,0 +1,13 @@
+{
+  "title": "Zadachnik",
+  "description": "The intelligent task tracker designed specifically for Scrum teams to streamline their agile workflow and boost productivity.",
+  "getStarted": "Get Started",
+  "featuresTitle": "Everything you need to manage your Scrum process",
+  "features": {
+    "organization": "Smart task organization for Scrum teams",
+    "collaboration": "Real-time collaboration tools",
+    "planning": "Sprint planning made easy",
+    "boards": "Customizable Scrum boards",
+    "analytics": "Advanced analytics and reporting"
+  }
+} 

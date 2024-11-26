@@ -9,6 +9,7 @@ import auth from "@/shared/locales/en/auth.json";
 import common from "@/shared/locales/en/common.json";
 import principal from "@/shared/locales/en/principal.json";
 import product from "@/shared/locales/en/product.json";
+import landing from "@/shared/locales/en/landing.json";
 import { routeTree } from "@/routeTree.gen";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ export const resources = {
     principal,
     product,
     common,
+    landing,
   },
 } as const;
 
