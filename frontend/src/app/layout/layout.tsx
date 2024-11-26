@@ -22,6 +22,7 @@ import {
   SidebarTrigger,
 } from "@/shared/components/ui/sidebar.tsx";
 import { useDialog } from "@/shared/hooks/use-dialog.tsx";
+import { TeamsSidebar } from "@/entities/team";
 
 export const Layout = () => {
   return (
@@ -30,6 +31,7 @@ export const Layout = () => {
         <AppSidebar
           principalSlot={<PrincipalSidebarFooter />}
           productsSlot={<SidebarProducts />}
+          teamsSlot={<SidebarTeams />}
         />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
@@ -68,6 +70,36 @@ function SidebarProducts() {
       <SidebarGroupContent>
         <Suspense fallback={<ProductsSidebarSkeleton />}>
           <ProductsSidebar />
+        </Suspense>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+}
+
+
+function SidebarTeams() {
+  const { t } = useTranslation("team");
+  const { Dialog, onClose } = useDialog();
+
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel asChild>
+        <Link search={defaultPagination} to="/teams">
+          {t("sidebar.title")}
+        </Link>
+      </SidebarGroupLabel>
+      <Dialog>
+        <SidebarGroupAction title={t("sidebar.actions.create.label")} asChild>
+          <DialogTrigger>
+            <Plus />
+            <span className="sr-only">{t("sidebar.actions.create.label")}</span>
+          </DialogTrigger>
+        </SidebarGroupAction>
+        <CreateProductDialogContent onClose={onClose} />
+      </Dialog>
+      <SidebarGroupContent>
+        <Suspense fallback={<ProductsSidebarSkeleton />}>
+          <TeamsSidebar />
         </Suspense>
       </SidebarGroupContent>
     </SidebarGroup>

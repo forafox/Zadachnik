@@ -12,8 +12,8 @@ export const teamSchema = z.object({
 
 export type Team = z.infer<typeof teamSchema>;
 
-const getTeamsRequestSchema = paginatedRequestSchema;
-const getTeamsResponseSchema = paginatedResponseSchema(teamSchema);
+export const getTeamsRequestSchema = paginatedRequestSchema;
+export const getTeamsResponseSchema = paginatedResponseSchema(teamSchema);
 
 export const getTeamsQueryOptions = (
   queryRaw: z.infer<typeof getTeamsRequestSchema>,

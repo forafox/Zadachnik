@@ -26,9 +26,10 @@ import {
 type Props = {
   principalSlot?: React.ReactNode;
   productsSlot?: React.ReactNode;
+  teamsSlot?: React.ReactNode;
 };
 
-export function AppSidebar({ principalSlot, productsSlot }: Props) {
+export function AppSidebar({ principalSlot, productsSlot, teamsSlot }: Props) {
   return (
     <Sidebar>
       <SidebarHeader>
@@ -40,7 +41,7 @@ export function AppSidebar({ principalSlot, productsSlot }: Props) {
         </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarTeams />
+        {teamsSlot}
         <SidebarSeparator />
         {productsSlot}
       </SidebarContent>

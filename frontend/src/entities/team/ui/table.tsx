@@ -33,7 +33,7 @@ const columnDef: Array<ColumnDef<Team>> = [
   },
 ];
 
-export function useProductsTable(data: Array<Team>) {
+export function useTeamsTable(data: Array<Team>) {
   return useReactTable({
     columns: columnDef,
     data,
