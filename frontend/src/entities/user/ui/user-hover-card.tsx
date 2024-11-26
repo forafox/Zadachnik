@@ -1,3 +1,4 @@
+import { getPrincipalQueryOptions } from "@/entities/principal";
 import { User } from "@/entities/user";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar.tsx";
 import { Button } from "@/shared/components/ui/button.tsx";
@@ -6,6 +7,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/shared/components/ui/hover-card.tsx";
+import { cn } from "@/shared/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 
 export function UserHoverCardContent({ user }: { user: User }) {
   const userAvatarFallback = user.fullName
@@ -29,10 +32,17 @@ export function UserHoverCardContent({ user }: { user: User }) {
 }
 
 export function UserHoverCard({ user }: { user: User }) {
+  const { data: principal } = useQuery(getPrincipalQueryOptions);
+
+  const isCurrentUser = principal?.id === user.id;
+  const buttonClassName = cn("px-0 py-0 h-auto", {
+    "bg-yellow-200/40": isCurrentUser,
+  });
+
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Button className="px-0" variant="link">
+        <Button className={buttonClassName} variant="link">
           @{user.username}
         </Button>
       </HoverCardTrigger>
