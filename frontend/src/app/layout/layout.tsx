@@ -98,7 +98,7 @@ function SidebarTeams() {
         <CreateProductDialogContent onClose={onClose} />
       </Dialog>
       <SidebarGroupContent>
-        <Suspense fallback={<ProductsSidebarSkeleton />}>
+        <Suspense >
           <TeamsSidebar />
         </Suspense>
       </SidebarGroupContent>

@@ -1,7 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { getTeamsQueryOptions, getTeamsRequestSchema, useTeamsTable } from '@/entities/team'
 import { DataTable } from '@/shared/components/data-table'
-import { PaginationFooter } from '@/shared/components/pagination'
+import { SetSidebarBreadcrumbs } from '@/shared/components/sidebar-breadcrumbs'
+import { Breadcrumb, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/shared/components/ui/breadcrumb'
+import { defaultPagination } from '@/shared/api/schemas'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/_authenticated/teams/')({
   component: RouteComponent,
@@ -17,9 +20,23 @@ function RouteComponent() {
   const table = useTeamsTable(data.values)
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
+  const { t } = useTranslation("team");
 
   return <div className="flex flex-col gap-4">
+    <SetSidebarBreadcrumbs>
+      <SetSidebarBreadcrumbs>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbLink asChild>
+              <Link search={defaultPagination} to="/teams">
+                {t("teams.label")}
+              </Link>
+            </BreadcrumbLink>
+            <BreadcrumbSeparator />
+          </BreadcrumbList>
+        </Breadcrumb>
+      </SetSidebarBreadcrumbs>
+    </SetSidebarBreadcrumbs>
     <DataTable table={table} />
-    <PaginationFooter query={search} setQuery={(query) => navigate({search: query})} total={data.total} />
   </div>
 }
