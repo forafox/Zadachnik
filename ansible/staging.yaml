@@ -22,13 +22,17 @@
   vars:
     staging_host: zadachnik.efedorov.spb.su
     registry_uri: fegor04
+    version: main
   tasks:
+    - name: Create traefik-ingress docker network
+      docker_network:
+        name: traefik-ingress
     - name: Clone git repo
       become_user: infsystem-zadachnik
       ansible.builtin.git:
         dest: /opt/is/zadachnik
         repo: https://github.com/FEgor04/is-course-work.git
-        version: main
+        version: '{{ version }}'
         force: true
     - name: Set git repo permissions
       ansible.builtin.file:
