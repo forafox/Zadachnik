@@ -29,7 +29,7 @@
       ansible.builtin.git:
         dest: /opt/is/zadachnik
         repo: https://github.com/FEgor04/is-course-work.git
-        version: {{ version }}
+        version: '{{ version }}'
         force: true
     - name: Set git repo permissions
       ansible.builtin.file:
