@@ -24,6 +24,9 @@
     registry_uri: fegor04
     version: main
   tasks:
+    - name: Create traefik-ingress docker network
+      docker_network:
+        name: traefik-ingress
     - name: Clone git repo
       become_user: infsystem-zadachnik
       ansible.builtin.git:
