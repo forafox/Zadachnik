@@ -2,7 +2,7 @@ name: cd
 
 on:
   push:
-    branches: [ "main" "ansible-version" ]
+    branches: [ "main", "ansible-version" ]
 
 jobs:
   image-frontend:
