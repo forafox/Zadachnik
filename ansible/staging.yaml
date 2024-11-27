@@ -10,7 +10,7 @@
           - sudo
     - name: Make sure directory for is exists
       ansible.builtin.file:
-        dest: /opt/is
+        dest: /opt/is/zadachnik
         owner: infsystem-zadachnik
         group: infsystem-zadachnik
         state: directory
