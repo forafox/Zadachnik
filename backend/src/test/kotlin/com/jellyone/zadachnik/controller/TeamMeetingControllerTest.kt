@@ -1,10 +1,12 @@
 package com.jellyone.zadachnik.controller
 
+import com.jellyone.zadachnik.domain.enums.TeamMeetingType
 import com.jellyone.zadachnik.web.dto.SignUpRequest
 import com.jellyone.zadachnik.web.dto.auth.JwtRequest
 import com.jellyone.zadachnik.web.dto.auth.JwtResponse
+import com.jellyone.zadachnik.web.request.CreateTeamMeetingRequest
 import com.jellyone.zadachnik.web.request.CreateTeamRequest
-import com.jellyone.zadachnik.web.request.UpdateTeamRequest
+import com.jellyone.zadachnik.web.response.TeamMeetingResponse
 import com.jellyone.zadachnik.web.response.TeamResponse
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
@@ -27,7 +29,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @Testcontainers
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-class TeamControllerTest {
+class TeamMeetingControllerTest {
 
     @LocalServerPort
     private var port: Int = 0
@@ -58,121 +60,30 @@ class TeamControllerTest {
 
     @Order(1)
     @Test
-    fun createTeamShouldReturnOk() {
-        val request = CreateTeamRequest(
-            title = "Test Team"
+    fun createTeamMeetingShouldReturnOk() {
+        createTeamShouldReturnOk()
+
+        val createTeamMeetingRequest = CreateTeamMeetingRequest(
+            type = TeamMeetingType.PLANNING,
+            agenda = "Agenda for the team meeting"
         )
-        val response = RestAssured.given()
-            .auth().oauth2(jwtToken)
-            .contentType(ContentType.JSON)
-            .body(request)
-            .`when`()
-            .post("/api/teams")
-            .then()
-            .statusCode(HttpStatus.OK.value())
-            .contentType(ContentType.JSON)
-            .extract()
-            .`as`(TeamResponse::class.java)
-
-        assertEquals("Test Team", response.title)
-    }
-
-    @Order(2)
-    @Test
-    fun getTeamByIdShouldReturnOk() {
         val teamId = 1L
-        val response = RestAssured.given()
-            .auth().oauth2(jwtToken)
-            .`when`()
-            .get("/api/teams/$teamId")
-            .then()
-            .statusCode(HttpStatus.OK.value())
-            .contentType(ContentType.JSON)
-            .extract()
-            .`as`(TeamResponse::class.java)
 
-        assertEquals(teamId, response.id)
-        assertEquals("Test Team", response.title)
-    }
-
-    @Order(3)
-    @Test
-    fun getTeamByIdNotFoundShouldReturnNotFound() {
-        val teamId = 9999L
-        RestAssured.given()
-            .auth().oauth2(jwtToken)
-            .`when`()
-            .get("/api/teams/$teamId")
-            .then()
-            .statusCode(HttpStatus.NOT_FOUND.value())
-    }
-
-    @Order(4)
-    @Test
-    fun updateTeamByIdShouldReturnOk() {
-        val teamId = 1L
-        val request = UpdateTeamRequest(
-            title = "Updated Team"
-        )
         val response = RestAssured.given()
             .auth().oauth2(jwtToken)
             .contentType(ContentType.JSON)
-            .body(request)
+            .body(createTeamMeetingRequest)
             .`when`()
-            .put("/api/teams/1")
+            .post("/api/teams/$teamId/meetings")
             .then()
             .statusCode(HttpStatus.OK.value())
             .contentType(ContentType.JSON)
             .extract()
-            .`as`(TeamResponse::class.java)
+            .`as`(TeamMeetingResponse::class.java)
 
-        assertEquals(teamId, response.id)
-        assertEquals("Updated Team", response.title)
+        assertEquals(TeamMeetingType.PLANNING, response.type)
+        assertEquals("Agenda for the team meeting", response.agenda)
     }
-
-    @Order(5)
-    @Test
-    fun getTeamsWithPaginationShouldReturnOk() {
-        val response = RestAssured.given()
-            .auth().oauth2(jwtToken)
-            .queryParam("page", 0)
-            .queryParam("size", 10)
-            .`when`()
-            .get("/api/teams")
-            .then()
-            .statusCode(HttpStatus.OK.value())
-            .contentType(ContentType.JSON)
-            .extract()
-            .jsonPath()
-
-        val content: List<Map<String, Any>> = response.getList("content")
-
-        assert(content.isNotEmpty()) { "Content should not be empty" }
-        assert(content[0]["id"] != null) { "First team should have an ID" }
-        assert(content[0]["title"] == "Updated Team") { "Title of the first team should match the expected value" }
-    }
-
-    @Order(6)
-    @Test
-    fun getTeamsOfCurrentUserShouldReturnOk() {
-        RestAssured.given()
-            .auth().oauth2(jwtToken)
-            .queryParam("page", 0)
-            .queryParam("size", 10)
-            .`when`()
-            .get("/api/me/teams")
-            .then()
-            .statusCode(HttpStatus.OK.value())
-            .contentType(ContentType.JSON)
-            .extract()
-            .jsonPath()
-            .let { response ->
-                val content: List<Map<String, Any>> = response.getList("content")
-                assert(content.isNotEmpty()) { "Content should not be empty" }
-                assert(content[0]["id"] != null) { "First team should have an ID" }
-            }
-    }
-
 
     private fun registerTestUser() {
         val signUpRequest = SignUpRequest(username = "testuser", fullName = "Test User", password = "password")
@@ -200,5 +111,22 @@ class TeamControllerTest {
             .`as`(JwtResponse::class.java)
 
         jwtToken = response.accessToken
+    }
+
+    private fun createTeamShouldReturnOk() {
+        val request = CreateTeamRequest(
+            title = "Test Team"
+        )
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .contentType(ContentType.JSON)
+            .body(request)
+            .`when`()
+            .post("/api/teams")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .`as`(TeamResponse::class.java)
     }
 }

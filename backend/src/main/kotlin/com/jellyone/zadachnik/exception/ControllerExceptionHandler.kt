@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
 import jakarta.validation.ConstraintViolationException
 import org.springframework.boot.json.JsonParseException
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.InvalidDataAccessApiUsageException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -32,6 +33,7 @@ class ControllerExceptionHandler {
         val message = ex.message?.let { ErrorMessage(HttpStatus.NOT_FOUND.value(), Date(), NOT_FOUND_EXCEPTION, it) }
         return ResponseEntity(message, HttpStatus.NOT_FOUND)
     }
+
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun methodArgumentNotValidException(ex: Exception, request: WebRequest): ResponseEntity<ErrorMessage> {
@@ -68,7 +70,7 @@ class ControllerExceptionHandler {
         return ResponseEntity(message, HttpStatus.UNAUTHORIZED)
     }
 
-    @ExceptionHandler(value = [IllegalStateException::class])
+    @ExceptionHandler(value = [IllegalStateException::class, DataIntegrityViolationException::class])
     fun illegalStateExceptionHandler(ex: Exception, request: WebRequest): ResponseEntity<ErrorMessage> {
         val message =
             ex.message?.let { ErrorMessage(HttpStatus.CONFLICT.value(), Date(), request.getDescription(false), it) }

@@ -1,11 +1,9 @@
 package com.jellyone.zadachnik.controller
 
-import com.jellyone.zadachnik.web.dto.SignUpRequest
-import com.jellyone.zadachnik.web.dto.auth.JwtRequest
-import com.jellyone.zadachnik.web.dto.auth.JwtResponse
-import com.jellyone.zadachnik.web.request.CreateTeamRequest
-import com.jellyone.zadachnik.web.request.UpdateTeamRequest
-import com.jellyone.zadachnik.web.response.TeamResponse
+import com.jellyone.zadachnik.web.request.CreateProductRequest
+import com.jellyone.zadachnik.web.request.CreateTaskRequest
+import com.jellyone.zadachnik.web.response.ProductResponse
+import com.jellyone.zadachnik.web.response.TaskResponse
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.*
@@ -27,7 +25,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @Testcontainers
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-class TeamControllerTest {
+class TaskControllerTest {
 
     @LocalServerPort
     private var port: Int = 0
@@ -58,87 +56,98 @@ class TeamControllerTest {
 
     @Order(1)
     @Test
-    fun createTeamShouldReturnOk() {
-        val request = CreateTeamRequest(
-            title = "Test Team"
+    fun createTaskShouldReturnOk() {
+        val productId = createProductWithId1()
+
+        val request = CreateTaskRequest(
+            type = "Test type",
+            title = "Test title",
+            description = "Test description"
         )
         val response = RestAssured.given()
             .auth().oauth2(jwtToken)
             .contentType(ContentType.JSON)
             .body(request)
             .`when`()
-            .post("/api/teams")
+            .post("/api/products/${productId}/tasks")
             .then()
             .statusCode(HttpStatus.OK.value())
             .contentType(ContentType.JSON)
             .extract()
-            .`as`(TeamResponse::class.java)
+            .`as`(TaskResponse::class.java)
 
-        assertEquals("Test Team", response.title)
+        assertEquals("Test type", response.type)
+        assertEquals("Test title", response.title)
+        assertEquals("Test description", response.description)
     }
 
     @Order(2)
     @Test
-    fun getTeamByIdShouldReturnOk() {
-        val teamId = 1L
+    fun getTaskByIdShouldReturnOk() {
+        val taskId = 1L
         val response = RestAssured.given()
             .auth().oauth2(jwtToken)
             .`when`()
-            .get("/api/teams/$teamId")
+            .get("/api/products/1/tasks/$taskId")
             .then()
             .statusCode(HttpStatus.OK.value())
             .contentType(ContentType.JSON)
             .extract()
-            .`as`(TeamResponse::class.java)
+            .`as`(TaskResponse::class.java)
 
-        assertEquals(teamId, response.id)
-        assertEquals("Test Team", response.title)
+        assertEquals(taskId, response.id)
+        assertEquals("Test title", response.title)
     }
 
     @Order(3)
     @Test
-    fun getTeamByIdNotFoundShouldReturnNotFound() {
-        val teamId = 9999L
+    fun getTaskByIdNotFoundShouldReturnNotFound() {
+        val taskId = 9999L
         RestAssured.given()
             .auth().oauth2(jwtToken)
             .`when`()
-            .get("/api/teams/$teamId")
+            .get("/api/products/1/tasks/$taskId")
             .then()
             .statusCode(HttpStatus.NOT_FOUND.value())
     }
 
     @Order(4)
     @Test
-    fun updateTeamByIdShouldReturnOk() {
-        val teamId = 1L
-        val request = UpdateTeamRequest(
-            title = "Updated Team"
+    fun updateTaskByIdShouldReturnOk() {
+        val taskId = 1L
+        val request = CreateTaskRequest(
+            type = "Feature",
+            title = "Updated Task",
+            description = "Updated Description"
         )
         val response = RestAssured.given()
             .auth().oauth2(jwtToken)
             .contentType(ContentType.JSON)
             .body(request)
             .`when`()
-            .put("/api/teams/1")
+            .put("/api/products/1/tasks/$taskId")
             .then()
             .statusCode(HttpStatus.OK.value())
             .contentType(ContentType.JSON)
             .extract()
-            .`as`(TeamResponse::class.java)
+            .`as`(TaskResponse::class.java)
 
-        assertEquals(teamId, response.id)
-        assertEquals("Updated Team", response.title)
+        assertEquals(taskId, response.id)
+        assertEquals("Feature", response.type)
+        assertEquals("Updated Task", response.title)
+        assertEquals("Updated Description", response.description)
     }
 
     @Order(5)
     @Test
-    fun getTeamsWithPaginationShouldReturnOk() {
+    fun getTaskHistoryShouldReturnOk() {
+        val taskId = 1L
         val response = RestAssured.given()
             .auth().oauth2(jwtToken)
             .queryParam("page", 0)
             .queryParam("size", 10)
             .`when`()
-            .get("/api/teams")
+            .get("/api/products/1/tasks/$taskId/history")
             .then()
             .statusCode(HttpStatus.OK.value())
             .contentType(ContentType.JSON)
@@ -148,34 +157,15 @@ class TeamControllerTest {
         val content: List<Map<String, Any>> = response.getList("content")
 
         assert(content.isNotEmpty()) { "Content should not be empty" }
-        assert(content[0]["id"] != null) { "First team should have an ID" }
-        assert(content[0]["title"] == "Updated Team") { "Title of the first team should match the expected value" }
+        assert(content[0]["field"] != null) { "First change should have a field type" }
     }
-
-    @Order(6)
-    @Test
-    fun getTeamsOfCurrentUserShouldReturnOk() {
-        RestAssured.given()
-            .auth().oauth2(jwtToken)
-            .queryParam("page", 0)
-            .queryParam("size", 10)
-            .`when`()
-            .get("/api/me/teams")
-            .then()
-            .statusCode(HttpStatus.OK.value())
-            .contentType(ContentType.JSON)
-            .extract()
-            .jsonPath()
-            .let { response ->
-                val content: List<Map<String, Any>> = response.getList("content")
-                assert(content.isNotEmpty()) { "Content should not be empty" }
-                assert(content[0]["id"] != null) { "First team should have an ID" }
-            }
-    }
-
 
     private fun registerTestUser() {
-        val signUpRequest = SignUpRequest(username = "testuser", fullName = "Test User", password = "password")
+        val signUpRequest = mapOf(
+            "username" to "testuser",
+            "fullName" to "Test User",
+            "password" to "password"
+        )
         RestAssured.given()
             .contentType(ContentType.JSON)
             .body(signUpRequest)
@@ -187,7 +177,10 @@ class TeamControllerTest {
     }
 
     private fun loginUser() {
-        val loginRequest = JwtRequest(username = "testuser", password = "password")
+        val loginRequest = mapOf(
+            "username" to "testuser",
+            "password" to "password"
+        )
         val response = RestAssured.given()
             .contentType(ContentType.JSON)
             .body(loginRequest)
@@ -197,8 +190,29 @@ class TeamControllerTest {
             .then()
             .statusCode(HttpStatus.OK.value())
             .extract()
-            .`as`(JwtResponse::class.java)
+            .`as`(Map::class.java)
 
-        jwtToken = response.accessToken
+        jwtToken = response["accessToken"] as String
+    }
+
+    private fun createProductWithId1(): Long {
+        val request = CreateProductRequest(
+            ticker = "PROD001",
+            title = "Test Product",
+            description = "This is a test product."
+        )
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .contentType(ContentType.JSON)
+            .body(request)
+            .`when`()
+            .post("/api/products")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .`as`(ProductResponse::class.java)
+
+        return response.id
     }
 }
