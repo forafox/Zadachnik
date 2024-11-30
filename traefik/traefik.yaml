@@ -4,6 +4,7 @@ api:
 
 providers:
   docker:
+    network: traefik-ingress
     exposedByDefault: false
 
 log:
