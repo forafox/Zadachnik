@@ -1,0 +1,363 @@
+product: {
+  shape: sql_table
+  id: serial {constraint: primary_key}
+  short_name: text {constraint: unique}
+  title: text
+  description: text
+  owner: integer {constraint: foreign_key}
+}
+
+team: {
+  shape: sql_table
+  id: serial {constraint: primary_key}
+  title: text {constraint: unique}
+  scrum_master: integer
+}
+
+user: {
+  shape: sql_table
+  id: serial {constraint: primary_key}
+  username: text {constraint: unique}
+  full_name: text
+  password: text
+}
+
+sprint: {
+  shape: sql_table
+  id: serial {constraint: primary_key}
+  team_id: integer {constraint: foreign_key}
+}
+
+comment: {
+  shape: sql_table
+  id: serial {constraint: primary_key}
+  author: integer {constraint: foreign_key}
+  content: text
+}
+
+team_meeting: {
+  shape: sql_table
+  id: serial {constraint: primary_key}
+  title: text
+  agenda: text
+}
+
+article: {
+  shape: sql_table
+  id: serial {constraint: primary_key}
+  author: integer {constraint: foreign_key}
+}
+
+product_release: {
+  shape: sql_table
+  id: serial {constraint: primary_key}
+  product_id: integer {constraint: foreign_key}
+  sprint_id: integer {constraint: foreign_key}
+  notes: integer {constraint: foreign_key}
+}
+
+product_release.notes <-> article: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+release_changelog_entry: {
+  shape: sql_table
+  release_id: integer {constraint: foreign_key}
+  task_id: integer {constraint: foreign_key}
+  type: text {tooltip: See keepachangelog.org}
+  comment: text
+}
+
+release_changelog_entry.release_id <-> product_release: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+release_changelog_entry.task_id <-> task: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+sprint <-> product_release.sprint_id: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+  label: "release after sprint. we may need to release during\na sprint, but we MUST release after"
+}
+
+product_release.product_id <-> product: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+article <-> team_meeting: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+  label: "Meeting minutes"
+}
+
+article.author <-> user: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+team_dailies: {
+  shape: sql_table
+  team_id: integer
+  meeting_id: integer
+}
+
+team <-> team_dailies.team_id: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+team_meeting <-> team_dailies.meeting_id: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+
+
+sprint.planning_meeting <-> team_meeting: {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+sprint.review_meeting <-> team_meeting: {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+sprint.retro_meeting <-> team_meeting: {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+team <-> team_meeting: {
+  label: "Daily Meeting"
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+team_meeting <-> user: {
+  label: "participants"
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+comment <-> task: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+comment <-> article: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+comment.author <-> user: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+team.id <-> sprint.team_id: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+team.scrum_master <-> user: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+product.owner <-> user: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+task: {
+  shape: sql_table
+  id: serial {constraint: primary_key}
+  type: text
+  title: text
+  descripton: text
+  product_id: integer {constraint: foreign_key}
+}
+
+task_relation: {
+  shape: sql_table
+  type: text
+  parent: integer {constraint: foreign_key}
+  child: integer {constraint: foreign_key}
+}
+
+task_relation.parent <-> task: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+task_relation.child <-> task: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+product.id <-> task.product_id: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+  label: "Product Backlog"
+}
+
+sprint.id <-> task.id: {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+  label: "Sprint Backlog"
+}
+
+task_changes: {
+  shape: sql_table
+  task_id: integer {constraint: foreign_key}
+  field_name: text
+  previous_value: json
+  new_value: json
+  changed_by: integer {constraint: foreign_key}
+  changed_at: timestamp_tz
+}
+
+task_changes.task_id <-> task: {
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+  source-arrowhead: {
+    shape: cf-many
+  }
+}
+
+task_changes.changed_by <-> user: {
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+  source-arrowhead: {
+    shape: cf-many
+  }
+}
+
+product_teams: {
+  shape: sql_table
+  product_id: integer {constraint: foreign_key}
+  team_id: integer {constraint: foreign_key}
+}
+
+product <-> product_teams.team_id: {
+  target-arrowhead: {
+    shape: cf-many
+  }
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+product_teams.product_id <-> team: {
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+  source-arrowhead: {
+    shape: cf-many
+  }
+}
