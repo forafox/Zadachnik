@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import z from "zod";
-import { api } from "@/shared/api";
+import { api, setAccessToken, setRefreshToken } from "@/shared/api";
 
 export const signUpRequestSchema = z.object({
   username: z.string(),
@@ -10,11 +10,17 @@ export const signUpRequestSchema = z.object({
 
 type Values = z.infer<typeof signUpRequestSchema>;
 
-export function useSignInMutation() {
+export function useSignUpMutation() {
   return useMutation({
-    mutationFn: (valuesRaw: Values) => {
+    mutationFn: async (valuesRaw: Values) => {
       const values = signUpRequestSchema.parse(valuesRaw);
-      return api.api.register(values);
+      const { data } = await api.api.register(values);
+
+      return data;
+    },
+    onSuccess: (tokens) => {
+      setAccessToken(tokens.accessToken);
+      setRefreshToken(tokens.refreshToken);
     },
   });
 }

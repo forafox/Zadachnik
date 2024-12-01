@@ -1,11 +1,11 @@
+import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
-import { userSchema } from "../user";
+import { api } from "@/shared/api";
 import {
   paginatedRequestSchema,
   paginatedResponseSchema,
 } from "@/shared/api/schemas";
-import { queryOptions } from "@tanstack/react-query";
-import { api } from "@/shared/api";
+import { userSchema } from "../user";
 
 export const teamSchema = z.object({
   id: z.string(),

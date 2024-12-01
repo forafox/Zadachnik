@@ -1,10 +1,14 @@
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import {
   getTeamsQueryOptions,
   getTeamsRequestSchema,
   useTeamsTable,
 } from "@/entities/team";
+import { defaultPagination } from "@/shared/api/schemas";
 import { DataTable } from "@/shared/components/data-table";
+import { PaginationFooter } from "@/shared/components/pagination.tsx";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs";
 import {
   Breadcrumb,
@@ -12,8 +16,6 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/shared/components/ui/breadcrumb";
-import { defaultPagination } from "@/shared/api/schemas";
-import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/_authenticated/teams/")({
   component: RouteComponent,
@@ -25,10 +27,11 @@ export const Route = createFileRoute("/_authenticated/teams/")({
 });
 
 function RouteComponent() {
-  const data = Route.useLoaderData();
-  const table = useTeamsTable(data.values);
+  const initialData = Route.useLoaderData();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
+  const { data } = useQuery({ ...getTeamsQueryOptions(search), initialData });
+  const table = useTeamsTable(data.values);
   const { t } = useTranslation("team");
 
   return (
@@ -48,6 +51,11 @@ function RouteComponent() {
         </SetSidebarBreadcrumbs>
       </SetSidebarBreadcrumbs>
       <DataTable table={table} />
+      <PaginationFooter
+        query={search}
+        total={data.total}
+        setQuery={(search) => navigate({ search })}
+      />
     </div>
   );
 }

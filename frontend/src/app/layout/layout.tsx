@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { CreateProductDialogContent } from "@/widgets/create-product-dialog";
 import { PrincipalSidebarFooter } from "@/entities/principal";
 import { ProductsSidebar, ProductsSidebarSkeleton } from "@/entities/product";
+import { TeamsSidebar } from "@/entities/team";
 import { defaultPagination } from "@/shared/api/schemas";
 import { AppSidebar } from "@/shared/components/app-sidebar.tsx";
 import {
@@ -22,7 +23,6 @@ import {
   SidebarTrigger,
 } from "@/shared/components/ui/sidebar.tsx";
 import { useDialog } from "@/shared/hooks/use-dialog.tsx";
-import { TeamsSidebar } from "@/entities/team";
 
 export const Layout = () => {
   return (
