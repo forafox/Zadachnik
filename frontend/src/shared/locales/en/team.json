@@ -1,4 +1,11 @@
 {
+  "breadcrumbs": {
+    "list": {
+      "teams": {
+        "title": "Teams"
+      }
+    }
+  },
   "sidebar": {
     "title": "Your Teams",
     "actions": {
