@@ -11,6 +11,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/shared/components/ui/sidebar.tsx";
+import { FeatureFlag } from "@/shared/lib/feature-flags.tsx";
 
 export function TeamsSidebar() {
   const { data, isPending, error } = useQuery(
@@ -41,14 +42,17 @@ function TeamSidebarEntry({ team }: { team: Team }) {
         <TeamLink team={team} />
       </SidebarMenuButton>
       <SidebarMenuSub>
-        <SidebarMenuSubItem>
-          <SidebarMenuSubButton asChild>
-            <TeamLink team={team} section={"meetings"} />
-          </SidebarMenuSubButton>
-          <SidebarMenuSubButton asChild>
-            <TeamLink team={team} section={"sprints"} />
-          </SidebarMenuSubButton>
-        </SidebarMenuSubItem>
+        {(["meetings", "sprints"] as const).map((section) => (
+          <>
+            <FeatureFlag key={section} flag={`teams.${section}`}>
+              <SidebarMenuSubItem>
+                <SidebarMenuSubButton asChild>
+                  <TeamLink team={team} section={section} />
+                </SidebarMenuSubButton>
+              </SidebarMenuSubItem>
+            </FeatureFlag>
+          </>
+        ))}
       </SidebarMenuSub>
     </SidebarMenuItem>
   );

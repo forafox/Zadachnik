@@ -1,11 +1,9 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { PlusCircle, UserCog, UserRoundPlus } from "lucide-react";
+import { UserCog } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { getPrincipalQueryOptions } from "@/entities/principal";
 import { getTeamQueryOptions, useTeamsBreadcrumbs } from "@/entities/team";
 import { UserHoverCard } from "@/entities/user";
-import { Badge } from "@/shared/components/ui/badge.tsx";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   Card,
