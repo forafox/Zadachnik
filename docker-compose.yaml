@@ -17,6 +17,7 @@ networks:
 services:
   frontend:
     image: ${FRONTEND_IMAGE}
+    container_name: zadachnik__frontend
     healthcheck:
       <<: *healthcheck
       test: ["CMD", "curl", "-f", "http://localhost:80"]
@@ -31,8 +32,9 @@ services:
       - traefik-ingress
   backend:
     image: ${BACKEND_IMAGE}
+    container_name: zadachnik__backend
     environment:
-      - POSTGRES_HOST=postgres:5432
+      - POSTGRES_HOST=zadachnik__db:5432
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
@@ -47,13 +49,14 @@ services:
       - traefik.http.routers.backend.tls.certresolver=letsEncrypt
       - traefik.http.services.backend.loadbalancer.server.port=8080
     depends_on:
-      postgres:
+      db:
         condition: "service_healthy"
     networks:
       - traefik-ingress
       - internal
-  postgres:
+  db:
     image: ${POSTGRES_IMAGE}
+    container_name: zadachnik__db
     healthcheck:
       <<: *healthcheck
       start_period: 1s
@@ -69,6 +72,7 @@ services:
       - internal
   ingress:
     image: ${TRAEFIK_IMAGE}
+    container_name: zadachnik__ingress
     ports:
       - 80:80
       - 443:443
