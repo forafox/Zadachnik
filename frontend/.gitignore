@@ -25,3 +25,5 @@ dist-ssr
 *.gen.ts
 
 !src/shared/api.gen.ts
+
+coverage/

@@ -29,6 +29,8 @@ jobs:
       run: pnpm run build
     - name: Linter
       run: pnpm run lint
+    - name: Tests
+      run: pnpm run test:covergae
 
   build-backend:
     permissions:
