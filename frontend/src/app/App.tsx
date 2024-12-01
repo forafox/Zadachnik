@@ -10,6 +10,7 @@ import common from "@/shared/locales/en/common.json";
 import landing from "@/shared/locales/en/landing.json";
 import principal from "@/shared/locales/en/principal.json";
 import product from "@/shared/locales/en/product.json";
+import team from "@/shared/locales/en/team.json";
 import { routeTree } from "@/routeTree.gen";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ export const resources = {
     product,
     common,
     landing,
+    team,
   },
 } as const;
 

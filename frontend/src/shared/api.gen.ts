@@ -9,13 +9,11 @@
  * ---------------------------------------------------------------
  */
 
-export interface ProductResponse {
+export interface TeamResponse {
   /** @format int64 */
   id: number;
-  ticker: string;
   title: string;
-  description?: string;
-  owner: UserResponse;
+  scrumMaster: UserResponse;
 }
 
 export interface UserResponse {
@@ -24,6 +22,51 @@ export interface UserResponse {
   username: string;
   fullName: string;
   role: "USER" | "ADMIN";
+}
+
+export interface UpdateTeamRequest {
+  title: string;
+}
+
+/** Error message model */
+export interface ErrorMessage {
+  /**
+   * @format int32
+   * @example 404
+   */
+  statusCode: number;
+  /**
+   * @format date-time
+   * @example "2024-04-11T12:00:00Z"
+   */
+  timestamp: string;
+  /** @example "Resource not found" */
+  description: string;
+  /** @example "The requested resource could not be found" */
+  message: string;
+}
+
+export interface TaskResponse {
+  /** @format int64 */
+  id: number;
+  type: string;
+  title: string;
+  description?: string;
+}
+
+export interface CreateTaskRequest {
+  type: string;
+  title: string;
+  description?: string;
+}
+
+export interface ProductResponse {
+  /** @format int64 */
+  id: number;
+  ticker: string;
+  title: string;
+  description?: string;
+  owner: UserResponse;
 }
 
 export interface ContentDisposition {
@@ -51,24 +94,28 @@ export interface ContentDisposition {
    * @format date-time
    */
   readDate?: string;
-  inline?: boolean;
-  attachment?: boolean;
   formData?: boolean;
+  attachment?: boolean;
+  inline?: boolean;
 }
 
 export interface ErrorResponse {
   body?: ProblemDetail;
   statusCode?: HttpStatusCode;
-  detailMessageArguments?: Array<object>;
   typeMessageCode?: string;
   detailMessageCode?: string;
   titleMessageCode?: string;
+  detailMessageArguments?: Array<object>;
   headers?: {
-    contentDisposition?: ContentDisposition;
-    acceptCharset?: Array<string>;
-    /** @format uri */
-    location?: string;
-    range?: Array<HttpRange>;
+    accessControlAllowOrigin?: string;
+    accessControlAllowMethods?: Array<HttpMethod>;
+    accessControlAllowHeaders?: Array<string>;
+    accessControlExposeHeaders?: Array<string>;
+    accessControlAllowCredentials?: boolean;
+    /** @format int64 */
+    accessControlMaxAge?: number;
+    accessControlRequestMethod?: HttpMethod;
+    accessControlRequestHeaders?: Array<string>;
     accept?: Array<MediaType>;
     acceptLanguageAsLocales?: Array<{
       language?: string;
@@ -90,16 +137,17 @@ export interface ErrorResponse {
       displayVariant?: string;
     }>;
     acceptPatch?: Array<MediaType>;
-    accessControlAllowCredentials?: boolean;
-    accessControlAllowHeaders?: Array<string>;
-    accessControlAllowMethods?: Array<HttpMethod>;
-    accessControlAllowOrigin?: string;
-    accessControlExposeHeaders?: Array<string>;
-    /** @format int64 */
-    accessControlMaxAge?: number;
-    accessControlRequestHeaders?: Array<string>;
-    accessControlRequestMethod?: HttpMethod;
+    /** @uniqueItems true */
+    allow?: Array<HttpMethod>;
+    acceptLanguage?: Array<{
+      range?: string;
+      /** @format double */
+      weight?: number;
+    }>;
+    basicAuth?: string;
+    acceptCharset?: Array<string>;
     bearerAuth?: string;
+    contentDisposition?: ContentDisposition;
     contentLanguage?: {
       language?: string;
       displayName?: string;
@@ -131,8 +179,9 @@ export interface ErrorResponse {
     upgrade?: string;
     vary?: Array<string>;
     empty?: boolean;
+    /** @format uri */
+    location?: string;
     host?: {
-      hostString?: string;
       address?: {
         hostAddress?: string;
         /** @format byte */
@@ -154,6 +203,7 @@ export interface ErrorResponse {
       port?: number;
       unresolved?: boolean;
       hostName?: string;
+      hostString?: string;
     };
     all?: Record<string, string>;
     /** @format int64 */
@@ -162,16 +212,9 @@ export interface ErrorResponse {
     date?: number;
     /** @format int64 */
     contentLength?: number;
-    /** @uniqueItems true */
-    allow?: Array<HttpMethod>;
-    cacheControl?: string;
     connection?: Array<string>;
-    acceptLanguage?: Array<{
-      range?: string;
-      /** @format double */
-      weight?: number;
-    }>;
-    basicAuth?: string;
+    range?: Array<HttpRange>;
+    cacheControl?: string;
     contentType?: MediaType;
     /** @format int64 */
     ifModifiedSince?: number;
@@ -185,11 +228,11 @@ export type HttpRange = object;
 
 export interface HttpStatusCode {
   error?: boolean;
-  is4xxClientError?: boolean;
-  is5xxServerError?: boolean;
   is1xxInformational?: boolean;
   is2xxSuccessful?: boolean;
   is3xxRedirection?: boolean;
+  is4xxClientError?: boolean;
+  is5xxServerError?: boolean;
 }
 
 export interface MediaType {
@@ -198,11 +241,11 @@ export interface MediaType {
   parameters?: Record<string, string>;
   /** @format double */
   qualityValue?: number;
+  charset?: string;
   wildcardType?: boolean;
   wildcardSubtype?: boolean;
   subtypeSuffix?: string;
   concrete?: boolean;
-  charset?: string;
 }
 
 export interface ProblemDetail {
@@ -223,6 +266,37 @@ export interface UpdateProductRequest {
   description?: string;
 }
 
+export interface CreateTeamRequest {
+  title: string;
+}
+
+export interface TeamMeetingResponse {
+  /** @format int64 */
+  id: number;
+  type: "DAILY" | "PLANNING" | "REVIEW" | "RETROSPECTIVE";
+  agenda: string;
+  team: TeamResponse;
+  /** @uniqueItems true */
+  users: Array<UserResponse>;
+}
+
+export interface CreateTeamMeetingRequest {
+  type: "DAILY" | "PLANNING" | "REVIEW" | "RETROSPECTIVE";
+  agenda: string;
+}
+
+export interface CreateProductRequest {
+  ticker: string;
+  title: string;
+  description?: string;
+}
+
+export interface SignUpRequest {
+  username: string;
+  fullName: string;
+  password: string;
+}
+
 /** JWT Response */
 export interface JwtResponse {
   /**
@@ -236,36 +310,6 @@ export interface JwtResponse {
   accessToken: string;
   /** Refresh token */
   refreshToken: string;
-}
-
-/** Error message model */
-export interface ErrorMessage {
-  /**
-   * @format int32
-   * @example 404
-   */
-  statusCode: number;
-  /**
-   * @format date-time
-   * @example "2024-04-11T12:00:00Z"
-   */
-  timestamp: string;
-  /** @example "Resource not found" */
-  description: string;
-  /** @example "The requested resource could not be found" */
-  message: string;
-}
-
-export interface CreateProductRequest {
-  ticker: string;
-  title: string;
-  description?: string;
-}
-
-export interface SignUpRequest {
-  username: string;
-  fullName: string;
-  password: string;
 }
 
 export interface SignInRequest {
@@ -286,8 +330,8 @@ export interface Page {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
   last?: boolean;
+  pageable?: PageableObject;
   first?: boolean;
   empty?: boolean;
 }
@@ -325,8 +369,8 @@ export interface PageUserResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
   last?: boolean;
+  pageable?: PageableObject;
   first?: boolean;
   empty?: boolean;
 }
@@ -356,6 +400,25 @@ export interface GetMeResponse {
   role: "USER" | "ADMIN";
 }
 
+export interface PageTeamResponse {
+  /** @format int64 */
+  totalElements?: number;
+  /** @format int32 */
+  totalPages?: number;
+  /** @format int32 */
+  size?: number;
+  content?: Array<TeamResponse>;
+  /** @format int32 */
+  number?: number;
+  sort?: Array<SortObject>;
+  /** @format int32 */
+  numberOfElements?: number;
+  last?: boolean;
+  pageable?: PageableObject;
+  first?: boolean;
+  empty?: boolean;
+}
+
 export interface PageProductResponse {
   /** @format int64 */
   totalElements?: number;
@@ -369,10 +432,38 @@ export interface PageProductResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
   last?: boolean;
+  pageable?: PageableObject;
   first?: boolean;
   empty?: boolean;
+}
+
+export interface PageTaskChangeResponse {
+  /** @format int64 */
+  totalElements?: number;
+  /** @format int32 */
+  totalPages?: number;
+  /** @format int32 */
+  size?: number;
+  content?: Array<TaskChangeResponse>;
+  /** @format int32 */
+  number?: number;
+  sort?: Array<SortObject>;
+  /** @format int32 */
+  numberOfElements?: number;
+  last?: boolean;
+  pageable?: PageableObject;
+  first?: boolean;
+  empty?: boolean;
+}
+
+export interface TaskChangeResponse {
+  field: "ID" | "TYPE" | "TITLE" | "DESCRIPTION" | "PRODUCT";
+  previousValue: object;
+  newValue: object;
+  changedBy: UserResponse;
+  /** @format date-time */
+  changedAt: string;
 }
 
 import type {
@@ -561,6 +652,95 @@ export class Api<
 > extends HttpClient<SecurityDataType> {
   api = {
     /**
+     * @description Get team by id
+     *
+     * @tags Teams API
+     * @name GetTeamById
+     * @summary Get team by id
+     * @request GET:/api/teams/{id}
+     * @secure
+     */
+    getTeamById: (id: number, params: RequestParams = {}) =>
+      this.request<TeamResponse, ErrorMessage | TeamResponse>({
+        path: `/api/teams/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Update team by id
+     *
+     * @tags Teams API
+     * @name UpdateTeamById
+     * @summary Update team by id
+     * @request PUT:/api/teams/{id}
+     * @secure
+     */
+    updateTeamById: (
+      id: number,
+      data: UpdateTeamRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<TeamResponse, ErrorMessage | TeamResponse>({
+        path: `/api/teams/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Get task by id
+     *
+     * @tags Tasks API
+     * @name GetTaskById
+     * @summary Get task by id
+     * @request GET:/api/products/{productId}/tasks/{taskId}
+     * @secure
+     */
+    getTaskById: (
+      taskId: number,
+      productId: number,
+      params: RequestParams = {},
+    ) =>
+      this.request<TaskResponse, ErrorMessage | TaskResponse>({
+        path: `/api/products/${productId}/tasks/${taskId}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Update task by id
+     *
+     * @tags Tasks API
+     * @name UpdateTaskById
+     * @summary Update task by id
+     * @request PUT:/api/products/{productId}/tasks/{taskId}
+     * @secure
+     */
+    updateTaskById: (
+      taskId: number,
+      productId: number,
+      data: CreateTaskRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<TaskResponse, ErrorMessage | TaskResponse>({
+        path: `/api/products/${productId}/tasks/${taskId}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Get product by id
      *
      * @tags Products API
@@ -570,7 +750,7 @@ export class Api<
      * @secure
      */
     getProductById: (id: number, params: RequestParams = {}) =>
-      this.request<JwtResponse, ErrorMessage | ErrorResponse>({
+      this.request<ProductResponse, ErrorMessage | ErrorResponse>({
         path: `/api/products/${id}`,
         method: "GET",
         secure: true,
@@ -592,9 +772,86 @@ export class Api<
       data: UpdateProductRequest,
       params: RequestParams = {},
     ) =>
-      this.request<JwtResponse, ErrorMessage | ErrorResponse>({
+      this.request<ProductResponse, ErrorMessage | ErrorResponse>({
         path: `/api/products/${id}`,
         method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Get paginated teams
+     *
+     * @tags Teams API
+     * @name GetTeams
+     * @summary Get teams with pagination
+     * @request GET:/api/teams
+     * @secure
+     */
+    getTeams: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        page?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        size?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Page, ErrorMessage | PageTeamResponse>({
+        path: `/api/teams`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Create a new team
+     *
+     * @tags Teams API
+     * @name CreateTeam
+     * @summary Create Team
+     * @request POST:/api/teams
+     * @secure
+     */
+    createTeam: (data: CreateTeamRequest, params: RequestParams = {}) =>
+      this.request<TeamResponse, ErrorMessage>({
+        path: `/api/teams`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Create team meeting
+     *
+     * @tags Teams API
+     * @name CreateTeamMeeting
+     * @summary Create team meeting
+     * @request POST:/api/teams/{id}/meetings
+     * @secure
+     */
+    createTeamMeeting: (
+      id: number,
+      data: CreateTeamMeetingRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<TeamMeetingResponse, ErrorMessage>({
+        path: `/api/teams/${id}/meetings`,
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
@@ -626,12 +883,11 @@ export class Api<
       },
       params: RequestParams = {},
     ) =>
-      this.request<Page, ErrorMessage | PageProductResponse>({
+      this.request<PageProductResponse, ErrorMessage | PageProductResponse>({
         path: `/api/products`,
         method: "GET",
         query: query,
         secure: true,
-        format: "json",
         ...params,
       }),
 
@@ -645,8 +901,32 @@ export class Api<
      * @secure
      */
     createProduct: (data: CreateProductRequest, params: RequestParams = {}) =>
-      this.request<JwtResponse, ErrorMessage>({
+      this.request<ProductResponse, ErrorMessage>({
         path: `/api/products`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Create a new task
+     *
+     * @tags Tasks API
+     * @name CreateTask
+     * @summary Create task
+     * @request POST:/api/products/{productId}/tasks
+     * @secure
+     */
+    createTask: (
+      productId: number,
+      data: CreateTaskRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<TaskResponse, ErrorMessage>({
+        path: `/api/products/${productId}/tasks`,
         method: "POST",
         body: data,
         secure: true,
@@ -763,6 +1043,41 @@ export class Api<
       }),
 
     /**
+     * @description Get task changes
+     *
+     * @tags Tasks API
+     * @name GetTaskChanges
+     * @summary Get task changes
+     * @request GET:/api/products/{productId}/tasks/{taskId}/history
+     * @secure
+     */
+    getTaskChanges: (
+      taskId: number,
+      productId: number,
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        page?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        size?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Page, ErrorMessage | PageTaskChangeResponse>({
+        path: `/api/products/${productId}/tasks/${taskId}/history`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Get current user
      *
      * @tags User Management
@@ -776,6 +1091,72 @@ export class Api<
         path: `/api/me`,
         method: "GET",
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description Get teams of current user
+     *
+     * @tags User Management
+     * @name GetTeamsOfCurrentUser
+     * @summary Get teams of current user
+     * @request GET:/api/me/teams
+     * @secure
+     */
+    getTeamsOfCurrentUser: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        page?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        size?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Page, PageTeamResponse>({
+        path: `/api/me/teams`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Get products of current user
+     *
+     * @tags User Management
+     * @name GetProductsOfCurrentUser
+     * @summary Get products of current user
+     * @request GET:/api/me/products
+     * @secure
+     */
+    getProductsOfCurrentUser: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        page?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        size?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Page, PageProductResponse>({
+        path: `/api/me/products`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
         ...params,
       }),
   };

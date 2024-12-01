@@ -1,0 +1,43 @@
+{
+  "breadcrumbs": {
+    "list": {
+      "teams": {
+        "title": "Teams"
+      }
+    }
+  },
+  "sidebar": {
+    "title": "Your Teams",
+    "actions": {
+      "create": {
+        "label": "Create Team"
+      }
+    }
+  },
+  "items": {
+    "title": {
+      "label": "Title"
+    },
+    "scrumMaster": {
+      "label": "Scrum Master"
+    },
+    "meetings": {
+      "label": "Meetings"
+    },
+    "sprints": {
+      "label": "Sprints"
+    },
+    "participants": {
+      "label": "Participants"
+    }
+  },
+  "actions": {
+    "create": {
+      "title": "Create a New Product",
+      "label": "Create"
+    },
+    "manage": {
+      "label": "Manage"
+    }
+  }
+}

@@ -21,7 +21,7 @@ import {
   FormLabel,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
-import { signUpRequestSchema, useSignInMutation } from "../api";
+import { signUpRequestSchema, useSignUpMutation } from "../api";
 
 const schema = signUpRequestSchema;
 
@@ -30,7 +30,7 @@ export function SignUpPage({ path }: { path?: string }) {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
-  const { mutate, isPending, error } = useSignInMutation();
+  const { mutate, isPending, error } = useSignUpMutation();
   const { t } = useTranslation("auth");
 
   function handleSubmit(values: z.infer<typeof schema>) {
@@ -43,7 +43,7 @@ export function SignUpPage({ path }: { path?: string }) {
     });
   }
 
-  const errorText = useSignInError(error);
+  const errorText = useSignUpError(error);
 
   return (
     <Card className="mx-auto mt-8 w-full max-w-md">
@@ -111,7 +111,7 @@ export function SignUpPage({ path }: { path?: string }) {
   );
 }
 
-function useSignInError(error: Error | null) {
+function useSignUpError(error: Error | null) {
   const { t } = useTranslation("auth");
 
   if (!error) {

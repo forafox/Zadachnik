@@ -1,14 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
-import { ProductLink } from "@/entities/product";
-import {
-  getPrincipalProductsQueryOptions,
-  Product,
-} from "@/entities/product/api";
+import { TeamLink } from "@/entities/team";
+import { getPrincipalTeamsQueryOptions, Team } from "@/entities/team/api";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import {
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
@@ -18,9 +13,9 @@ import {
 } from "@/shared/components/ui/sidebar.tsx";
 import { FeatureFlag } from "@/shared/lib/feature-flags.tsx";
 
-export function ProductsSidebar() {
+export function TeamsSidebar() {
   const { data, isPending, error } = useQuery(
-    getPrincipalProductsQueryOptions(defaultPagination),
+    getPrincipalTeamsQueryOptions(defaultPagination),
   );
 
   if (error) {
@@ -28,37 +23,31 @@ export function ProductsSidebar() {
   }
 
   if (isPending) {
-    return <ProductsSidebarSkeleton />;
+    return <TeamsSidebarSkeleton />;
   }
 
   return (
     <SidebarMenu>
-      {data.values.map((product) => (
-        <ProductSidebarEntry key={product.id} product={product} />
+      {data.values.map((team) => (
+        <TeamSidebarEntry key={team.id} team={team} />
       ))}
     </SidebarMenu>
   );
 }
 
-function ProductSidebarEntry({ product }: { product: Product }) {
+function TeamSidebarEntry({ team }: { team: Team }) {
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild>
-        <Link
-          to={`/products/$productId`}
-          params={{ productId: String(product.id) }}
-        >
-          {product.title}
-          <SidebarMenuBadge>[{product.ticker}]</SidebarMenuBadge>
-        </Link>
+        <TeamLink team={team} />
       </SidebarMenuButton>
       <SidebarMenuSub>
-        {(["issues", "releases"] as const).map((section) => (
+        {(["meetings", "sprints"] as const).map((section) => (
           <>
-            <FeatureFlag key={section} flag={`products.${section}`}>
+            <FeatureFlag key={section} flag={`teams.${section}`}>
               <SidebarMenuSubItem>
                 <SidebarMenuSubButton asChild>
-                  <ProductLink product={product} section={section} />
+                  <TeamLink team={team} section={section} />
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             </FeatureFlag>
@@ -69,7 +58,7 @@ function ProductSidebarEntry({ product }: { product: Product }) {
   );
 }
 
-export function ProductsSidebarSkeleton() {
+export function TeamsSidebarSkeleton() {
   return (
     <SidebarMenu>
       {Array.from({ length: 5 }).map((_, i) => (

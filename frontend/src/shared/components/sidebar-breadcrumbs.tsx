@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, ReactNode, useContext, useEffect } from "react";
 
 type Context = {
   breadcrumbs: React.ReactNode;
@@ -31,9 +31,8 @@ export const SidebarBreadcrumbs = () => {
   return context.breadcrumbs;
 };
 
-export const SetSidebarBreadcrumbs = ({
-  children,
-}: React.PropsWithChildren) => {
+// eslint-disable-next-line react-refresh/only-export-components
+export function useBreadcrumbs(children: ReactNode) {
   const context = useContext(SidebarBreadcrumbsContext);
   if (context == null) {
     throw new Error(
@@ -53,5 +52,12 @@ export const SetSidebarBreadcrumbs = ({
     };
   }, [context, children]);
 
+  return undefined;
+}
+
+export const SetSidebarBreadcrumbs = ({
+  children,
+}: React.PropsWithChildren) => {
+  useBreadcrumbs(children);
   return undefined;
 };
