@@ -26,12 +26,18 @@
     },
     "sprints": {
       "label": "Sprints"
+    },
+    "participants": {
+      "label": "Participants"
     }
   },
   "actions": {
     "create": {
       "title": "Create a New Product",
       "label": "Create"
+    },
+    "manage": {
+      "label": "Manage"
     }
   }
 }
