@@ -1,0 +1,326 @@
+Продукт: {
+  shape: sql_table
+  ID {constraint: primary_key}
+  Краткое имя 
+  Заголовок
+  Описание
+  Владелец {constraint: foreign_key}
+}
+
+Команда: {
+  shape: sql_table
+  ID {constraint: primary_key}
+  Заголовок
+  "Скрам Мастер"
+}
+
+Пользователь: {
+  shape: sql_table
+  ID {constraint: primary_key}
+  Логин
+  Полное имя
+  Пароль
+}
+
+Спринт: {
+  shape: sql_table
+  ID {constraint: primary_key}
+  Команда {constraint: foreign_key}
+}
+
+Комментарий: {
+  shape: sql_table
+  ID {constraint: primary_key}
+  Автор {constraint: foreign_key}
+  Контент
+}
+
+"Командное собрание": {
+  shape: sql_table
+  ID {constraint: primary_key}
+  Заголовок
+  Агенда
+  Команда {constraint: foreign_key}
+}
+
+Статья: {
+  shape: sql_table
+  ID {constraint: primary_key}
+  Автор {constraint: foreign_key}
+}
+
+"Релизы продукта": {
+  shape: sql_table
+  ID: {constraint: primary_key}
+  Продукт {constraint: foreign_key}
+  Спринт  {constraint: foreign_key}
+  Заметки {constraint: foreign_key}
+}
+
+"Релизы продукта".Заметки <-> Статья: является заметками {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+"Изменения релизов": {
+  shape: sql_table
+  Релиз {constraint: foreign_key}
+  Задание {constraint: foreign_key}
+  Тип {tooltip: See keepachangelog.org}
+  Комментарий
+}
+
+"Изменения релизов".Релиз <-> "Релизы продукта": Принадлежит {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+"Изменения релизов".Задание <-> Задание: Принадлежит {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+Спринт <-> "Релизы продукта".Спринт: Порождается {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+"Релизы продукта".Продукт <-> Продукт: Принадлежит {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+Статья <-> "Командное собрание": является минутками {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+Статья.Автор <-> Пользователь: является {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+Команда <-> "Командное собрание".Команда: Daily встреча {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+Спринт."Планировочное собрание" <-> "Командное собрание": проводится в рамках {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+Спринт."Ревью собрание" <-> "Командное собрание": проводится в рамках {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+Спринт."Ретро собрание" <-> "Командное собрание": проводится в рамках {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+Команда <-> "Командное собрание": проводит {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+"Командное собрание" <-> Пользователь: участвует {
+  label: "participants"
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+Комментарий <-> Задание: принадлежит {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+Комментарий <-> Статья: принадлежит {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+Комментарий. <-> Пользователь: от кого {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+Команда.ID <-> Спринт.Команда: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+Команда."Скрам Мастер" <-> Пользователь: является {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+Продукт.Владелец <-> Пользователь: является {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one
+  }
+}
+
+Продукт <-> Команда: разрабатывается {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+Задание: {
+  shape: sql_table
+  ID {constraint: primary_key}
+  Тип
+  Заголовок
+  Описание
+  Продукт {constraint: foreign_key}
+}
+
+"Связи заданий": {
+  shape: sql_table
+  Тип
+  Источник {constraint: foreign_key}
+  Цель {constraint: foreign_key}
+}
+
+"Связи заданий".Источник <-> Задание: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+"Связи заданий".Цель <-> Задание: {
+  source-arrowhead: {
+    shape: cf-many
+  }
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+}
+
+Продукт.ID <-> Задание.Продукт: {
+  source-arrowhead: {
+    shape: cf-one-required
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+Спринт.ID <-> Задание.ID: {
+  source-arrowhead: {
+    shape: cf-one
+  }
+  target-arrowhead: {
+    shape: cf-many
+  }
+}
+
+"Изменения заданий": {
+  shape: sql_table
+  Задание {constraint: foreign_key}
+  "Название характеристики" 
+  "Прошлое значение"
+  "Новое значение"
+  "Кем изменено?" {constraint: foreign_key}
+  "Когда изменено?"
+}
+
+"Изменения заданий".Задание <-> Задание: {
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+  source-arrowhead: {
+    shape: cf-many
+  }
+}
+"Изменения заданий"."Кем изменено" <-> Пользователь: кем {
+  target-arrowhead: {
+    shape: cf-one-required
+  }
+  source-arrowhead: {
+    shape: cf-many
+  }
+}
