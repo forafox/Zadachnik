@@ -1,18 +1,18 @@
 {
-    "sidebar": {
-        "title": "Your Teams",
-        "actions": {
-            "create": {
-                "label": "Create Team"
-            }
-        }
-    },
-    "items": {
-        "title": {
-            "label": "Title"
-        },
-        "scrumMaster": {
-            "label": "Scrum Master"
-        }
+  "sidebar": {
+    "title": "Your Teams",
+    "actions": {
+      "create": {
+        "label": "Create Team"
+      }
     }
+  },
+  "items": {
+    "title": {
+      "label": "Title"
+    },
+    "scrumMaster": {
+      "label": "Scrum Master"
+    }
+  }
 }

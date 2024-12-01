@@ -17,13 +17,11 @@ function RenderTranslation({ str }: { str: string }) {
 }
 
 const columnDef: Array<ColumnDef<Team>> = [
-    {
-        accessorKey: "title",
-        header: () => <RenderTranslation str="items.title.label" />,
-        cell: ({ row }) => (
-            <TeamLink team={row.original} />
-        ),
-    },
+  {
+    accessorKey: "title",
+    header: () => <RenderTranslation str="items.title.label" />,
+    cell: ({ row }) => <TeamLink team={row.original} />,
+  },
   {
     accessorKey: "scrumMaster",
     header: () => <RenderTranslation str="items.scrumMaster.label" />,
@@ -41,4 +39,3 @@ export function useTeamsTable(data: Array<Team>) {
     enableSorting: false,
   });
 }
-

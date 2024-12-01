@@ -466,12 +466,19 @@ export interface TaskChangeResponse {
   changedAt: string;
 }
 
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
+import type {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  HeadersDefaults,
+  ResponseType,
+} from "axios";
 import axios from "axios";
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
+export interface FullRequestParams
+  extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -486,9 +493,13 @@ export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "pa
   body?: unknown;
 }
 
-export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
+export type RequestParams = Omit<
+  FullRequestParams,
+  "body" | "method" | "query" | "path"
+>;
 
-export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
+export interface ApiConfig<SecurityDataType = unknown>
+  extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
@@ -510,8 +521,16 @@ export class HttpClient<SecurityDataType = unknown> {
   private secure?: boolean;
   private format?: ResponseType;
 
-  constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "http://localhost:8080" });
+  constructor({
+    securityWorker,
+    secure,
+    format,
+    ...axiosConfig
+  }: ApiConfig<SecurityDataType> = {}) {
+    this.instance = axios.create({
+      ...axiosConfig,
+      baseURL: axiosConfig.baseURL || "http://localhost:8080",
+    });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -521,7 +540,10 @@ export class HttpClient<SecurityDataType = unknown> {
     this.securityData = data;
   };
 
-  protected mergeRequestParams(params1: AxiosRequestConfig, params2?: AxiosRequestConfig): AxiosRequestConfig {
+  protected mergeRequestParams(
+    params1: AxiosRequestConfig,
+    params2?: AxiosRequestConfig,
+  ): AxiosRequestConfig {
     const method = params1.method || (params2 && params2.method);
 
     return {
@@ -529,7 +551,11 @@ export class HttpClient<SecurityDataType = unknown> {
       ...params1,
       ...(params2 || {}),
       headers: {
-        ...((method && this.instance.defaults.headers[method.toLowerCase() as keyof HeadersDefaults]) || {}),
+        ...((method &&
+          this.instance.defaults.headers[
+            method.toLowerCase() as keyof HeadersDefaults
+          ]) ||
+          {}),
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
@@ -550,11 +576,15 @@ export class HttpClient<SecurityDataType = unknown> {
     }
     return Object.keys(input || {}).reduce((formData, key) => {
       const property = input[key];
-      const propertyContent: any[] = property instanceof Array ? property : [property];
+      const propertyContent: any[] =
+        property instanceof Array ? property : [property];
 
       for (const formItem of propertyContent) {
         const isFileType = formItem instanceof Blob || formItem instanceof File;
-        formData.append(key, isFileType ? formItem : this.stringifyFormItem(formItem));
+        formData.append(
+          key,
+          isFileType ? formItem : this.stringifyFormItem(formItem),
+        );
       }
 
       return formData;
@@ -578,11 +608,21 @@ export class HttpClient<SecurityDataType = unknown> {
     const requestParams = this.mergeRequestParams(params, secureParams);
     const responseFormat = format || this.format || undefined;
 
-    if (type === ContentType.FormData && body && body !== null && typeof body === "object") {
+    if (
+      type === ContentType.FormData &&
+      body &&
+      body !== null &&
+      typeof body === "object"
+    ) {
       body = this.createFormData(body as Record<string, unknown>);
     }
 
-    if (type === ContentType.Text && body && body !== null && typeof body !== "string") {
+    if (
+      type === ContentType.Text &&
+      body &&
+      body !== null &&
+      typeof body !== "string"
+    ) {
       body = JSON.stringify(body);
     }
 
@@ -607,7 +647,9 @@ export class HttpClient<SecurityDataType = unknown> {
  *
  * Sample API
  */
-export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+export class Api<
+  SecurityDataType extends unknown,
+> extends HttpClient<SecurityDataType> {
   api = {
     /**
      * @description Get team by id
@@ -636,7 +678,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/teams/{id}
      * @secure
      */
-    updateTeamById: (id: number, data: UpdateTeamRequest, params: RequestParams = {}) =>
+    updateTeamById: (
+      id: number,
+      data: UpdateTeamRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<TeamResponse, ErrorMessage | TeamResponse>({
         path: `/api/teams/${id}`,
         method: "PUT",
@@ -656,7 +702,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/products/{productId}/tasks/{taskId}
      * @secure
      */
-    getTaskById: (taskId: number, productId: number, params: RequestParams = {}) =>
+    getTaskById: (
+      taskId: number,
+      productId: number,
+      params: RequestParams = {},
+    ) =>
       this.request<TaskResponse, ErrorMessage | TaskResponse>({
         path: `/api/products/${productId}/tasks/${taskId}`,
         method: "GET",
@@ -674,7 +724,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/products/{productId}/tasks/{taskId}
      * @secure
      */
-    updateTaskById: (taskId: number, productId: number, data: CreateTaskRequest, params: RequestParams = {}) =>
+    updateTaskById: (
+      taskId: number,
+      productId: number,
+      data: CreateTaskRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<TaskResponse, ErrorMessage | TaskResponse>({
         path: `/api/products/${productId}/tasks/${taskId}`,
         method: "PUT",
@@ -712,7 +767,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/products/{id}
      * @secure
      */
-    updateProductById: (id: number, data: UpdateProductRequest, params: RequestParams = {}) =>
+    updateProductById: (
+      id: number,
+      data: UpdateProductRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<ProductResponse, ErrorMessage | ErrorResponse>({
         path: `/api/products/${id}`,
         method: "PUT",
@@ -785,7 +844,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/teams/{id}/meetings
      * @secure
      */
-    createTeamMeeting: (id: number, data: CreateTeamMeetingRequest, params: RequestParams = {}) =>
+    createTeamMeeting: (
+      id: number,
+      data: CreateTeamMeetingRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<TeamMeetingResponse, ErrorMessage>({
         path: `/api/teams/${id}/meetings`,
         method: "POST",
@@ -857,7 +920,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/products/{productId}/tasks
      * @secure
      */
-    createTask: (productId: number, data: CreateTaskRequest, params: RequestParams = {}) =>
+    createTask: (
+      productId: number,
+      data: CreateTaskRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<TaskResponse, ErrorMessage>({
         path: `/api/products/${productId}/tasks`,
         method: "POST",

@@ -76,7 +76,6 @@ function SidebarProducts() {
   );
 }
 
-
 function SidebarTeams() {
   const { t } = useTranslation("team");
   const { Dialog, onClose } = useDialog();
@@ -98,7 +97,7 @@ function SidebarTeams() {
         <CreateProductDialogContent onClose={onClose} />
       </Dialog>
       <SidebarGroupContent>
-        <Suspense >
+        <Suspense>
           <TeamsSidebar />
         </Suspense>
       </SidebarGroupContent>

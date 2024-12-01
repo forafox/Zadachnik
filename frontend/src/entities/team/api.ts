@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { userSchema } from "../user";
-import { paginatedRequestSchema, paginatedResponseSchema } from "@/shared/api/schemas";
+import {
+  paginatedRequestSchema,
+  paginatedResponseSchema,
+} from "@/shared/api/schemas";
 import { queryOptions } from "@tanstack/react-query";
 import { api } from "@/shared/api";
 
@@ -35,4 +38,3 @@ export const getTeamsQueryOptions = (
     },
   });
 };
-
