@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { useTranslation } from "react-i18next";
+import { ProductLink } from "@/entities/product";
 import {
   getPrincipalProductsQueryOptions,
   Product,
@@ -16,6 +16,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/shared/components/ui/sidebar.tsx";
+import { FeatureFlag } from "@/shared/lib/feature-flags.tsx";
 
 export function ProductsSidebar() {
   const { data, isPending, error } = useQuery(
@@ -40,7 +41,6 @@ export function ProductsSidebar() {
 }
 
 function ProductSidebarEntry({ product }: { product: Product }) {
-  const { t } = useTranslation("product");
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild>
@@ -53,24 +53,17 @@ function ProductSidebarEntry({ product }: { product: Product }) {
         </Link>
       </SidebarMenuButton>
       <SidebarMenuSub>
-        <SidebarMenuSubItem>
-          <SidebarMenuSubButton asChild>
-            <Link
-              to="/products/$productId/issues"
-              params={{ productId: String(product.id) }}
-            >
-              {t("items.issues.label")}
-            </Link>
-          </SidebarMenuSubButton>
-          <SidebarMenuSubButton asChild>
-            <Link
-              to="/products/$productId/releases"
-              params={{ productId: String(product.id) }}
-            >
-              {t("items.releases.label")}
-            </Link>
-          </SidebarMenuSubButton>
-        </SidebarMenuSubItem>
+        {(["issues", "releases"] as const).map((section) => (
+          <>
+            <FeatureFlag key={section} flag={`products.${section}`}>
+              <SidebarMenuSubItem>
+                <SidebarMenuSubButton asChild>
+                  <ProductLink product={product} section={section} />
+                </SidebarMenuSubButton>
+              </SidebarMenuSubItem>
+            </FeatureFlag>
+          </>
+        ))}
       </SidebarMenuSub>
     </SidebarMenuItem>
   );
