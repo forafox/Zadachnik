@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductsPage } from "@/pages/products-page";
 import {
-  getProductsQueryOptions,
+  getPrincipalProductsQueryOptions,
   getProductsRequestSchema,
 } from "@/entities/product";
 
@@ -10,7 +10,9 @@ export const Route = createFileRoute("/_authenticated/products/")({
   validateSearch: getProductsRequestSchema,
   loaderDeps: (params) => params.search,
   loader: ({ deps, context }) => {
-    return context.queryClient.ensureQueryData(getProductsQueryOptions(deps));
+    return context.queryClient.ensureQueryData(
+      getPrincipalProductsQueryOptions(deps),
+    );
   },
 });
 

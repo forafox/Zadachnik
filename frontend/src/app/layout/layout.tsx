@@ -1,10 +1,10 @@
 import { Link, Outlet } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
-import { Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateProductDialogContent } from "@/widgets/create-product-dialog";
+import { CreateTeamDialogContent } from "@/widgets/create-team-dialog";
 import { PrincipalSidebarFooter } from "@/entities/principal";
-import { ProductsSidebar, ProductsSidebarSkeleton } from "@/entities/product";
+import { ProductsSidebar } from "@/entities/product";
 import { TeamsSidebar } from "@/entities/team";
 import { defaultPagination } from "@/shared/api/schemas";
 import { AppSidebar } from "@/shared/components/app-sidebar.tsx";
@@ -23,7 +23,6 @@ import {
   SidebarTrigger,
 } from "@/shared/components/ui/sidebar.tsx";
 import { useDialog } from "@/shared/hooks/use-dialog.tsx";
-import { CreateTeamDialogContent } from "@/widgets/create-team-dialog";
 
 export const Layout = () => {
   return (
@@ -69,9 +68,7 @@ function SidebarProducts() {
         <CreateProductDialogContent onClose={onClose} />
       </Dialog>
       <SidebarGroupContent>
-        <Suspense fallback={<ProductsSidebarSkeleton />}>
-          <ProductsSidebar />
-        </Suspense>
+        <ProductsSidebar />
       </SidebarGroupContent>
     </SidebarGroup>
   );
@@ -98,9 +95,7 @@ function SidebarTeams() {
         <CreateTeamDialogContent onClose={onClose} />
       </Dialog>
       <SidebarGroupContent>
-        <Suspense fallback={<ProductsSidebarSkeleton />}>
-          <TeamsSidebar />
-        </Suspense>
+        <TeamsSidebar />
       </SidebarGroupContent>
     </SidebarGroup>
   );

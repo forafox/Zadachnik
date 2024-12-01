@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import z from "zod";
 import {
-  getProductsQueryOptions,
+  getPrincipalProductsQueryOptions,
   getProductsRequestSchema,
   getProductsResponseSchema,
 } from "@/entities/product";
@@ -16,7 +16,7 @@ type Props = { products: z.infer<typeof getProductsResponseSchema> } & Query;
 
 export function ProductsPage({ products, ...query }: Props) {
   const { data } = useSuspenseQuery({
-    ...getProductsQueryOptions(query),
+    ...getPrincipalProductsQueryOptions(query),
     initialData: products,
   });
   const navigate = useNavigate({

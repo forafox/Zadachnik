@@ -1,7 +1,11 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { getProductsQueryOptions, Product } from "@/entities/product/api";
+import {
+  getPrincipalProductsQueryOptions,
+  Product,
+} from "@/entities/product/api";
+import { defaultPagination } from "@/shared/api/schemas.ts";
 import {
   SidebarMenu,
   SidebarMenuBadge,
@@ -14,13 +18,17 @@ import {
 } from "@/shared/components/ui/sidebar.tsx";
 
 export function ProductsSidebar() {
-  // @TODO: infinite scroll
-  const { data } = useSuspenseQuery(
-    getProductsQueryOptions({
-      page: 1,
-      pageSize: 10,
-    }),
+  const { data, isPending, error } = useQuery(
+    getPrincipalProductsQueryOptions(defaultPagination),
   );
+
+  if (error) {
+    return error.message;
+  }
+
+  if (isPending) {
+    return <ProductsSidebarSkeleton />;
+  }
 
   return (
     <SidebarMenu>

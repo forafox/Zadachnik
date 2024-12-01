@@ -31,14 +31,14 @@ export type DetailedProduct = z.infer<typeof detailedProductSchema>;
 export const getProductsRequestSchema = paginatedRequestSchema;
 export const getProductsResponseSchema = paginatedResponseSchema(productSchema);
 
-export const getProductsQueryOptions = (
+export const getPrincipalProductsQueryOptions = (
   queryRaw: z.infer<typeof getProductsRequestSchema>,
 ) => {
   const query = getProductsRequestSchema.parse(queryRaw);
   return queryOptions({
     queryKey: ["products", "list", query],
     queryFn: async () => {
-      const { data } = await api.api.getProducts({
+      const { data } = await api.api.getProductsOfCurrentUser({
         size: query.pageSize,
         page: query.page - 1,
       });

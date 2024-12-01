@@ -19,14 +19,14 @@ export type Team = z.infer<typeof teamSchema>;
 export const getTeamsRequestSchema = paginatedRequestSchema;
 export const getTeamsResponseSchema = paginatedResponseSchema(teamSchema);
 
-export const getTeamsQueryOptions = (
+export const getPrincipalTeamsQueryOptions = (
   queryRaw: z.infer<typeof getTeamsRequestSchema>,
 ) => {
   const query = getTeamsRequestSchema.parse(queryRaw);
   return queryOptions({
     queryKey: ["teams", "list", query],
     queryFn: async () => {
-      const { data } = await api.api.getTeams({
+      const { data } = await api.api.getTeamsOfCurrentUser({
         size: query.pageSize,
         page: query.page - 1,
       });
