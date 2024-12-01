@@ -1,15 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Team, TeamLink } from "@/entities/team";
+import { Section, Team, TeamLink } from "@/entities/team";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { useBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
 import {
   Breadcrumb,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbSeparator,
 } from "@/shared/components/ui/breadcrumb.tsx";
 
-export function useTeamsBreadcrumbs(team?: Team) {
+export function useTeamsBreadcrumbs(team?: Team, section?: Section) {
   const { t } = useTranslation("team");
 
   return useBreadcrumbs(
@@ -21,9 +22,20 @@ export function useTeamsBreadcrumbs(team?: Team) {
           </Link>
         </BreadcrumbLink>
         {team && (
-          <BreadcrumbLink asChild>
-            <TeamLink team={team} />
-          </BreadcrumbLink>
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbLink asChild>
+              <TeamLink team={team} />
+            </BreadcrumbLink>
+            {section && (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbLink asChild>
+                  <TeamLink team={team} section={section} />
+                </BreadcrumbLink>
+              </>
+            )}
+          </>
         )}
       </BreadcrumbList>
     </Breadcrumb>,

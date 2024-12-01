@@ -5,10 +5,11 @@ import {
   paginatedRequestSchema,
   paginatedResponseSchema,
 } from "@/shared/api/schemas";
+// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { userSchema } from "../user";
 
 export const teamSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   title: z.string(),
   scrumMaster: userSchema,
 });
@@ -23,7 +24,7 @@ export const getTeamsQueryOptions = (
 ) => {
   const query = getTeamsRequestSchema.parse(queryRaw);
   return queryOptions({
-    queryKey: ["products", "list", query],
+    queryKey: ["teams", "list", query],
     queryFn: async () => {
       const { data } = await api.api.getTeams({
         size: query.pageSize,
@@ -35,6 +36,16 @@ export const getTeamsQueryOptions = (
         total: data.totalElements,
         values: data.content,
       });
+    },
+  });
+};
+
+export const getTeamQueryOptions = (id: number) => {
+  return queryOptions({
+    queryKey: ["teams", "detail", id],
+    queryFn: async () => {
+      const { data } = await api.api.getTeamById(id);
+      return teamSchema.parse(data);
     },
   });
 };

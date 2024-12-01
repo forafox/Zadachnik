@@ -23,6 +23,7 @@ import {
   SidebarTrigger,
 } from "@/shared/components/ui/sidebar.tsx";
 import { useDialog } from "@/shared/hooks/use-dialog.tsx";
+import { CreateTeamDialogContent } from "@/widgets/create-team-dialog";
 
 export const Layout = () => {
   return (
@@ -94,10 +95,10 @@ function SidebarTeams() {
             <span className="sr-only">{t("sidebar.actions.create.label")}</span>
           </DialogTrigger>
         </SidebarGroupAction>
-        <CreateProductDialogContent onClose={onClose} />
+        <CreateTeamDialogContent onClose={onClose} />
       </Dialog>
       <SidebarGroupContent>
-        <Suspense>
+        <Suspense fallback={<ProductsSidebarSkeleton />}>
           <TeamsSidebar />
         </Suspense>
       </SidebarGroupContent>

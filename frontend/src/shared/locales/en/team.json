@@ -20,6 +20,18 @@
     },
     "scrumMaster": {
       "label": "Scrum Master"
+    },
+    "meetings": {
+      "label": "Meetings"
+    },
+    "sprints": {
+      "label": "Sprints"
+    }
+  },
+  "actions": {
+    "create": {
+      "title": "Create a New Product",
+      "label": "Create"
     }
   }
 }
