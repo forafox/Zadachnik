@@ -19,6 +19,7 @@ describe("FlattenedKeys", () => {
 
     type Keys = FlattenedKeys<obj>;
 
+    // @ts-expect-error unused
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     type _test = Expect<Equal<Keys, "a" | "b">>;
   });
@@ -33,6 +34,7 @@ describe("FlattenedKeys", () => {
   };
   type Keys = FlattenedKeys<obj>;
 
+  // @ts-expect-error unused
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   type _test = Expect<Equal<Keys, "a.b.c">>;
 });
