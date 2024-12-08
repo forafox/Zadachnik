@@ -20,7 +20,7 @@ entryPoints:
         entryPoint:
           to: webSecure
           scheme: https
-          permament: true
+          permanent: true
   webSecure:
     address: ":443"
   traefik:
