@@ -15,6 +15,12 @@ accessLog: {}
 entryPoints:
   web:
     address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: webSecure
+          scheme: https
+          permament: true
   webSecure:
     address: ":443"
   traefik:
