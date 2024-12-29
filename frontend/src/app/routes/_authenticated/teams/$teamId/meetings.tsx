@@ -4,7 +4,7 @@ import { getTeamQueryOptions, useTeamsBreadcrumbs } from "@/entities/team";
 export const Route = createFileRoute("/_authenticated/teams/$teamId/meetings")({
   component: RouteComponent,
   loader: async ({ params, context }) => {
-    return context.queryClient.ensureQueryData(
+    return context.queryClient.prefetchQuery(
       getTeamQueryOptions(Number(params.teamId)),
     );
   },

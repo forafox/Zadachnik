@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/products/")({
   validateSearch: getProductsRequestSchema,
   loaderDeps: (params) => params.search,
   loader: ({ deps, context }) => {
-    return context.queryClient.ensureQueryData(
+    return context.queryClient.prefetchQuery(
       getPrincipalProductsQueryOptions(deps),
     );
   },

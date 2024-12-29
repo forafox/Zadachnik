@@ -17,7 +17,7 @@ export const Route = createFileRoute(
 )({
   component: RouteComponent,
   loader: ({ context, params }) => {
-    return context.queryClient.ensureQueryData(
+    return context.queryClient.prefetchQuery(
       getProductByIdQueryOptions(Number(params.productId)),
     );
   },

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/teams/")({
   validateSearch: getTeamsRequestSchema,
   loaderDeps: ({ search }) => search,
   loader: async ({ deps, context }) => {
-    return context.queryClient.ensureQueryData(
+    return context.queryClient.prefetchQuery(
       getPrincipalTeamsQueryOptions(deps),
     );
   },

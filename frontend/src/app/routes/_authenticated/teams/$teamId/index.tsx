@@ -16,7 +16,7 @@ import { Separator } from "@/shared/components/ui/separator.tsx";
 export const Route = createFileRoute("/_authenticated/teams/$teamId/")({
   component: RouteComponent,
   loader: async ({ params, context }) => {
-    return context.queryClient.ensureQueryData(
+    return context.queryClient.prefetchQuery(
       getTeamQueryOptions(Number(params.teamId)),
     );
   },
