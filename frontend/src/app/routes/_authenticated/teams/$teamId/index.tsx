@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { UserCog } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -23,11 +23,8 @@ export const Route = createFileRoute("/_authenticated/teams/$teamId/")({
 });
 
 function RouteComponent() {
-  const initialData = Route.useLoaderData();
-  const { data } = useQuery({
-    ...getTeamQueryOptions(initialData.id),
-    initialData,
-  });
+  const teamId = parseInt(Route.useParams().teamId);
+  const { data } = useSuspenseQuery(getTeamQueryOptions(teamId));
   const { t } = useTranslation("team");
   useTeamsBreadcrumbs(data);
 

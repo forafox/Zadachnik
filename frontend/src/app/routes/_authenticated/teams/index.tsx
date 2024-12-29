@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   getPrincipalTeamsQueryOptions,
@@ -21,13 +21,11 @@ export const Route = createFileRoute("/_authenticated/teams/")({
 });
 
 function RouteComponent() {
-  const initialData = Route.useLoaderData();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
-  const { data } = useQuery({
-    ...getPrincipalTeamsQueryOptions(search),
-    initialData,
-  });
+  const { data } = useSuspenseQuery(
+    getPrincipalTeamsQueryOptions(search),
+  );
   const table = useTeamsTable(data.values);
   useTeamsBreadcrumbs();
 

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getTeamQueryOptions, useTeamsBreadcrumbs } from "@/entities/team";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/teams/$teamId/meetings")({
   component: RouteComponent,
@@ -11,8 +12,9 @@ export const Route = createFileRoute("/_authenticated/teams/$teamId/meetings")({
 });
 
 function RouteComponent() {
-  const team = Route.useLoaderData();
-  useTeamsBreadcrumbs(team, "meetings");
+  const teamId = parseInt(Route.useParams().teamId);
+  const { data } = useSuspenseQuery(getTeamQueryOptions(teamId));
+  useTeamsBreadcrumbs(data, "sprints");
 
   return "Hello /_authenticated/teams/$teamId/meetings!";
 }
