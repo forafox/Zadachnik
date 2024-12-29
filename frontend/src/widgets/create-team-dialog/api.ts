@@ -17,6 +17,6 @@ export function useCreateTeamMutation() {
       });
       return teamSchema.parse(data);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["teams"] }),
   });
 }
