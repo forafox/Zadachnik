@@ -1,6 +1,6 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { getTeamQueryOptions, useTeamsBreadcrumbs } from "@/entities/team";
-import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/teams/$teamId/meetings")({
   component: RouteComponent,

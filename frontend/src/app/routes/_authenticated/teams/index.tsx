@@ -23,9 +23,7 @@ export const Route = createFileRoute("/_authenticated/teams/")({
 function RouteComponent() {
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
-  const { data } = useSuspenseQuery(
-    getPrincipalTeamsQueryOptions(search),
-  );
+  const { data } = useSuspenseQuery(getPrincipalTeamsQueryOptions(search));
   const table = useTeamsTable(data.values);
   useTeamsBreadcrumbs();
 
