@@ -2,8 +2,10 @@ package com.jellyone.zadachnik.service
 
 import com.jellyone.zadachnik.domain.TeamMeeting
 import com.jellyone.zadachnik.domain.enums.TeamMeetingType
+import com.jellyone.zadachnik.exception.ResourceNotFoundException
 import com.jellyone.zadachnik.repository.TeamMeetingRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class TeamMeetingService(
@@ -14,15 +16,28 @@ class TeamMeetingService(
     fun createTeamMeeting(
         type: TeamMeetingType,
         agenda: String,
-        teamId: Long
+        teamId: Long,
+        date: LocalDateTime,
     ): TeamMeeting {
         return teamMeetingRepository.save(
             TeamMeeting(
                 id = 0,
                 agenda = agenda,
                 type = type,
+                date = date,
                 team = teamService.getTeamById(teamId)
             )
         )
+    }
+
+    fun updateTeamMeetingById(
+        id: Long,
+        date: LocalDateTime,
+        agenda: String
+    ): TeamMeeting {
+        val teamMeeting = teamMeetingRepository.findById(id)
+            .orElseThrow { ResourceNotFoundException("Team meeting with id $id not found") }
+
+        return teamMeetingRepository.save(teamMeeting.copy(date = date, agenda = agenda))
     }
 }

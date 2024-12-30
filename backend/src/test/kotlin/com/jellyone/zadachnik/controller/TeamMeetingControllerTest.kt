@@ -24,6 +24,7 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
+import java.time.LocalDateTime
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
@@ -65,7 +66,8 @@ class TeamMeetingControllerTest {
 
         val createTeamMeetingRequest = CreateTeamMeetingRequest(
             type = TeamMeetingType.PLANNING,
-            agenda = "Agenda for the team meeting"
+            agenda = "Agenda for the team meeting",
+            date = LocalDateTime.now()
         )
         val teamId = 1L
 

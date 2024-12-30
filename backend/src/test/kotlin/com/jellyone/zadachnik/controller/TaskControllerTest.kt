@@ -62,7 +62,8 @@ class TaskControllerTest {
         val request = CreateTaskRequest(
             type = "Test type",
             title = "Test title",
-            description = "Test description"
+            description = "Test description",
+            status = "TO_DO"
         )
         val response = RestAssured.given()
             .auth().oauth2(jwtToken)
@@ -79,6 +80,7 @@ class TaskControllerTest {
         assertEquals("Test type", response.type)
         assertEquals("Test title", response.title)
         assertEquals("Test description", response.description)
+        assertEquals("TO_DO", response.status)
     }
 
     @Order(2)
@@ -118,7 +120,8 @@ class TaskControllerTest {
         val request = CreateTaskRequest(
             type = "Feature",
             title = "Updated Task",
-            description = "Updated Description"
+            description = "Updated Description",
+            status = "DONE"
         )
         val response = RestAssured.given()
             .auth().oauth2(jwtToken)
@@ -136,6 +139,7 @@ class TaskControllerTest {
         assertEquals("Feature", response.type)
         assertEquals("Updated Task", response.title)
         assertEquals("Updated Description", response.description)
+        assertEquals("DONE", response.status)
     }
 
     @Order(5)

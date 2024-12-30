@@ -57,7 +57,8 @@ class TeamMeetingController(
         return teamMeetingService.createTeamMeeting(
             type = teamMeeting.type,
             agenda = teamMeeting.agenda,
-            teamId = id
+            teamId = id,
+            date = teamMeeting.date
         ).toResponse()
     }
 }
