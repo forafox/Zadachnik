@@ -168,4 +168,16 @@ class ProductController(
             )
         }
     }
+
+    @GetMapping("/{productId}/tasks")
+    fun getTasksByProductId(
+        @PathVariable productId: Long,
+        @RequestParam(required = false) assigneeId: Long?,
+        @RequestParam(required = false) status: String?,
+        @RequestParam(required = false) teamId: Long?,
+        @RequestParam(defaultValue = "0") pageNumber: Int,
+        @RequestParam(defaultValue = "10") pageSize: Int
+    ) = productService.getTasksByProductId(productId, assigneeId, teamId, status, pageNumber, pageSize).map { task ->
+        task.toResponse()
+    }
 }
