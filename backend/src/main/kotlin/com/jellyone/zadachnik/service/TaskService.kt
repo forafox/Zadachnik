@@ -57,6 +57,7 @@ class TaskService(
             type = type,
             title = title,
             description = description,
+            status = TaskStatus.valueOf(status),
             product = productService.getProductById(productId)
         )
 
