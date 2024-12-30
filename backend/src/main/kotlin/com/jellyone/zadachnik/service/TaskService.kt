@@ -3,6 +3,8 @@ package com.jellyone.zadachnik.service
 import com.jellyone.zadachnik.domain.Task
 import com.jellyone.zadachnik.exception.ResourceNotFoundException
 import com.jellyone.zadachnik.repository.TaskRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
@@ -47,5 +49,19 @@ class TaskService(
         taskChangeService.logChanges(task, updatedTask)
 
         return taskRepository.save(updatedTask)
+    }
+
+    fun findSprintTasks(
+        sprintId: Long,
+        assigneeId: Long?,
+        productId: Long?,
+        status: String?,
+        pageable: Pageable
+    ): Page<Task> {
+        return taskRepository.findSprintTasks(sprintId, assigneeId, productId, status, pageable)
+    }
+
+    fun getTasksByIds(ids: List<Long>): List<Task> {
+        return taskRepository.findAllById(ids)
     }
 }
