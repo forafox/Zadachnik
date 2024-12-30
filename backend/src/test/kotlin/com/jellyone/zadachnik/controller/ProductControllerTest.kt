@@ -175,6 +175,26 @@ class ProductControllerTest {
     }
 
     @Test
+    fun getTasksByProductIdShouldReturnOk() {
+        val productId = 1L
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .queryParam("page", 0)
+            .queryParam("size", 10)
+            .`when`()
+            .get("/api/products/$productId/tasks")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .jsonPath()
+
+        val content: List<Map<String, Any>> = response.getList("content")
+
+        assert(content.isEmpty()) { "Task list should be empty" }
+    }
+
+    @Test
     fun getProductsOfCurrentUserShouldReturnOk() {
         RestAssured.given()
             .auth().oauth2(jwtToken)
