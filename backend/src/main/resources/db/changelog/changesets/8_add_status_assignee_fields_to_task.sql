@@ -1,0 +1,5 @@
+ALTER TABLE task
+    ADD COLUMN assignee INTEGER REFERENCES users (id);
+
+ALTER TABLE task
+    ADD COLUMN status TEXT;

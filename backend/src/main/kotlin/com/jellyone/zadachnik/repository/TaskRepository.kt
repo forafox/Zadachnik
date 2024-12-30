@@ -10,8 +10,6 @@ import org.springframework.data.repository.query.Param
 
 interface TaskRepository : JpaRepository<Task, Long>, JpaSpecificationExecutor<Task> {
 
-    fun findAllByIdContains(ids: List<Long>): List<Task>
-
     @Query(
         """
             SELECT t FROM Task t 

@@ -4,6 +4,7 @@ import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.SprintService
 import com.jellyone.zadachnik.web.dto.SprintModel
 import com.jellyone.zadachnik.web.request.CreateSprintRequest
+import com.jellyone.zadachnik.web.request.UpdateMeetingRequest
 import com.jellyone.zadachnik.web.request.UpdateSprintRequest
 import com.jellyone.zadachnik.web.response.SprintResponse
 import com.jellyone.zadachnik.web.response.TaskResponse
@@ -26,7 +27,7 @@ import java.security.Principal
 
 @SecurityRequirement(name = "JWT")
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/teams")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Sprints API")
@@ -40,7 +41,7 @@ import java.security.Principal
 class SprintController(
     private val sprintService: SprintService
 ) {
-    @PostMapping("/teams/{teamId}/sprints")
+    @PostMapping("/{teamId}/sprints")
     @Operation(
         summary = "Create Sprint",
         description = "Create a new sprint",
@@ -74,30 +75,37 @@ class SprintController(
         )
     ).toResponse()
 
-    @GetMapping("/teams/{teamId}/sprints/{sprintId}")
+    @GetMapping("/{teamId}/sprints/{sprintId}")
     fun getSprintsByTeamIdAndSprintId(
         @PathVariable("teamId") teamId: Long,
         @PathVariable("sprintId") sprintId: Long
     ) = sprintService.getSprintById(sprintId).toResponse()
 
-    @PutMapping("/teams/{teamId}/sprints/{sprintId}")
+    @PutMapping("/{teamId}/sprints/{sprintId}")
     fun updateSprintByTeamIdAndSprintId(
         @PathVariable("teamId") teamId: Long,
         @PathVariable("sprintId") sprintId: Long,
         @Valid @RequestBody request: UpdateSprintRequest
     ) = sprintService.updateSprintById(
-        sprintId,
-        SprintModel(
-            length = request.length,
-            startAt = request.startsAt,
-            tasksIds = request.tasksIds,
-            planningDateTime = request.planningDateTime,
-            retroDateTime = request.retroDateTime,
-            reviewDateTime = request.reviewDateTime,
-        )
+        sprintId = sprintId,
+        length = request.length,
+        startAt = request.startsAt,
+        tasksIds = request.tasksIds,
     ).toResponse()
 
-    @GetMapping("/teams/{teamId}/sprints/{sprintId}/tasks")
+    @PutMapping("/{teamId}/sprints/{sprintId}/meeting")
+    fun updateMeetingBySprintIdAndMeetingType(
+        @PathVariable("teamId") teamId: Long,
+        @PathVariable("sprintId") sprintId: Long,
+        @Valid @RequestBody request: UpdateMeetingRequest
+    ) = sprintService.updateMeeting(
+        sprintId = sprintId,
+        meetingType = request.type,
+        agenda = request.agenda,
+        date = request.date,
+    ).toResponse()
+
+    @GetMapping("/{teamId}/sprints/{sprintId}/tasks")
     fun getSprintTasks(
         @PathVariable("teamId") teamId: Long,
         @PathVariable("sprintId") sprintId: Long,
@@ -114,12 +122,15 @@ class SprintController(
             status = status,
             PageRequest.of(pageNumber, pageSize)
         ).map { task ->
-            TaskResponse(
-                id = task.id,
-                title = task.title,
-                description = task.description,
-                type = task.type
-            )
+            task.toResponse()
         }
 
+    @GetMapping("/{teamId}/sprints")
+    fun getSprintsByTeamId(
+        @PathVariable("teamId") teamId: Long,
+        @RequestParam(defaultValue = "0") pageNumber: Int,
+        @RequestParam(defaultValue = "10") pageSize: Int
+    ) = sprintService.getSprintsByTeamId(teamId, pageNumber, pageSize).map { sprint ->
+        sprint.toResponse()
+    }
 }

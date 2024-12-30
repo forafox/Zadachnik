@@ -9,8 +9,11 @@ import com.jellyone.zadachnik.exception.ResourceNotFoundException
 import com.jellyone.zadachnik.repository.SprintRepository
 import com.jellyone.zadachnik.web.dto.SprintModel
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class SprintService(
@@ -44,28 +47,54 @@ class SprintService(
     }
 
     fun updateSprintById(
-        id: Long,
-        sprintModel: SprintModel
+        sprintId: Long,
+        startAt: LocalDateTime,
+        length: Int,
+        tasksIds: List<Long>
     ): Sprint {
         val sprint =
-            sprintRepository.findById(id).orElseThrow { ResourceNotFoundException("Sprint with id $id not found") }
-
-        val planingMeeting =
-            meetingService.updateTeamMeetingById(sprint.planningMeeting.id, sprint.planningMeeting.date)
-        val reviewMeeting = meetingService.updateTeamMeetingById(sprint.reviewMeeting.id, sprint.reviewMeeting.date)
-        val retroMeeting = meetingService.updateTeamMeetingById(sprint.retroMeeting.id, sprint.retroMeeting.date)
+            sprintRepository.findById(sprintId)
+                .orElseThrow { ResourceNotFoundException("Sprint with id $sprintId not found") }
 
         val updatedSprint = sprint.copy(
-            planningMeeting = planingMeeting,
-            reviewMeeting = reviewMeeting,
-            retroMeeting = retroMeeting,
-            length = sprintModel.length,
-            startAt = sprintModel.startAt,
-            tasks = taskService.getTasksByIds(sprintModel.tasksIds).toMutableList()
+            length = length,
+            startAt = startAt,
+            tasks = taskService.getTasksByIds(tasksIds).toMutableList()
         )
 
         return sprintRepository.save(updatedSprint)
     }
+
+    fun updateMeeting(sprintId: Long, meetingType: TeamMeetingType, agenda: String, date: LocalDateTime): TeamMeeting {
+        val sprint = sprintRepository.findById(sprintId)
+            .orElseThrow { ResourceNotFoundException("Sprint with id $sprintId not found") }
+
+        val updatedMeeting: TeamMeeting?
+
+        val updatedSprint = when (meetingType) {
+            TeamMeetingType.PLANNING -> {
+                updatedMeeting =
+                    meetingService.updateTeamMeetingById(sprint.planningMeeting.id, date, agenda)
+                sprint.copy(planningMeeting = updatedMeeting)
+            }
+
+            TeamMeetingType.REVIEW -> {
+                updatedMeeting = meetingService.updateTeamMeetingById(sprint.reviewMeeting.id, date, agenda)
+                sprint.copy(reviewMeeting = updatedMeeting)
+            }
+
+            TeamMeetingType.RETROSPECTIVE -> {
+                updatedMeeting = meetingService.updateTeamMeetingById(sprint.retroMeeting.id, date, agenda)
+                sprint.copy(retroMeeting = updatedMeeting)
+            }
+
+            else -> throw IllegalArgumentException("Meeting type $meetingType is not supported for update.")
+        }
+
+        sprintRepository.save(updatedSprint)
+        return updatedMeeting
+    }
+
 
     fun getSprintTasksByTeamIdAndSprintId(
         sprintId: Long,
@@ -80,6 +109,11 @@ class SprintService(
         val tasksPage = taskService.findSprintTasks(sprintId, assigneeId, productId, status, pageable)
 
         return tasksPage
+    }
+
+    fun getSprintsByTeamId(teamId: Long, page: Int, pageSize: Int): Page<Sprint> {
+        val pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "startAt"))
+        return sprintRepository.findAllByTeamId(teamId, pageable)
     }
 
     private fun createPlanningMeeting(team: Team, sprint: SprintModel) = meetingService.createTeamMeeting(

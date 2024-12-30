@@ -33,10 +33,11 @@ class TeamMeetingService(
     fun updateTeamMeetingById(
         id: Long,
         date: LocalDateTime,
+        agenda: String
     ): TeamMeeting {
         val teamMeeting = teamMeetingRepository.findById(id)
             .orElseThrow { ResourceNotFoundException("Team meeting with id $id not found") }
 
-        return teamMeetingRepository.save(teamMeeting.copy(date = date))
+        return teamMeetingRepository.save(teamMeeting.copy(date = date, agenda = agenda))
     }
 }

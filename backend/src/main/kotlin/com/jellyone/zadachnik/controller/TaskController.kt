@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor
 import org.springframework.data.domain.Page
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 @SecurityRequirement(name = "JWT")
 @RestController
@@ -56,13 +57,16 @@ class TaskController(
     @PostMapping
     fun createTask(
         @PathVariable productId: Long,
-        @RequestBody request: CreateTaskRequest
+        @RequestBody request: CreateTaskRequest,
+        principal: Principal
     ): TaskResponse {
         return taskService.createTask(
             type = request.type,
             title = request.title,
             description = request.description,
-            productId = productId
+            productId = productId,
+            status = request.status,
+            username = principal.name
         ).toResponse()
     }
 
@@ -118,7 +122,8 @@ class TaskController(
             type = request.type,
             title = request.title,
             description = request.description,
-            productId = productId
+            productId = productId,
+            status = request.status,
         ).toResponse()
     }
 
