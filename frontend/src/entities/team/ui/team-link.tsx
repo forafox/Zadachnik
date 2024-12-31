@@ -8,14 +8,16 @@ type Props = {
   team: Team;
   section?: Section;
   className?: string;
+  before?: React.ReactNode;
 };
 
-export function TeamLink({ team, section, ...props }: Props) {
+export function TeamLink({ team, section, before, ...props }: Props) {
   const { t } = useTranslation("team");
 
   if (section == undefined) {
     return (
       <Link to="/teams/$teamId" params={{ teamId: String(team.id) }} {...props}>
+        {before}
         {team.title}
       </Link>
     );
@@ -28,6 +30,7 @@ export function TeamLink({ team, section, ...props }: Props) {
         params={{ teamId: String(team.id) }}
         {...props}
       >
+        {before}
         {t("items.meetings.label")}
       </Link>
     );
@@ -40,6 +43,7 @@ export function TeamLink({ team, section, ...props }: Props) {
         params={{ teamId: String(team.id) }}
         {...props}
       >
+        {before}
         {t("items.sprints.label")}
       </Link>
     );

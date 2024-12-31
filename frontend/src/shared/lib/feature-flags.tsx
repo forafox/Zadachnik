@@ -2,12 +2,12 @@ import React from "react";
 
 const featureFlags = {
   teams: {
-    meetings: false,
-    sprints: false,
+    meetings: import.meta.env.DEV,
+    sprints: import.meta.env.DEV,
   },
   products: {
-    issues: false,
-    releases: false,
+    issues: import.meta.env.DEV,
+    releases: import.meta.env.DEV,
   },
 };
 
