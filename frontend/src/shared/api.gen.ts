@@ -9,23 +9,12 @@
  * ---------------------------------------------------------------
  */
 
-export interface TeamResponse {
-  /** @format int64 */
-  id: number;
-  title: string;
-  scrumMaster: UserResponse;
-}
-
-export interface UserResponse {
-  /** @format int64 */
-  id: number;
-  username: string;
-  fullName: string;
-  role: "USER" | "ADMIN";
-}
-
-export interface UpdateTeamRequest {
-  title: string;
+export interface UpdateSprintRequest {
+  /** @format int32 */
+  length: number;
+  /** @format date-time */
+  startsAt: string;
+  tasksIds: Array<number>;
 }
 
 /** Error message model */
@@ -46,18 +35,47 @@ export interface ErrorMessage {
   message: string;
 }
 
+export interface UpdateMeetingRequest {
+  type: "DAILY" | "PLANNING" | "REVIEW" | "RETROSPECTIVE";
+  agenda: string;
+  /** @format date-time */
+  date: string;
+}
+
+export interface TeamResponse {
+  /** @format int64 */
+  id: number;
+  title: string;
+  scrumMaster: UserResponse;
+}
+
+export interface UserResponse {
+  /** @format int64 */
+  id: number;
+  username: string;
+  fullName: string;
+  role: "USER" | "ADMIN";
+}
+
+export interface UpdateTeamRequest {
+  title: string;
+}
+
 export interface TaskResponse {
   /** @format int64 */
   id: number;
   type: string;
   title: string;
   description?: string;
+  assignee: UserResponse;
+  status: string;
 }
 
 export interface CreateTaskRequest {
   type: string;
   title: string;
   description?: string;
+  status: string;
 }
 
 export interface ProductResponse {
@@ -94,8 +112,8 @@ export interface ContentDisposition {
    * @format date-time
    */
   readDate?: string;
-  formData?: boolean;
   attachment?: boolean;
+  formData?: boolean;
   inline?: boolean;
 }
 
@@ -107,77 +125,7 @@ export interface ErrorResponse {
   titleMessageCode?: string;
   detailMessageArguments?: Array<object>;
   headers?: {
-    accessControlAllowOrigin?: string;
-    accessControlAllowMethods?: Array<HttpMethod>;
-    accessControlAllowHeaders?: Array<string>;
-    accessControlExposeHeaders?: Array<string>;
-    accessControlAllowCredentials?: boolean;
-    /** @format int64 */
-    accessControlMaxAge?: number;
-    accessControlRequestMethod?: HttpMethod;
-    accessControlRequestHeaders?: Array<string>;
     accept?: Array<MediaType>;
-    acceptLanguageAsLocales?: Array<{
-      language?: string;
-      displayName?: string;
-      country?: string;
-      variant?: string;
-      script?: string;
-      /** @uniqueItems true */
-      extensionKeys?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleAttributes?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleKeys?: Array<string>;
-      iso3Language?: string;
-      iso3Country?: string;
-      displayLanguage?: string;
-      displayScript?: string;
-      displayCountry?: string;
-      displayVariant?: string;
-    }>;
-    acceptPatch?: Array<MediaType>;
-    /** @uniqueItems true */
-    allow?: Array<HttpMethod>;
-    acceptLanguage?: Array<{
-      range?: string;
-      /** @format double */
-      weight?: number;
-    }>;
-    basicAuth?: string;
-    acceptCharset?: Array<string>;
-    bearerAuth?: string;
-    contentDisposition?: ContentDisposition;
-    contentLanguage?: {
-      language?: string;
-      displayName?: string;
-      country?: string;
-      variant?: string;
-      script?: string;
-      /** @uniqueItems true */
-      extensionKeys?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleAttributes?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleKeys?: Array<string>;
-      iso3Language?: string;
-      iso3Country?: string;
-      displayLanguage?: string;
-      displayScript?: string;
-      displayCountry?: string;
-      displayVariant?: string;
-    };
-    etag?: string;
-    /** @format int64 */
-    expires?: number;
-    ifMatch?: Array<string>;
-    ifNoneMatch?: Array<string>;
-    /** @format int64 */
-    ifUnmodifiedSince?: number;
-    origin?: string;
-    pragma?: string;
-    upgrade?: string;
-    vary?: Array<string>;
     empty?: boolean;
     /** @format uri */
     location?: string;
@@ -212,9 +160,79 @@ export interface ErrorResponse {
     date?: number;
     /** @format int64 */
     contentLength?: number;
-    connection?: Array<string>;
+    origin?: string;
     range?: Array<HttpRange>;
+    acceptCharset?: Array<string>;
+    contentDisposition?: ContentDisposition;
+    accessControlAllowOrigin?: string;
+    accessControlAllowMethods?: Array<HttpMethod>;
+    accessControlAllowHeaders?: Array<string>;
+    accessControlExposeHeaders?: Array<string>;
+    accessControlAllowCredentials?: boolean;
+    /** @format int64 */
+    accessControlMaxAge?: number;
+    accessControlRequestMethod?: HttpMethod;
+    accessControlRequestHeaders?: Array<string>;
+    acceptPatch?: Array<MediaType>;
+    bearerAuth?: string;
+    contentLanguage?: {
+      language?: string;
+      displayName?: string;
+      country?: string;
+      variant?: string;
+      script?: string;
+      /** @uniqueItems true */
+      extensionKeys?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleAttributes?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleKeys?: Array<string>;
+      iso3Language?: string;
+      iso3Country?: string;
+      displayLanguage?: string;
+      displayScript?: string;
+      displayCountry?: string;
+      displayVariant?: string;
+    };
+    etag?: string;
+    /** @format int64 */
+    expires?: number;
+    ifMatch?: Array<string>;
+    ifNoneMatch?: Array<string>;
+    /** @format int64 */
+    ifUnmodifiedSince?: number;
+    pragma?: string;
+    upgrade?: string;
+    vary?: Array<string>;
+    /** @uniqueItems true */
+    allow?: Array<HttpMethod>;
     cacheControl?: string;
+    acceptLanguage?: Array<{
+      range?: string;
+      /** @format double */
+      weight?: number;
+    }>;
+    basicAuth?: string;
+    acceptLanguageAsLocales?: Array<{
+      language?: string;
+      displayName?: string;
+      country?: string;
+      variant?: string;
+      script?: string;
+      /** @uniqueItems true */
+      extensionKeys?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleAttributes?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleKeys?: Array<string>;
+      iso3Language?: string;
+      iso3Country?: string;
+      displayLanguage?: string;
+      displayScript?: string;
+      displayCountry?: string;
+      displayVariant?: string;
+    }>;
+    connection?: Array<string>;
     contentType?: MediaType;
     /** @format int64 */
     ifModifiedSince?: number;
@@ -228,11 +246,11 @@ export type HttpRange = object;
 
 export interface HttpStatusCode {
   error?: boolean;
+  is4xxClientError?: boolean;
+  is5xxServerError?: boolean;
   is1xxInformational?: boolean;
   is2xxSuccessful?: boolean;
   is3xxRedirection?: boolean;
-  is4xxClientError?: boolean;
-  is5xxServerError?: boolean;
 }
 
 export interface MediaType {
@@ -266,8 +284,45 @@ export interface UpdateProductRequest {
   description?: string;
 }
 
+export interface UpdateArticleRequest {
+  content: string;
+}
+
 export interface CreateTeamRequest {
   title: string;
+}
+
+export interface SprintResponse {
+  /** @format int64 */
+  id: number;
+  /** @format int32 */
+  length: number;
+  /** @format date-time */
+  startAt: string;
+  /** @format date-time */
+  planningDateTime: string;
+  /** @format date-time */
+  retroDateTime: string;
+  /** @format date-time */
+  reviewDateTime: string;
+}
+
+export interface CreateSprintRequest {
+  /** @format date-time */
+  startsAt: string;
+  /** @format int32 */
+  length: number;
+  tasksIds: Array<number>;
+  /** @format date-time */
+  planningDateTime: string;
+  /** @format date-time */
+  retroDateTime: string;
+  /** @format date-time */
+  reviewDateTime: string;
+}
+
+export interface CreateArticleRequest {
+  content: string;
 }
 
 export interface TeamMeetingResponse {
@@ -283,6 +338,8 @@ export interface TeamMeetingResponse {
 export interface CreateTeamMeetingRequest {
   type: "DAILY" | "PLANNING" | "REVIEW" | "RETROSPECTIVE";
   agenda: string;
+  /** @format date-time */
+  date: string;
 }
 
 export interface CreateProductRequest {
@@ -330,8 +387,8 @@ export interface Page {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  last?: boolean;
   pageable?: PageableObject;
+  last?: boolean;
   first?: boolean;
   empty?: boolean;
 }
@@ -369,8 +426,8 @@ export interface PageUserResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  last?: boolean;
   pageable?: PageableObject;
+  last?: boolean;
   first?: boolean;
   empty?: boolean;
 }
@@ -413,8 +470,8 @@ export interface PageTeamResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  last?: boolean;
   pageable?: PageableObject;
+  last?: boolean;
   first?: boolean;
   empty?: boolean;
 }
@@ -432,8 +489,8 @@ export interface PageProductResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  last?: boolean;
   pageable?: PageableObject;
+  last?: boolean;
   first?: boolean;
   empty?: boolean;
 }
@@ -451,8 +508,8 @@ export interface PageTaskChangeResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  last?: boolean;
   pageable?: PageableObject;
+  last?: boolean;
   first?: boolean;
   empty?: boolean;
 }
@@ -652,6 +709,72 @@ export class Api<
 > extends HttpClient<SecurityDataType> {
   api = {
     /**
+     * No description
+     *
+     * @tags Sprints API
+     * @name GetSprintsByTeamIdAndSprintId
+     * @request GET:/api/teams/{teamId}/sprints/{sprintId}
+     * @secure
+     */
+    getSprintsByTeamIdAndSprintId: (
+      teamId: number,
+      sprintId: number,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/sprints/${sprintId}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Sprints API
+     * @name UpdateSprintByTeamIdAndSprintId
+     * @request PUT:/api/teams/{teamId}/sprints/{sprintId}
+     * @secure
+     */
+    updateSprintByTeamIdAndSprintId: (
+      teamId: number,
+      sprintId: number,
+      data: UpdateSprintRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/sprints/${sprintId}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Sprints API
+     * @name UpdateMeetingBySprintIdAndMeetingType
+     * @request PUT:/api/teams/{teamId}/sprints/{sprintId}/meeting
+     * @secure
+     */
+    updateMeetingBySprintIdAndMeetingType: (
+      teamId: number,
+      sprintId: number,
+      data: UpdateMeetingRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/sprints/${sprintId}/meeting`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
      * @description Get team by id
      *
      * @tags Teams API
@@ -783,6 +906,28 @@ export class Api<
       }),
 
     /**
+     * No description
+     *
+     * @tags Articles API
+     * @name UpdateArticle
+     * @request PUT:/api/articles/{id}
+     * @secure
+     */
+    updateArticle: (
+      id: number,
+      data: UpdateArticleRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/articles/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
      * @description Get paginated teams
      *
      * @tags Teams API
@@ -832,6 +977,85 @@ export class Api<
         secure: true,
         type: ContentType.Json,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Sprints API
+     * @name GetSprintsByTeamId
+     * @request GET:/api/teams/{teamId}/sprints
+     * @secure
+     */
+    getSprintsByTeamId: (
+      teamId: number,
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageNumber?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/sprints`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description Create a new sprint
+     *
+     * @tags Sprints API
+     * @name CreateSprint
+     * @summary Create Sprint
+     * @request POST:/api/teams/{teamId}/sprints
+     * @secure
+     */
+    createSprint: (
+      teamId: number,
+      data: CreateSprintRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<SprintResponse, ErrorMessage>({
+        path: `/api/teams/${teamId}/sprints`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Teams API
+     * @name CreateArticle
+     * @request POST:/api/teams/{teamId}/meetings/{meetingId}/minutes
+     * @secure
+     */
+    createArticle: (
+      meetingId: number,
+      teamId: number,
+      data: CreateArticleRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/meetings/${meetingId}/minutes`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 
@@ -908,6 +1132,43 @@ export class Api<
         secure: true,
         type: ContentType.Json,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Products API
+     * @name GetTasksByProductId
+     * @request GET:/api/products/{productId}/tasks
+     * @secure
+     */
+    getTasksByProductId: (
+      productId: number,
+      query?: {
+        /** @format int64 */
+        assigneeId?: number;
+        status?: string;
+        /** @format int64 */
+        teamId?: number;
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageNumber?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/products/${productId}/tasks`,
+        method: "GET",
+        query: query,
+        secure: true,
         ...params,
       }),
 
@@ -1039,6 +1300,44 @@ export class Api<
         method: "GET",
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Sprints API
+     * @name GetSprintTasks
+     * @request GET:/api/teams/{teamId}/sprints/{sprintId}/tasks
+     * @secure
+     */
+    getSprintTasks: (
+      teamId: number,
+      sprintId: number,
+      query?: {
+        /** @format int64 */
+        assigneeId?: number;
+        /** @format int64 */
+        productId?: number;
+        status?: string;
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageNumber?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/sprints/${sprintId}/tasks`,
+        method: "GET",
+        query: query,
+        secure: true,
         ...params,
       }),
 
