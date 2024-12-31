@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme
         Tag(name = "Teams API", description = "API for teams"),
         Tag(name = "Tasks API", description = "API for tasks"),
         Tag(name = "Sprints API", description = "API for sprints"),
+        Tag(name = "Articles API", description = "API for articles"),
     ]
 )
 

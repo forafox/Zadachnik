@@ -4,8 +4,8 @@ import com.jellyone.zadachnik.domain.enums.TeamMeetingType
 import com.jellyone.zadachnik.web.dto.SignUpRequest
 import com.jellyone.zadachnik.web.dto.auth.JwtRequest
 import com.jellyone.zadachnik.web.dto.auth.JwtResponse
-import com.jellyone.zadachnik.web.request.CreateTeamMeetingRequest
-import com.jellyone.zadachnik.web.request.CreateTeamRequest
+import com.jellyone.zadachnik.web.request.*
+import com.jellyone.zadachnik.web.response.ArticleResponse
 import com.jellyone.zadachnik.web.response.TeamMeetingResponse
 import com.jellyone.zadachnik.web.response.TeamResponse
 import io.restassured.RestAssured
@@ -85,6 +85,54 @@ class TeamMeetingControllerTest {
 
         assertEquals(TeamMeetingType.PLANNING, response.type)
         assertEquals("Agenda for the team meeting", response.agenda)
+    }
+
+    @Order(2)
+    @Test
+    fun createArticleShouldReturnOk() {
+        val teamId = 1L
+        val meetingId = 1L
+        val request = CreateArticleRequest(
+            content = "Test content"
+        )
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .contentType(ContentType.JSON)
+            .body(request)
+            .`when`()
+            .post("/api/teams/$teamId/meetings/$meetingId/minutes")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .`as`(ArticleResponse::class.java)
+
+        assertEquals("Test content", response.content)
+    }
+
+    @Order(3)
+    @Test
+    fun updateArticleByIdShouldReturnOk() {
+        val articleId = 1L
+
+        val request = UpdateArticleRequest(
+            content = "Updated content"
+        )
+
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .contentType(ContentType.JSON)
+            .body(request)
+            .`when`()
+            .put("/api/articles/$articleId")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .`as`(ArticleResponse::class.java)
+
+        assertEquals(articleId, response.id)
+        assertEquals("Updated content", response.content)
     }
 
     private fun registerTestUser() {
