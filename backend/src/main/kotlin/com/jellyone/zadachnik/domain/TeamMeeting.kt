@@ -17,7 +17,7 @@ data class TeamMeeting(
     @Column(name = "agenda")
     val agenda: String,
 
-    @Column(name="date")
+    @Column(name = "date")
     val date: LocalDateTime,
 
     @ManyToOne

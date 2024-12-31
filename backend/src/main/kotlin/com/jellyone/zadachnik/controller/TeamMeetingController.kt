@@ -2,6 +2,7 @@ package com.jellyone.zadachnik.controller
 
 import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.TeamMeetingService
+import com.jellyone.zadachnik.web.request.CreateArticleRequest
 import com.jellyone.zadachnik.web.request.CreateTeamMeetingRequest
 import com.jellyone.zadachnik.web.response.TeamMeetingResponse
 import com.jellyone.zadachnik.web.response.TeamResponse
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import lombok.RequiredArgsConstructor
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 @SecurityRequirement(name = "JWT")
 @RestController
@@ -61,4 +63,17 @@ class TeamMeetingController(
             date = teamMeeting.date
         ).toResponse()
     }
+
+    @PostMapping("{teamId}/meetings/{meetingId}/minutes")
+    fun createArticle(
+        @PathVariable meetingId: Long,
+        @PathVariable teamId: Long,
+        @RequestBody article: CreateArticleRequest,
+        principal: Principal
+    ) = teamMeetingService.createArticle(
+        meetingId = meetingId,
+        teamId = teamId,
+        content = article.content,
+        authorUsername = principal.name
+    ).toResponse()
 }
