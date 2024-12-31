@@ -1,0 +1,19 @@
+{
+  "items": {
+    "startsAt": {
+      "label": "Starts at"
+    },
+    "endsAt": {
+      "label": "Ends at"
+    },
+    "planningMeeting": {
+      "label": "Planning"
+    },
+    "reviewMeeting": {
+      "label": "Review"
+    },
+    "retroMeeting": {
+      "label": "Retro"
+    }
+  }
+}

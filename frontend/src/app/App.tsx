@@ -11,6 +11,7 @@ import landing from "@/shared/locales/en/landing.json";
 import principal from "@/shared/locales/en/principal.json";
 import product from "@/shared/locales/en/product.json";
 import team from "@/shared/locales/en/team.json";
+import sprint from "@/shared/locales/en/sprint.json";
 import { routeTree } from "@/routeTree.gen";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ export const resources = {
     common,
     landing,
     team,
+    sprint
   },
 } as const;
 
