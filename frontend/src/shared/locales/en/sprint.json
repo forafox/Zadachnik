@@ -6,6 +6,9 @@
     "endsAt": {
       "label": "Ends at"
     },
+    "length": {
+      "label": "Duration, in days"
+    },
     "planningMeeting": {
       "label": "Planning"
     },
@@ -14,6 +17,15 @@
     },
     "retroMeeting": {
       "label": "Retro"
+    },
+    "tasks": {
+      "label": "Tasks"
+    }
+  },
+  "actions": {
+    "create": {
+      "title": "Create a Sprint",
+      "label": "Create"
     }
   }
 }

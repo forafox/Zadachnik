@@ -8,6 +8,10 @@ import {
 import { getTeamQueryOptions, useTeamsBreadcrumbs } from "@/entities/team";
 import { DataTable } from "@/shared/components/data-table.tsx";
 import { PaginationFooter } from "@/shared/components/pagination.tsx";
+import { Button } from "@/shared/components/ui/button.tsx";
+import { DialogTrigger } from "@/shared/components/ui/dialog.tsx";
+import { useDialog } from "@/shared/hooks/use-dialog.tsx";
+import { CreateSprintDialogContent } from "@/entities/sprint/ui/create-dialog.tsx";
 
 const validateSearch = getTeamSprintsRequestSchema.omit({ teamId: true });
 
@@ -35,9 +39,18 @@ function RouteComponent() {
   );
   useTeamsBreadcrumbs(team, "sprints");
   const table = useSprintsTable(sprints.values);
+  const { Dialog, onClose } = useDialog();
 
   return (
     <div className="flex flex-col gap-4">
+      <header>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>Create Sprint</Button>
+          </DialogTrigger>
+          <CreateSprintDialogContent onClose={onClose} teamId={teamId} />
+        </Dialog>
+      </header>
       <DataTable table={table} />
       <PaginationFooter
         query={search}

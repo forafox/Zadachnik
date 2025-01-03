@@ -1,4 +1,8 @@
-import { queryOptions } from "@tanstack/react-query";
+import {
+  queryOptions,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import z from "zod";
 import { api } from "@/shared/api";
 import {
@@ -19,7 +23,8 @@ export type Sprint = z.infer<typeof sprintSchema>;
 export const getTeamSprintsRequestSchema = paginatedRequestSchema.extend({
   teamId: z.number(),
 });
-export const getTeamSprintsResponseSchema = paginatedResponseSchema(sprintSchema);
+export const getTeamSprintsResponseSchema =
+  paginatedResponseSchema(sprintSchema);
 
 export const getTeamSprintsQueryOptions = (
   queryRaw: z.infer<typeof getTeamSprintsRequestSchema>,
@@ -41,3 +46,26 @@ export const getTeamSprintsQueryOptions = (
     },
   });
 };
+
+export const createSprintRequestSchema = sprintSchema
+  .omit({ id: true })
+  .extend({ teamId: z.number(), tasksIds: z.number().array() });
+export type CreateSprintValues = z.infer<typeof createSprintRequestSchema>;
+
+export function useCreateSprintMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (valuesRaw: CreateSprintValues) => {
+      const values = createSprintRequestSchema.parse(valuesRaw);
+      const { data } = await api.api.createSprint(values.teamId, {
+        ...values,
+        startsAt: values.startAt.toISOString(),
+        planningDateTime: values.planningDateTime.toISOString(),
+        retroDateTime: values.retroDateTime.toISOString(),
+        reviewDateTime: values.reviewDateTime.toISOString(),
+      });
+      return sprintSchema.parse(data);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["sprints"] }),
+  });
+}

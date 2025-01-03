@@ -12,6 +12,7 @@ import {
   SidebarMenuSubItem,
 } from "@/shared/components/ui/sidebar.tsx";
 import { FeatureFlag } from "@/shared/lib/feature-flags.tsx";
+import { Fragment } from "react";
 
 export function TeamsSidebar() {
   const { data, isPending, error } = useQuery(
@@ -43,7 +44,7 @@ function TeamSidebarEntry({ team }: { team: Team }) {
       </SidebarMenuButton>
       <SidebarMenuSub>
         {(["meetings", "sprints"] as const).map((section) => (
-          <>
+          <Fragment key={section}>
             <FeatureFlag key={section} flag={`teams.${section}`}>
               <SidebarMenuSubItem>
                 <SidebarMenuSubButton asChild>
@@ -51,7 +52,7 @@ function TeamSidebarEntry({ team }: { team: Team }) {
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             </FeatureFlag>
-          </>
+          </Fragment>
         ))}
       </SidebarMenuSub>
     </SidebarMenuItem>

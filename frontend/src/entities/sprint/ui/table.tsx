@@ -8,7 +8,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { Sprint } from "@/entities/sprint";
 
 function SprintTrans(props: React.ComponentProps<typeof Trans>) {
-  const {t} = useTranslation("sprint")
+  const { t } = useTranslation("sprint");
 
   return <Trans t={t} {...props} />;
 }
