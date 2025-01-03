@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ru } from "date-fns/locale";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,7 +8,7 @@ import {
   useCreateSprintMutation,
 } from "@/entities/sprint";
 import { Button } from "@/shared/components/ui/button.tsx";
-import { DatePicker } from "@/shared/components/ui/date-picker.tsx";
+import { DateTimePicker } from "@/shared/components/ui/date-time-picker.tsx";
 import {
   DialogContent,
   DialogFooter,
@@ -20,7 +21,6 @@ import {
   FormItem,
   FormLabel,
 } from "@/shared/components/ui/form.tsx";
-import { TimePickerInput } from "@/shared/components/ui/time-picker-input.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
 
@@ -60,7 +60,7 @@ export function CreateSprintDialogContent({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.startsAt.label")}</FormLabel>
-                  <Input type="datetime-local" {...field} />
+                  <DateTimePicker modal {...field} />
                 </FormItem>
               )}
             />
@@ -81,7 +81,7 @@ export function CreateSprintDialogContent({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.planningMeeting.label")}</FormLabel>
-                  <Input type="datetime-local" {...field} />
+                  <DateTimePicker modal {...field} />
                 </FormItem>
               )}
             />
@@ -91,7 +91,7 @@ export function CreateSprintDialogContent({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.reviewMeeting.label")}</FormLabel>
-                  <Input type="datetime-local" {...field} />
+                  <DateTimePicker modal {...field} />
                 </FormItem>
               )}
             />
@@ -101,7 +101,7 @@ export function CreateSprintDialogContent({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.retroMeeting.label")}</FormLabel>
-                  <Input type="datetime-local" {...field} />
+                  <DateTimePicker modal {...field} />
                 </FormItem>
               )}
             />
