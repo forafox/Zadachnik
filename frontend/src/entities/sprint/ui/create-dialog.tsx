@@ -116,10 +116,7 @@ export function CreateSprintDialogContent({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.tasks.label")}</FormLabel>
-                  <SelectTeamTasks
-                    teamId={teamId}
-                    {...field}
-                  />
+                  <SelectTeamTasks teamId={teamId} {...field} />
                 </FormItem>
               )}
             />

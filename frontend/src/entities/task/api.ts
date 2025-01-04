@@ -35,7 +35,6 @@ export const getProductTasksQueryOptions = (
   });
 };
 
-
 export const getTeamTasksRequestSchema = z.object({
   assigneeId: z.number().optional(),
   status: taskStatus.optional(),
@@ -47,12 +46,9 @@ export type GetTeamTasksRequestValues = z.infer<
   typeof getTeamTasksRequestSchema
 >;
 
-export const getTeamTasksResponseSchema =
-  paginatedResponseSchema(taskSchema);
+export const getTeamTasksResponseSchema = paginatedResponseSchema(taskSchema);
 
-export const getTeamTasksQueryOptions = (
-  reqRaw: GetTeamTasksRequestValues,
-) => {
+export const getTeamTasksQueryOptions = (reqRaw: GetTeamTasksRequestValues) => {
   const req = getTeamTasksRequestSchema.parse(reqRaw);
   return queryOptions({
     queryKey: ["teams", "detail", req.teamId, "tasks"],

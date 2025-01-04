@@ -25,4 +25,4 @@ export const taskSchema = z.object({
   status: taskStatus,
 });
 
-export type Task = z.infer<typeof taskSchema>
+export type Task = z.infer<typeof taskSchema>;

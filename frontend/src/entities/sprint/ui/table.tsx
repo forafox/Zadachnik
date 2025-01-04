@@ -1,4 +1,8 @@
-import { ColumnDef, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import {
+  ColumnDef,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import { addDays } from "date-fns";
 import { Trans, useTranslation } from "react-i18next";
 import { Sprint } from "@/entities/sprint";

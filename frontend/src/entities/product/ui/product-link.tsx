@@ -8,7 +8,7 @@ type Props = {
   product: Product;
   section?: Section;
   className?: string;
-  before ?: React.ReactNode
+  before?: React.ReactNode;
 };
 
 export function ProductLink({ product, section, before, ...props }: Props) {

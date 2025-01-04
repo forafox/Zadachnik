@@ -22,9 +22,7 @@ type Props = {
 
 const BadgeAlertIcon = ({ controls }: Props) => {
   return (
-    <div
-      className="flex cursor-pointer select-none items-center justify-center rounded-md transition-colors duration-200 hover:bg-accent"
-    >
+    <div className="flex cursor-pointer select-none items-center justify-center rounded-md transition-colors duration-200 hover:bg-accent">
       <motion.svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"

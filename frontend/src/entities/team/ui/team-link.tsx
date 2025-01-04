@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Team } from "../api";
 import { defaultPagination } from "@/shared/api/schemas.ts";
+import { Team } from "../api";
 
 export type Section = "sprints" | "meetings";
 
