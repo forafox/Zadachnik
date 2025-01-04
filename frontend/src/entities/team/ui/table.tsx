@@ -6,9 +6,9 @@ import {
 import { useTranslation } from "react-i18next";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { UserHoverCard } from "@/entities/user";
+import { getDefaultColumn } from "@/shared/components/ui/default-column.tsx";
 import { Team } from "../api";
 import { TeamLink } from "./team-link";
-import { defaultColumn } from "@/shared/components/ui/default-column.tsx";
 
 // eslint-disable-next-line react-refresh/only-export-components
 function RenderTranslation({ str }: { str: string }) {
@@ -37,6 +37,6 @@ export function useTeamsTable(data: Array<Team>) {
     data,
     getCoreRowModel: getCoreRowModel(),
     enableSorting: false,
-    defaultColumn,
+    defaultColumn: getDefaultColumn<Team>(),
   });
 }

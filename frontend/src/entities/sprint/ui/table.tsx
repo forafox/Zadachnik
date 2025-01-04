@@ -1,12 +1,8 @@
-import {
-  ColumnDef,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { ColumnDef, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { addDays } from "date-fns";
 import { Trans, useTranslation } from "react-i18next";
 import { Sprint } from "@/entities/sprint";
-import { defaultColumn } from "@/shared/components/ui/default-column.tsx";
+import { getDefaultColumn } from "@/shared/components/ui/default-column.tsx";
 
 function SprintTrans(props: React.ComponentProps<typeof Trans>) {
   const { t } = useTranslation("sprint");
@@ -20,12 +16,11 @@ const columnDef: Array<ColumnDef<Sprint>> = [
     header: () => <SprintTrans i18nKey="items.startsAt.label" />,
   },
   {
-    accessorKey: "endsAt",
+    id: "endsAt",
     header: () => <SprintTrans i18nKey="items.endsAt.label" />,
     accessorFn: (row) => {
       const duration = row.length;
-      const endsAt = addDays(row.startAt, duration);
-      return endsAt;
+      return addDays(row.startAt, duration);
     },
   },
   {
@@ -48,6 +43,6 @@ export function useSprintsTable(data: Array<Sprint>) {
     data,
     getCoreRowModel: getCoreRowModel(),
     enableSorting: false,
-    defaultColumn,
+    defaultColumn: getDefaultColumn<Sprint>(),
   });
 }

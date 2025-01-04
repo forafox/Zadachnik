@@ -1,15 +1,17 @@
 import { TableOptions } from "@tanstack/react-table";
 import { DateTime } from "@/shared/components/ui/date-time.tsx";
 
-type DefaultColumnType = TableOptions<unknown>["defaultColumn"];
+type DefaultColumnType<T> = TableOptions<T>["defaultColumn"];
 
-export const defaultColumn: DefaultColumnType = {
-  cell: ({ getValue }) => {
-    const value = getValue();
-    if (value instanceof Date) {
-      return <DateTime value={value} />;
-    }
+export function getDefaultColumn<T>() {
+  return {
+    cell: ({ getValue }) => {
+      const value = getValue();
+      if (value instanceof Date) {
+        return <DateTime value={value} />;
+      }
 
-    return value;
-  },
-};
+      return value;
+    },
+  } as DefaultColumnType<T>;
+}

@@ -1,4 +1,5 @@
-import React, { createContext, ReactNode, useContext, useEffect } from "react";
+import { useLayoutEffect } from "@tanstack/react-router";
+import React, { createContext, ReactNode, useContext } from "react";
 
 type Context = {
   breadcrumbs: React.ReactNode;
@@ -40,7 +41,7 @@ export function useBreadcrumbs(children: ReactNode) {
     );
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let prev = context.breadcrumbs;
     context.setBreadcrumbs((preBreadcrumbs) => {
       prev = preBreadcrumbs;

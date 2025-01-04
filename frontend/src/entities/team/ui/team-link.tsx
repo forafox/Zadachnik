@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Team } from "../api";
+import { defaultPagination } from "@/shared/api/schemas.ts";
 
 export type Section = "sprints" | "meetings";
 
@@ -41,6 +42,7 @@ export function TeamLink({ team, section, before, ...props }: Props) {
       <Link
         to="/teams/$teamId/sprints"
         params={{ teamId: String(team.id) }}
+        search={defaultPagination}
         {...props}
       >
         {before}

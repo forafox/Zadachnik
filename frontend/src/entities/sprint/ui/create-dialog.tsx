@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ru } from "date-fns/locale";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,6 +6,7 @@ import {
   CreateSprintValues,
   useCreateSprintMutation,
 } from "@/entities/sprint";
+// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { SelectTeamTasks } from "@/entities/task";
 import { Button } from "@/shared/components/ui/button.tsx";
 import { DateTimePicker } from "@/shared/components/ui/date-time-picker.tsx";
@@ -40,11 +40,11 @@ export function CreateSprintDialogContent({
     },
   });
   const { t } = useTranslation("sprint");
-  const { mutate, isPending, error } = useCreateSprintMutation();
+  const { mutate, isPending } = useCreateSprintMutation();
 
   function handleSubmit(values: CreateSprintValues) {
     mutate(values, {
-      onSuccess: ({ id }) => {
+      onSuccess: () => {
         onClose();
       },
     });

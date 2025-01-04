@@ -2,8 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
 import React, { forwardRef } from "react";
 import {
-  getProductTasksQueryOptions,
-  GetProductTasksRequestValues,
   getTeamTasksQueryOptions,
   GetTeamTasksRequestValues,
   Task,
@@ -34,7 +32,7 @@ type Props = {
 export const SelectTeamTasks = forwardRef<HTMLButtonElement, Props>(
   function SelectTeamTasks({ value, onChange, ...filters }, ref) {
     const [open, setOpen] = React.useState(false);
-    const { data, isPending, isError } = useQuery(
+    const { data } = useQuery(
       getTeamTasksQueryOptions({ ...filters, page: 1, pageSize: 100 }),
     );
 
@@ -62,7 +60,7 @@ export const SelectTeamTasks = forwardRef<HTMLButtonElement, Props>(
                   <CommandItem
                     key={framework.id}
                     value={String(framework.id)}
-                    onSelect={(currentValue) => {
+                    onSelect={() => {
                       onChange([]);
                       setOpen(false);
                     }}
