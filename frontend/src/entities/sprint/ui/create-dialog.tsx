@@ -7,6 +7,7 @@ import {
   CreateSprintValues,
   useCreateSprintMutation,
 } from "@/entities/sprint";
+import { SelectTeamTasks } from "@/entities/task";
 import { Button } from "@/shared/components/ui/button.tsx";
 import { DateTimePicker } from "@/shared/components/ui/date-time-picker.tsx";
 import {
@@ -23,7 +24,6 @@ import {
 } from "@/shared/components/ui/form.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
-import { SelectTeamTasks } from "@/entities/task";
 
 export function CreateSprintDialogContent({
   teamId,
@@ -116,7 +116,10 @@ export function CreateSprintDialogContent({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.tasks.label")}</FormLabel>
-                  <SelectTeamTasks value={field.value} onChange={field.onChange} teamId={teamId} />
+                  <SelectTeamTasks
+                    teamId={teamId}
+                    {...field}
+                  />
                 </FormItem>
               )}
             />
