@@ -68,7 +68,7 @@ export const SelectTeamTasks = forwardRef<HTMLButtonElement, Props>(
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        1 === 1 ? "opacity-100" : "opacity-0",
+                        framework.title ? "opacity-100" : "opacity-0",
                       )}
                     />
                     {framework.title}

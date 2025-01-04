@@ -1,11 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { Accessibility, Phone } from "lucide-react";
 import { Fragment } from "react";
 import { TeamLink } from "@/entities/team";
 import { getPrincipalTeamsQueryOptions, Team } from "@/entities/team/api";
 import { defaultPagination } from "@/shared/api/schemas.ts";
-import { BadgeAlertIcon } from "@/shared/components/ui/badge-alert.tsx";
-import { RocketIcon } from "@/shared/components/ui/rocket.tsx";
 import { RockingChairIcon } from "@/shared/components/ui/rocking-chair.tsx";
 import {
   SidebarMenu,

@@ -8,6 +8,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { Sprint } from "@/entities/sprint";
 import { getDefaultColumn } from "@/shared/components/ui/default-column.tsx";
 
+// eslint-disable-next-line react-refresh/only-export-components
 function SprintTrans(props: React.ComponentProps<typeof Trans>) {
   const { t } = useTranslation("sprint");
 

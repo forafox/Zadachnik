@@ -1,7 +1,7 @@
 "use client";
 
 import type { AnimationControls, Variants } from "motion/react";
-import { motion, useAnimation } from "motion/react";
+import { motion } from "motion/react";
 
 const handVariants: Variants = {
   normal: {

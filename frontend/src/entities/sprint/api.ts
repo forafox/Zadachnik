@@ -4,6 +4,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import z from "zod";
+// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { taskSchema } from "@/entities/task";
 import { api } from "@/shared/api";
 import {

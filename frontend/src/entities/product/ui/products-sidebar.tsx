@@ -1,7 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { Rocket } from "lucide-react";
-import { useAnimation } from "motion/react";
 import React from "react";
 import { ProductLink } from "@/entities/product";
 import {

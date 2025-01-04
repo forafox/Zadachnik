@@ -5,7 +5,7 @@ import {
   getTeamSprintsRequestSchema,
   useSprintsTable,
 } from "@/entities/sprint";
-import { CreateSprintDialogContent } from "@/entities/sprint/ui/create-dialog.tsx";
+import { CreateSprintDialogContent } from "@/entities/sprint";
 import { getTeamQueryOptions, useTeamsBreadcrumbs } from "@/entities/team";
 import { DataTable } from "@/shared/components/data-table.tsx";
 import { PaginationFooter } from "@/shared/components/pagination.tsx";
