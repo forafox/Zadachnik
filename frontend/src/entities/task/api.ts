@@ -26,8 +26,43 @@ export const getProductTasksQueryOptions = (
   return queryOptions({
     queryKey: ["products", "detail", req.productId, "tasks"],
     queryFn: async () => {
-      const { data } = await api.api.getTasksByProductId(req.productId, req);
+      const { data } = await api.api.getTasksByProductId(req.productId, {
+        ...req,
+        pageNumber: req.page - 1,
+      });
       return getProductTasksResponseSchema.parse(data);
+    },
+  });
+};
+
+
+export const getTeamTasksRequestSchema = z.object({
+  assigneeId: z.number().optional(),
+  status: taskStatus.optional(),
+  teamId: z.number(),
+  page: z.number(),
+  pageSize: z.number(),
+});
+export type GetTeamTasksRequestValues = z.infer<
+  typeof getTeamTasksRequestSchema
+>;
+
+export const getTeamTasksResponseSchema =
+  paginatedResponseSchema(taskSchema);
+
+export const getTeamTasksQueryOptions = (
+  reqRaw: GetTeamTasksRequestValues,
+) => {
+  const req = getTeamTasksRequestSchema.parse(reqRaw);
+  return queryOptions({
+    queryKey: ["teams", "detail", req.teamId, "tasks"],
+    queryFn: async () => {
+      return getTeamTasksResponseSchema.parse({
+        total: 0,
+        page: 0,
+        pageSize: 0,
+        values: [],
+      });
     },
   });
 };

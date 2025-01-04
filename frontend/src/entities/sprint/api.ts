@@ -4,6 +4,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import z from "zod";
+import { taskSchema } from "@/entities/task";
 import { api } from "@/shared/api";
 import {
   paginatedRequestSchema,
@@ -49,7 +50,7 @@ export const getTeamSprintsQueryOptions = (
 
 export const createSprintRequestSchema = sprintSchema
   .omit({ id: true })
-  .extend({ teamId: z.number(), tasksIds: z.number().array() });
+  .extend({ teamId: z.number(), tasks: taskSchema.array() });
 export type CreateSprintValues = z.infer<typeof createSprintRequestSchema>;
 
 export function useCreateSprintMutation() {
@@ -59,6 +60,7 @@ export function useCreateSprintMutation() {
       const values = createSprintRequestSchema.parse(valuesRaw);
       const { data } = await api.api.createSprint(values.teamId, {
         ...values,
+        tasksIds: values.tasks.map((it) => it.id),
         startsAt: values.startAt.toISOString(),
         planningDateTime: values.planningDateTime.toISOString(),
         retroDateTime: values.retroDateTime.toISOString(),

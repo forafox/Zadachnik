@@ -24,3 +24,5 @@ export const taskSchema = z.object({
   assignee: userSchema.optional(),
   status: taskStatus,
 });
+
+export type Task = z.infer<typeof taskSchema>

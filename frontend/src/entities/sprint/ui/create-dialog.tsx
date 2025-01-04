@@ -23,6 +23,7 @@ import {
 } from "@/shared/components/ui/form.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
+import { SelectTeamTasks } from "@/entities/task";
 
 export function CreateSprintDialogContent({
   teamId,
@@ -35,6 +36,7 @@ export function CreateSprintDialogContent({
     resolver: zodResolver(createSprintRequestSchema),
     defaultValues: {
       teamId,
+      tasks: [],
     },
   });
   const { t } = useTranslation("sprint");
@@ -110,11 +112,11 @@ export function CreateSprintDialogContent({
             <Separator className="my-2" orientation="horizontal" />
             <FormField
               control={form.control}
-              name="tasksIds"
+              name="tasks"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.tasks.label")}</FormLabel>
-                  <Input />
+                  <SelectTeamTasks value={field.value} onChange={field.onChange} teamId={teamId} />
                 </FormItem>
               )}
             />
