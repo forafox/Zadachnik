@@ -3,9 +3,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import * as dayjs from "dayjs";
+import { addDays } from "date-fns";
 import { Trans, useTranslation } from "react-i18next";
 import { Sprint } from "@/entities/sprint";
+import { defaultColumn } from "@/shared/components/ui/default-column.tsx";
 
 function SprintTrans(props: React.ComponentProps<typeof Trans>) {
   const { t } = useTranslation("sprint");
@@ -21,9 +22,9 @@ const columnDef: Array<ColumnDef<Sprint>> = [
   {
     accessorKey: "endsAt",
     header: () => <SprintTrans i18nKey="items.endsAt.label" />,
-    cell: ({ row }) => {
-      const duration = row.original.length;
-      const endsAt = dayjs(row.original.startAt).add(duration, "days");
+    accessorFn: (row) => {
+      const duration = row.length;
+      const endsAt = addDays(row.startAt, duration);
       return endsAt;
     },
   },
@@ -47,5 +48,6 @@ export function useSprintsTable(data: Array<Sprint>) {
     data,
     getCoreRowModel: getCoreRowModel(),
     enableSorting: false,
+    defaultColumn,
   });
 }

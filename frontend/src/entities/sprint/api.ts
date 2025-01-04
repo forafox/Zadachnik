@@ -13,7 +13,7 @@ import {
 
 export const sprintSchema = z.object({
   id: z.number(),
-  length: z.number(),
+  length: z.coerce.number(),
   startAt: z.coerce.date(),
   planningDateTime: z.coerce.date(),
   retroDateTime: z.coerce.date(),

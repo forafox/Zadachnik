@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { UserHoverCard } from "@/entities/user";
 import { Team } from "../api";
 import { TeamLink } from "./team-link";
+import { defaultColumn } from "@/shared/components/ui/default-column.tsx";
 
 // eslint-disable-next-line react-refresh/only-export-components
 function RenderTranslation({ str }: { str: string }) {
@@ -36,5 +37,6 @@ export function useTeamsTable(data: Array<Team>) {
     data,
     getCoreRowModel: getCoreRowModel(),
     enableSorting: false,
+    defaultColumn,
   });
 }
