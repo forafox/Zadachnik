@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Fragment } from "react";
 import { TeamLink } from "@/entities/team";
 import { getPrincipalTeamsQueryOptions, Team } from "@/entities/team/api";
 import { defaultPagination } from "@/shared/api/schemas.ts";
@@ -12,7 +13,6 @@ import {
   SidebarMenuSubItem,
 } from "@/shared/components/ui/sidebar.tsx";
 import { FeatureFlag } from "@/shared/lib/feature-flags.tsx";
-import { Fragment } from "react";
 
 export function TeamsSidebar() {
   const { data, isPending, error } = useQuery(

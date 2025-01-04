@@ -53,7 +53,9 @@ export function DateTimePicker({
     new Intl.DateTimeFormat(locale, {
       dateStyle: "long",
       timeStyle: "short",
-    }).format(date).replace(" at ", " ");
+    })
+      .format(date)
+      .replace(" at ", " ");
 
   return (
     <Popover

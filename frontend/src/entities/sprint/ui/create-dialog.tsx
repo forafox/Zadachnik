@@ -42,7 +42,9 @@ export function CreateSprintDialogContent({
 
   function handleSubmit(values: CreateSprintValues) {
     mutate(values, {
-      onSuccess: ({ id }) => {},
+      onSuccess: ({ id }) => {
+        onClose();
+      },
     });
   }
 
