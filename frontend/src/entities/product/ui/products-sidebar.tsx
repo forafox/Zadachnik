@@ -17,6 +17,7 @@ import {
   SidebarMenuSubItem,
 } from "@/shared/components/ui/sidebar.tsx";
 import { FeatureFlag } from "@/shared/lib/feature-flags.tsx";
+import React from "react";
 
 export function ProductsSidebar() {
   const { data, isPending, error } = useQuery(
@@ -54,7 +55,7 @@ function ProductSidebarEntry({ product }: { product: Product }) {
       </SidebarMenuButton>
       <SidebarMenuSub>
         {(["issues", "releases"] as const).map((section) => (
-          <>
+          <React.Fragment key={section}>
             <FeatureFlag key={section} flag={`products.${section}`}>
               <SidebarMenuSubItem>
                 <SidebarMenuSubButton asChild>
@@ -62,7 +63,7 @@ function ProductSidebarEntry({ product }: { product: Product }) {
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             </FeatureFlag>
-          </>
+          </React.Fragment>
         ))}
       </SidebarMenuSub>
     </SidebarMenuItem>

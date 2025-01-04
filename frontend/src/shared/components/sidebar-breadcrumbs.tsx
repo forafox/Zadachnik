@@ -42,16 +42,9 @@ export function useBreadcrumbs(children: ReactNode) {
   }
 
   useLayoutEffect(() => {
-    let prev = context.breadcrumbs;
-    context.setBreadcrumbs((preBreadcrumbs) => {
-      prev = preBreadcrumbs;
-      return children;
-    });
-
-    return () => {
-      context.setBreadcrumbs(prev);
-    };
-  }, [context, children]);
+    context.setBreadcrumbs(children);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return undefined;
 }
