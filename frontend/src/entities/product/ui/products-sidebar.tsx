@@ -1,11 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
+import { Rocket } from "lucide-react";
+import { useAnimation } from "motion/react";
+import React from "react";
 import { ProductLink } from "@/entities/product";
 import {
   getPrincipalProductsQueryOptions,
   Product,
 } from "@/entities/product/api";
 import { defaultPagination } from "@/shared/api/schemas.ts";
+import { BadgeAlertIcon } from "@/shared/components/ui/badge-alert.tsx";
+import { RocketIcon } from "@/shared/components/ui/rocket.tsx";
 import {
   SidebarMenu,
   SidebarMenuBadge,
@@ -16,9 +21,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/shared/components/ui/sidebar.tsx";
+import { useIconsWithControls } from "@/shared/hooks/use-icons-with-controls.tsx";
 import { FeatureFlag } from "@/shared/lib/feature-flags.tsx";
-import React from "react";
-import { Accessibility, BadgeAlert, Phone, Rocket } from "lucide-react";
 
 export function ProductsSidebar() {
   const { data, isPending, error } = useQuery(
@@ -42,13 +46,12 @@ export function ProductsSidebar() {
   );
 }
 
-const Icons = {
-  issues: <BadgeAlert />,
-  releases: <Rocket />,
-} as const;
-
-
 function ProductSidebarEntry({ product }: { product: Product }) {
+  const icons = useIconsWithControls({
+    releases: RocketIcon,
+    issues: BadgeAlertIcon,
+  });
+
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild>
@@ -64,9 +67,18 @@ function ProductSidebarEntry({ product }: { product: Product }) {
         {(["issues", "releases"] as const).map((section) => (
           <React.Fragment key={section}>
             <FeatureFlag key={section} flag={`products.${section}`}>
-              <SidebarMenuSubItem>
+              <SidebarMenuSubItem
+                onMouseEnter={() => icons[section].controls.start("animate")}
+                onMouseLeave={() => icons[section].controls.start("normal")}
+              >
                 <SidebarMenuSubButton asChild>
-                  <ProductLink product={product} section={section} before={Icons[section]} />
+                  <ProductLink
+                    product={product}
+                    section={section}
+                    before={icons[section].icon({
+                      controls: icons[section].controls,
+                    })}
+                  />
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             </FeatureFlag>
