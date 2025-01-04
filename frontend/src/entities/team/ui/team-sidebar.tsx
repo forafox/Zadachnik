@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Accessibility, Phone } from "lucide-react";
 import { Fragment } from "react";
 import { TeamLink } from "@/entities/team";
 import { getPrincipalTeamsQueryOptions, Team } from "@/entities/team/api";
@@ -36,6 +37,11 @@ export function TeamsSidebar() {
   );
 }
 
+const Icons = {
+  meetings: <Phone />,
+  sprints: <Accessibility />,
+} as const;
+
 function TeamSidebarEntry({ team }: { team: Team }) {
   return (
     <SidebarMenuItem>
@@ -48,7 +54,11 @@ function TeamSidebarEntry({ team }: { team: Team }) {
             <FeatureFlag key={section} flag={`teams.${section}`}>
               <SidebarMenuSubItem>
                 <SidebarMenuSubButton asChild>
-                  <TeamLink team={team} section={section} />
+                  <TeamLink
+                    team={team}
+                    section={section}
+                    before={Icons[section]}
+                  />
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             </FeatureFlag>

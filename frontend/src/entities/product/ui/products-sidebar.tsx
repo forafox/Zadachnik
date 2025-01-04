@@ -18,6 +18,7 @@ import {
 } from "@/shared/components/ui/sidebar.tsx";
 import { FeatureFlag } from "@/shared/lib/feature-flags.tsx";
 import React from "react";
+import { Accessibility, BadgeAlert, Phone, Rocket } from "lucide-react";
 
 export function ProductsSidebar() {
   const { data, isPending, error } = useQuery(
@@ -41,6 +42,12 @@ export function ProductsSidebar() {
   );
 }
 
+const Icons = {
+  issues: <BadgeAlert />,
+  releases: <Rocket />,
+} as const;
+
+
 function ProductSidebarEntry({ product }: { product: Product }) {
   return (
     <SidebarMenuItem>
@@ -59,7 +66,7 @@ function ProductSidebarEntry({ product }: { product: Product }) {
             <FeatureFlag key={section} flag={`products.${section}`}>
               <SidebarMenuSubItem>
                 <SidebarMenuSubButton asChild>
-                  <ProductLink product={product} section={section} />
+                  <ProductLink product={product} section={section} before={Icons[section]} />
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             </FeatureFlag>
