@@ -7,6 +7,8 @@ import {
   useCreateTaskMutation,
 } from "@/entities/task";
 import { SelectTaskType } from "@/entities/task/ui/select-type.tsx";
+// eslint-disable-next-line @conarti/feature-sliced/layers-slices
+import { SelectUser } from "@/entities/user";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   DialogContent,
@@ -82,6 +84,16 @@ export function CreateTaskDialogContent({ productId, onClose }: Props) {
                 <FormItem>
                   <FormLabel>{t("items.description.label")}</FormLabel>
                   <Input {...field} />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="assignee"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("items.assignee.label")}</FormLabel>
+                  <SelectUser {...field} />
                 </FormItem>
               )}
             />
