@@ -2,21 +2,29 @@ import z from "zod";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { userSchema } from "@/entities/user";
 
-export const taskType = z.enum(["task", "story", "epic"]);
+export const taskType = z
+  .string()
+  .toLowerCase()
+  .pipe(z.enum(["task", "story", "epic"]));
 export type TaskType = z.infer<typeof taskType>;
 
-export const taskStatus = z.enum([
-  "backlog",
-  "to_do",
-  "in_review",
-  "in_progress",
-  "ready_to_merge",
-  "done",
-  "canceled",
-  "could_not_reproduce",
-  "will_not_fix",
-  "duplicate",
-]);
+export const taskStatus = z
+  .string()
+  .toLowerCase()
+  .pipe(
+    z.enum([
+      "backlog",
+      "to_do",
+      "in_review",
+      "in_progress",
+      "ready_to_merge",
+      "done",
+      "canceled",
+      "could_not_reproduce",
+      "will_not_fix",
+      "duplicate",
+    ]),
+  );
 
 export type TaskStatus = z.infer<typeof taskStatus>;
 export type StatusGroup = "backlog" | "started" | "completed" | "canceled";
@@ -33,7 +41,7 @@ export const taskSchema = z.object({
   type: taskType,
   title: z.string(),
   description: z.string().optional(),
-  assignee: userSchema.optional(),
+  assignee: userSchema.nullish().transform((it) => it ?? undefined),
   status: taskStatus,
 });
 

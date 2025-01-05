@@ -10,7 +10,7 @@ import { paginatedResponseSchema } from "@/shared/api/schemas.ts";
 export const getProductTasksRequestSchema = z.object({
   productId: z.number(),
   assigneeId: z.number().optional(),
-  status: taskStatus,
+  status: taskStatus.optional(),
   teamId: z.number().optional(),
   page: z.number(),
   pageSize: z.number(),
@@ -32,8 +32,14 @@ export const getProductTasksQueryOptions = (
       const { data } = await api.api.getTasksByProductId(req.productId, {
         ...req,
         pageNumber: req.page - 1,
+        status: req.status?.toUpperCase(),
       });
-      return getProductTasksResponseSchema.parse(data);
+      return getProductTasksResponseSchema.parse({
+        values: data.content,
+        page: data.number + 1,
+        pageSize: data.size,
+        total: data.totalElements,
+      });
     },
   });
 };
