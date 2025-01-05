@@ -24,7 +24,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
-import { Link } from "@tanstack/react-router";
 
 type Props = {
   productId: number;
@@ -183,12 +182,10 @@ function TaskCard({
   dragSlot?: React.ReactNode;
 }) {
   return (
-    <Card
-      className="cursor-pointer transition-all"
-    >
+    <Card className="cursor-pointer transition-all">
       <CardHeader className="p-2">
         <CardTitle className="flex flex-row items-center">
-          <Link to="/products/$productId/issues/$issueId" params={{issueId: task.id}}>{task.title}</Link>
+          {task.title}
           {dragSlot ?? <GripHorizontalIcon className="ml-auto size-4" />}
         </CardTitle>
       </CardHeader>

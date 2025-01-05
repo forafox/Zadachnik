@@ -6,7 +6,7 @@ const featureFlags = {
     sprints: true,
   },
   products: {
-    issues: true,
+    tasks: true,
     releases: true,
   },
 };

@@ -47,7 +47,7 @@ export function ProductsSidebar() {
 function ProductSidebarEntry({ product }: { product: Product }) {
   const icons = useIconsWithControls({
     releases: RocketIcon,
-    issues: BadgeAlertIcon,
+    tasks: BadgeAlertIcon,
   });
 
   return (
@@ -62,7 +62,7 @@ function ProductSidebarEntry({ product }: { product: Product }) {
         </Link>
       </SidebarMenuButton>
       <SidebarMenuSub>
-        {(["issues", "releases"] as const).map((section) => (
+        {(["tasks", "releases"] as const).map((section) => (
           <React.Fragment key={section}>
             <FeatureFlag key={section} flag={`products.${section}`}>
               <SidebarMenuSubItem

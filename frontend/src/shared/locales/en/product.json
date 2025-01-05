@@ -30,8 +30,8 @@
       "label": "Ticker",
       "description": "This tag will be used as a short name for tasks in this product, i.e. [PROD-1]"
     },
-    "issues": {
-      "label": "Issues"
+    "tasks": {
+      "label": "Tasks"
     },
     "releases": {
       "label": "Releases"

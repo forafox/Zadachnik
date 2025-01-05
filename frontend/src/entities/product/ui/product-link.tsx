@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Product } from "../api";
 
-export type Section = "issues" | "releases";
+export type Section = "tasks" | "releases";
 
 type Props = {
   product: Product;
