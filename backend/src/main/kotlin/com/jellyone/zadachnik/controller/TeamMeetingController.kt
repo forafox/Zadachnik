@@ -1,8 +1,10 @@
 package com.jellyone.zadachnik.controller
 
 import com.jellyone.zadachnik.exception.ErrorMessage
+import com.jellyone.zadachnik.service.CommentService
 import com.jellyone.zadachnik.service.TeamMeetingService
 import com.jellyone.zadachnik.web.request.CreateArticleRequest
+import com.jellyone.zadachnik.web.request.CreateCommentRequest
 import com.jellyone.zadachnik.web.request.CreateTeamMeetingRequest
 import com.jellyone.zadachnik.web.response.TeamMeetingResponse
 import com.jellyone.zadachnik.web.response.TeamResponse
@@ -33,7 +35,8 @@ import java.security.Principal
     )
 )
 class TeamMeetingController(
-    private val teamMeetingService: TeamMeetingService
+    private val teamMeetingService: TeamMeetingService,
+    private val commentService: CommentService
 ) {
     @Operation(
         summary = "Create team meeting",
@@ -76,4 +79,29 @@ class TeamMeetingController(
         content = article.content,
         authorUsername = principal.name
     ).toResponse()
+
+    @PostMapping("/{teamId}/meetings/{meetingId}/minutes/{articleId}/comments")
+    fun createComment(
+        @PathVariable meetingId: Long,
+        @PathVariable teamId: Long,
+        @PathVariable articleId: Long,
+        @RequestBody request: CreateCommentRequest,
+        principal: Principal
+    ) = commentService.createComment(
+        authorUsername = principal.name,
+        content = request.content,
+        articleId = articleId,
+        taskId = null
+    ).toResponse()
+
+    @GetMapping("/{teamId}/meetings/{meetingId}/minutes/{articleId}/comments")
+    fun getCommentsByArticleId(
+        @PathVariable meetingId: Long,
+        @PathVariable teamId: Long,
+        @PathVariable articleId: Long,
+        @RequestParam(required = false) page: Int,
+        @RequestParam(required = false) size: Int
+    ) = commentService.getCommentsByArticleId(articleId, page, size).map { comment ->
+        comment.toResponse()
+    }
 }
