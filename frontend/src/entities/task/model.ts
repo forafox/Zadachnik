@@ -3,6 +3,7 @@ import z from "zod";
 import { userSchema } from "@/entities/user";
 
 export const taskType = z.enum(["task", "story", "epic"]);
+export type TaskType = z.infer<typeof taskType>;
 
 export const taskStatus = z.enum([
   "backlog",
@@ -11,11 +12,21 @@ export const taskStatus = z.enum([
   "in_progress",
   "ready_to_merge",
   "done",
-  "cancelled",
+  "canceled",
   "could_not_reproduce",
   "will_not_fix",
   "duplicate",
 ]);
+
+export type TaskStatus = z.infer<typeof taskStatus>;
+export type StatusGroup = "backlog" | "started" | "completed" | "canceled";
+
+export const statusGroups = {
+  backlog: ["backlog", "to_do"],
+  started: ["in_progress", "in_review", "ready_to_merge"],
+  completed: ["done"],
+  canceled: ["canceled", "could_not_reproduce", "will_not_fix", "duplicate"],
+} satisfies Record<StatusGroup, TaskStatus[]>;
 
 export const taskSchema = z.object({
   id: z.number(),
