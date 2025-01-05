@@ -218,6 +218,27 @@ class TaskControllerTest {
         assertEquals(1, comments.size)
     }
 
+    @Order(8)
+    @Test
+    fun getTasksByTeamIdShouldReturnOk() {
+        val teamId = 1L
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .queryParam("page", 0)
+            .queryParam("size", 10)
+            .`when`()
+            .get("/api/teams/$teamId/tasks")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .jsonPath()
+
+        val content: List<Map<String, Any>> = response.getList("content")
+
+        assert(content.isEmpty()) { "Content should not be empty" }
+    }
+
 
     private fun registerTestUser() {
         val signUpRequest = mapOf(

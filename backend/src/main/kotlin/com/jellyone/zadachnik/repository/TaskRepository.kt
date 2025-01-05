@@ -28,4 +28,6 @@ interface TaskRepository : JpaRepository<Task, Long>, JpaSpecificationExecutor<T
         @Param("status") status: String?,
         pageable: Pageable
     ): Page<Task>
+
+    fun findAllByProductIdIn(productIds: List<Long>): List<Task>
 }
