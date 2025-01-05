@@ -3,6 +3,8 @@ package com.jellyone.zadachnik.controller
 import com.jellyone.zadachnik.domain.enums.TaskStatus
 import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.ProductService
+import com.jellyone.zadachnik.service.ProductsInvitationsService
+import com.jellyone.zadachnik.service.TeamsInvitationsService
 import com.jellyone.zadachnik.web.request.CreateProductRequest
 import com.jellyone.zadachnik.web.request.UpdateProductRequest
 import com.jellyone.zadachnik.web.response.ProductResponse
@@ -36,7 +38,8 @@ import java.security.Principal
     )
 )
 class ProductController(
-    private val productService: ProductService
+    private val productService: ProductService,
+    private val productInvitationsService: ProductsInvitationsService
 ) {
     @PostMapping
     @Operation(
@@ -187,5 +190,14 @@ class ProductController(
         pageSize
     ).map { task ->
         task.toResponse()
+    }
+
+    @GetMapping("/{productId}/teams")
+    fun getProductTeams(
+        @PathVariable productId: Long,
+        @RequestParam(required = false, defaultValue = "0") page: Int,
+        @RequestParam(required = false, defaultValue = "10") size: Int
+    ) = productInvitationsService.getProductTeams(productId, page, size).map { team ->
+        team.toResponse()
     }
 }

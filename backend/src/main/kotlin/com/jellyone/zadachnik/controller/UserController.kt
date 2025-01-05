@@ -2,6 +2,7 @@ package com.jellyone.zadachnik.controller
 
 import com.jellyone.zadachnik.service.ProductService
 import com.jellyone.zadachnik.service.TeamService
+import com.jellyone.zadachnik.service.TeamsInvitationsService
 import com.jellyone.zadachnik.service.UserService
 import com.jellyone.zadachnik.web.dto.GetMeResponse
 import com.jellyone.zadachnik.web.response.ProductResponse
@@ -26,7 +27,8 @@ import java.security.Principal
 class UserController(
     private val userService: UserService,
     private val productService: ProductService,
-    private val teamService: TeamService
+    private val teamService: TeamService,
+    private val teamsInvitationsService: TeamsInvitationsService
 ) {
 
     @GetMapping("/me")
@@ -150,4 +152,13 @@ class UserController(
         }
     }
 
+    @GetMapping("/teams/{teamId}/users")
+    fun getUsersOfTeams(
+        @PathVariable("teamId") teamId: Long,
+        @RequestParam(required = false, defaultValue = "0") page: Int,
+        @RequestParam(required = false, defaultValue = "10") size: Int,
+        principal: Principal
+    ) = teamsInvitationsService.getUsersOfTeams(teamId, page, size).map { team ->
+        team.toResponse()
+    }
 }

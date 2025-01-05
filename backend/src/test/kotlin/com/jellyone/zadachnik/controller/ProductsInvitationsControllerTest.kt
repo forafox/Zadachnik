@@ -13,9 +13,7 @@ import com.jellyone.zadachnik.web.response.ProductTeamRelationResponse
 import com.jellyone.zadachnik.web.response.TeamResponse
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
@@ -30,6 +28,7 @@ import kotlin.test.assertEquals
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class ProductsInvitationsControllerTest {
 
     @LocalServerPort
@@ -141,6 +140,30 @@ class ProductsInvitationsControllerTest {
             .then()
             .statusCode(HttpStatus.OK.value())
     }
+
+    @Order(5)
+    @Test
+    fun getProductTeamsShouldReturnOk() {
+        val productId = 1L
+
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .queryParam("page", 0)
+            .queryParam("size", 10)
+            .`when`()
+            .get("/api/products/$productId/teams")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .jsonPath()
+
+        val content: List<Map<String, Any>> = response.getList("content")
+
+        assert(content.isNotEmpty()) { "Content should not be empty" }
+
+    }
+
 
     private fun registerTestUser() {
         val signUpRequest = SignUpRequest(username = "testuser", fullName = "Test User", password = "password")
