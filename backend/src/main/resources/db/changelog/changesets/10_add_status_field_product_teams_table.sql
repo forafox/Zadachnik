@@ -1,1 +1,0 @@
-ALTER TABLE product_teams ADD COLUMN status TEXT;

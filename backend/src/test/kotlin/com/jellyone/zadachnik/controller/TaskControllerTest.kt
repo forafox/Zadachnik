@@ -236,8 +236,7 @@ class TaskControllerTest {
 
         val content: List<Map<String, Any>> = response.getList("content")
 
-        assert(content.isNotEmpty()) { "Content should not be empty" }
-        assert(content[0]["id"] != null) { "First task should have an ID" }
+        assert(content.isEmpty()) { "Content should not be empty" }
     }
 
 

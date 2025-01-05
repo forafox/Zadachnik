@@ -10,11 +10,11 @@ data class ProductTeamRelation(
     val id: Long = 0,
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     val product: Product,
 
     @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
+    @JoinColumn(name = "team_id")
     val team: Team,
 
     @Enumerated(EnumType.STRING)
