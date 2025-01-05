@@ -1,0 +1,30 @@
+{
+  "items": {
+    "title": {
+      "label": "Title"
+    },
+    "description": {
+      "label": "Description"
+    },
+    "type": {
+      "label": "Type",
+      "items": {
+        "epic": {
+          "label": "Epic"
+        },
+        "story": {
+          "label": "Story"
+        },
+        "task": {
+          "label": "Task"
+        }
+      }
+    }
+  },
+  "actions": {
+    "create": {
+      "title": "Create a Task",
+      "label": "Create"
+    }
+  }
+}

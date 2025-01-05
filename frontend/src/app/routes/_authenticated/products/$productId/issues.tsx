@@ -11,6 +11,10 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/shared/components/ui/breadcrumb.tsx";
+import { Button } from "@/shared/components/ui/button.tsx";
+import { DialogTrigger } from "@/shared/components/ui/dialog.tsx";
+import { CreateTaskDialogContent } from "@/entities/task";
+import { useDialog } from "@/shared/hooks/use-dialog.tsx";
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/issues",
@@ -30,9 +34,11 @@ function RouteComponent() {
     getProductByIdQueryOptions(productId),
   );
   const { t } = useTranslation("product");
+  const { Dialog, onClose } = useDialog();
 
   return (
     <div>
+      {/** TODO: extract to useProductsBreadcrumbs */}
       <SetSidebarBreadcrumbs>
         <Breadcrumb>
           <BreadcrumbList>
@@ -55,6 +61,14 @@ function RouteComponent() {
           </BreadcrumbList>
         </Breadcrumb>
       </SetSidebarBreadcrumbs>
+      <header>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>Create</Button>
+          </DialogTrigger>
+          <CreateTaskDialogContent productId={product.id} onClose={onClose} />
+        </Dialog>
+      </header>
       <main>Tasks will be here</main>
     </div>
   );

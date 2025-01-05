@@ -1,4 +1,7 @@
-import { queryOptions } from "@tanstack/react-query";
+import {
+  queryOptions,
+  useMutation,
+} from "@tanstack/react-query";
 import z from "zod";
 import { taskSchema, taskStatus } from "@/entities/task/model.ts";
 import { api } from "@/shared/api";
@@ -62,3 +65,25 @@ export const getTeamTasksQueryOptions = (reqRaw: GetTeamTasksRequestValues) => {
     },
   });
 };
+
+export const createTaskMutationRequestSchema = taskSchema
+  .omit({ id: true })
+  .extend({ productId: z.number() })
+  .partial({ assignee: true })
+export type CreateTaskValues = z.infer<typeof createTaskMutationRequestSchema>;
+
+export function useCreateTaskMutation() {
+  return useMutation({
+    mutationFn: async (valuesRaw: CreateTaskValues) => {
+      const values = createTaskMutationRequestSchema.parse(valuesRaw);
+      const { data } = await api.api.createTask(values.productId, {
+        type: values.type.toUpperCase(),
+        title: values.title,
+        description: values.description,
+        status: values.status.toUpperCase(),
+        assigneeId: values.assignee?.id,
+      });
+      return taskSchema.parse(data);
+    },
+  });
+}
