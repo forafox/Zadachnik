@@ -71,7 +71,7 @@ function RouteComponent() {
         </Dialog>
       </header>
       <main>
-        <KanbanBoard productId={product.id} onTaskChange={console.log} />
+        <KanbanBoard productId={product.id} />
       </main>
     </div>
   );
