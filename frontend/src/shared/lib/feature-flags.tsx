@@ -2,12 +2,12 @@ import React from "react";
 
 const featureFlags = {
   teams: {
-    meetings: false,
-    sprints: false,
+    meetings: true,
+    sprints: true,
   },
   products: {
-    issues: false,
-    releases: false,
+    issues: true,
+    releases: true,
   },
 };
 

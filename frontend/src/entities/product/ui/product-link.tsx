@@ -8,9 +8,10 @@ type Props = {
   product: Product;
   section?: Section;
   className?: string;
+  before?: React.ReactNode;
 };
 
-export function ProductLink({ product, section, ...props }: Props) {
+export function ProductLink({ product, section, before, ...props }: Props) {
   const { t } = useTranslation("product");
 
   if (section == undefined) {
@@ -20,6 +21,7 @@ export function ProductLink({ product, section, ...props }: Props) {
         params={{ productId: String(product.id) }}
         {...props}
       >
+        {before}
         {product.title}
       </Link>
     );
@@ -31,6 +33,7 @@ export function ProductLink({ product, section, ...props }: Props) {
       params={{ productId: String(product.id) }}
       {...props}
     >
+      {before}
       {t(`items.${section}.label`)}
     </Link>
   );

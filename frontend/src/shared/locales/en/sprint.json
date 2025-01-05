@@ -1,0 +1,31 @@
+{
+  "items": {
+    "startsAt": {
+      "label": "Starts at"
+    },
+    "endsAt": {
+      "label": "Ends at"
+    },
+    "length": {
+      "label": "Duration, in days"
+    },
+    "planningMeeting": {
+      "label": "Planning"
+    },
+    "reviewMeeting": {
+      "label": "Review"
+    },
+    "retroMeeting": {
+      "label": "Retro"
+    },
+    "tasks": {
+      "label": "Tasks"
+    }
+  },
+  "actions": {
+    "create": {
+      "title": "Create a Sprint",
+      "label": "Create"
+    }
+  }
+}
