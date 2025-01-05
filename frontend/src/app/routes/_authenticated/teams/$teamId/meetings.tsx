@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/teams/$teamId/meetings")({
 function RouteComponent() {
   const teamId = parseInt(Route.useParams().teamId);
   const { data } = useSuspenseQuery(getTeamQueryOptions(teamId));
-  useTeamsBreadcrumbs(data, "sprints");
+  useTeamsBreadcrumbs(data, "meetings");
 
   return "Hello /_authenticated/teams/$teamId/meetings!";
 }

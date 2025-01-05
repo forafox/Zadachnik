@@ -1,4 +1,5 @@
-import React, { createContext, ReactNode, useContext, useEffect } from "react";
+import { useLayoutEffect } from "@tanstack/react-router";
+import React, { createContext, ReactNode, useContext } from "react";
 
 type Context = {
   breadcrumbs: React.ReactNode;
@@ -40,17 +41,10 @@ export function useBreadcrumbs(children: ReactNode) {
     );
   }
 
-  useEffect(() => {
-    let prev = context.breadcrumbs;
-    context.setBreadcrumbs((preBreadcrumbs) => {
-      prev = preBreadcrumbs;
-      return children;
-    });
-
-    return () => {
-      context.setBreadcrumbs(prev);
-    };
-  }, [context, children]);
+  useLayoutEffect(() => {
+    context.setBreadcrumbs(children);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return undefined;
 }

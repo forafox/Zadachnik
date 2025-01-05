@@ -10,6 +10,7 @@ import common from "@/shared/locales/en/common.json";
 import landing from "@/shared/locales/en/landing.json";
 import principal from "@/shared/locales/en/principal.json";
 import product from "@/shared/locales/en/product.json";
+import sprint from "@/shared/locales/en/sprint.json";
 import team from "@/shared/locales/en/team.json";
 import { routeTree } from "@/routeTree.gen";
 
@@ -32,6 +33,7 @@ export const resources = {
     common,
     landing,
     team,
+    sprint,
   },
 } as const;
 
