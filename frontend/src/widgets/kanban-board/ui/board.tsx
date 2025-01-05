@@ -1,4 +1,4 @@
-import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, useDraggable, useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useQueries } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
+import { useState } from "react";
 
 type Props = {
   productId: number;
@@ -27,17 +28,29 @@ const groups: Array<StatusGroup> = [
 ];
 
 export function KanbanBoard({ productId }: Props) {
+  const [activeTask, setActiveTask] = useState<Task | undefined>();
+
+  const handleDragStart = ({ active }: DragStartEvent) => {
+    setActiveTask(active.data.current.task as Task);
+  };
+
+  function handleDragEnd({ active, over }: DragEndEvent) {
+    console.log("drag end", active.data.current.task, over?.id);
+  }
+
   return (
     <DndContext
-      onDragEnd={(e) => {
-        console.log(e);
-      }}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
     >
       <div className="flex w-full flex-row gap-2">
         {groups.map((group) => (
           <BoardColumn productId={productId} group={group} key={group} />
         ))}
       </div>
+      <DragOverlay>
+        {activeTask && <TaskCard task={activeTask} />}
+      </DragOverlay>
     </DndContext>
   );
 }
@@ -71,13 +84,13 @@ function BoardColumn({
         {pending && <LoaderCircle className="ml-auto size-4 animate-spin" />}
       </CardHeader>
       <main className="p-2">
-        {tasks?.map((task) => <TaskCard key={task.id} task={task} />)}
+        {tasks?.map((task) => <DraggableTask key={task.id} task={task} />)}
       </main>
     </Card>
   );
 }
 
-function TaskCard({ task }: { task: Task }) {
+function DraggableTask({task}: {task: Task}) {
   const { setNodeRef, transform, attributes, listeners, isDragging } =
     useDraggable({
       id: task.id,
@@ -91,8 +104,16 @@ function TaskCard({ task }: { task: Task }) {
     opacity: isDragging ? 0 : 1,
   };
 
+
+  return <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <TaskCard task={task} />
+  </div>
+}
+
+function TaskCard({ task }: { task: Task }) {
+
   return (
-    <Card ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <Card>
       <CardHeader className="p-2">
         <CardTitle>{task.title}</CardTitle>
       </CardHeader>
