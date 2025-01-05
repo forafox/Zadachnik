@@ -8,7 +8,7 @@ import {
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useQueries } from "@tanstack/react-query";
-import { LoaderCircle } from "lucide-react";
+import { GripHorizontalIcon, LoaderCircle, TextIcon } from "lucide-react";
 import { useState } from "react";
 import {
   getProductTasksQueryOptions,
@@ -17,6 +17,7 @@ import {
   Task,
   useUpdateTaskMutation,
 } from "@/entities/task";
+import { UserAvatar } from "@/entities/user";
 import {
   Card,
   CardContent,
@@ -158,19 +159,40 @@ function DraggableTask({
   if (isDragging) return null;
 
   return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
-      <TaskCard task={task} />
+    <div ref={setNodeRef} style={style}>
+      <TaskCard
+        task={task}
+        dragSlot={
+          <GripHorizontalIcon
+            {...attributes}
+            {...listeners}
+            className="ml-auto size-4"
+          />
+        }
+      />
     </div>
   );
 }
 
-function TaskCard({ task }: { task: Task }) {
+function TaskCard({
+  task,
+  dragSlot,
+}: {
+  task: Task;
+  dragSlot?: React.ReactNode;
+}) {
   return (
-    <Card>
+    <Card onClick={() => console.log("ckick")} className="transition-all cursor-pointer">
       <CardHeader className="p-2">
-        <CardTitle>{task.title}</CardTitle>
+        <CardTitle className="flex flex-row items-center">
+          {task.title}
+          {dragSlot ?? <GripHorizontalIcon className="ml-auto size-4" />}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="p-2">{task.description}</CardContent>
+      <CardContent className="p-2">
+        {task.description && <TextIcon className="size-4" />}
+        {task.assignee && <UserAvatar user={task.assignee} />}
+      </CardContent>
     </Card>
   );
 }
