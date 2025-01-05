@@ -11,10 +11,19 @@ import landing from "@/shared/locales/en/landing.json";
 import principal from "@/shared/locales/en/principal.json";
 import product from "@/shared/locales/en/product.json";
 import sprint from "@/shared/locales/en/sprint.json";
+import task from "@/shared/locales/en/task.json";
 import team from "@/shared/locales/en/team.json";
 import { routeTree } from "@/routeTree.gen";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    mutations: {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries();
+      },
+    },
+  },
+});
 
 const router = createRouter({ routeTree, context: { queryClient } });
 
@@ -34,6 +43,7 @@ export const resources = {
     landing,
     team,
     sprint,
+    task,
   },
 } as const;
 

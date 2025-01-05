@@ -38,7 +38,7 @@ export const Layout = () => {
             <SidebarTrigger />
             <SidebarBreadcrumbs />
           </header>
-          <main className="p-4">
+          <main className="h-full p-4">
             <Outlet />
           </main>
         </SidebarInset>
