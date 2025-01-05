@@ -63,10 +63,11 @@ class TaskControllerTest {
         val productId = createProductWithId1()
 
         val request = CreateTaskRequest(
-            type = "Test type",
+            type = "TASK",
             title = "Test title",
             description = "Test description",
-            status = "TO_DO"
+            status = "TO_DO",
+            assigneeId = null
         )
         val response = RestAssured.given()
             .auth().oauth2(jwtToken)
@@ -80,7 +81,7 @@ class TaskControllerTest {
             .extract()
             .`as`(TaskResponse::class.java)
 
-        assertEquals("Test type", response.type)
+        assertEquals("TASK", response.type.name)
         assertEquals("Test title", response.title)
         assertEquals("Test description", response.description)
         assertEquals("TO_DO", response.status)
@@ -121,10 +122,11 @@ class TaskControllerTest {
     fun updateTaskByIdShouldReturnOk() {
         val taskId = 1L
         val request = CreateTaskRequest(
-            type = "Feature",
+            type = "EPIC",
             title = "Updated Task",
             description = "Updated Description",
-            status = "DONE"
+            status = "DONE",
+            assigneeId = 1L
         )
         val response = RestAssured.given()
             .auth().oauth2(jwtToken)
@@ -139,7 +141,7 @@ class TaskControllerTest {
             .`as`(TaskResponse::class.java)
 
         assertEquals(taskId, response.id)
-        assertEquals("Feature", response.type)
+        assertEquals("EPIC", response.type.name)
         assertEquals("Updated Task", response.title)
         assertEquals("Updated Description", response.description)
         assertEquals("DONE", response.status)

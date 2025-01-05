@@ -3,6 +3,7 @@ package com.jellyone.zadachnik.service
 import com.jellyone.zadachnik.domain.Task
 import com.jellyone.zadachnik.domain.TaskChange
 import com.jellyone.zadachnik.domain.TaskChangeId
+import com.jellyone.zadachnik.domain.enums.TaskType
 import com.jellyone.zadachnik.repository.TaskChangeRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -27,8 +28,8 @@ class TaskChangeService(
             createTaskChange(
                 taskId = original.id,
                 fieldName = "type",
-                previousValue = original.type,
-                newValue = updated.type,
+                previousValue = original.type.name,
+                newValue = updated.type.name,
                 changedBy = changedBy.id
             )
         }
@@ -65,8 +66,8 @@ class TaskChangeService(
         createTaskChange(
             taskId = task.id,
             fieldName = "type",
-            previousValue = task.type,
-            newValue = task.type,
+            previousValue = task.type.name,
+            newValue = task.type.name,
             changedBy = task.product.owner.id
         )
         createTaskChange(

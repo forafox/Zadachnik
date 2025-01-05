@@ -60,18 +60,15 @@ class TaskController(
     @PostMapping
     fun createTask(
         @PathVariable productId: Long,
-        @RequestBody request: CreateTaskRequest,
-        principal: Principal
-    ): TaskResponse {
-        return taskService.createTask(
-            type = request.type,
-            title = request.title,
-            description = request.description,
-            productId = productId,
-            status = request.status,
-            username = principal.name
-        ).toResponse()
-    }
+        @RequestBody request: CreateTaskRequest
+    ) = taskService.createTask(
+        type = request.type,
+        title = request.title,
+        description = request.description,
+        productId = productId,
+        assigneeId = request.assigneeId,
+        status = request.status
+    ).toResponse()
 
     @Operation(
         summary = "Get task by id",
@@ -126,6 +123,7 @@ class TaskController(
             title = request.title,
             description = request.description,
             productId = productId,
+            assigneeId = request.assigneeId,
             status = request.status,
         ).toResponse()
     }

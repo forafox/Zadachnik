@@ -1,6 +1,7 @@
 package com.jellyone.zadachnik.domain
 
 import com.jellyone.zadachnik.domain.enums.TaskStatus
+import com.jellyone.zadachnik.domain.enums.TaskType
 import jakarta.persistence.*
 import java.io.Serializable
 
@@ -12,7 +13,7 @@ data class Task(
     val id: Long,
 
     @Column(nullable = false)
-    var type: String,
+    var type: TaskType,
 
     var title: String,
 
@@ -20,7 +21,7 @@ data class Task(
 
     @ManyToOne
     @JoinColumn(name = "assignee")
-    val assignee: User,
+    val assignee: User? = null,
 
     @Enumerated(EnumType.STRING)
     val status: TaskStatus,

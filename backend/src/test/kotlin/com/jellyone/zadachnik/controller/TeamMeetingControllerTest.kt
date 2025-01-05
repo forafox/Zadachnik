@@ -187,6 +187,23 @@ class TeamMeetingControllerTest {
         assertEquals(1, comments.size)
     }
 
+    @Order(8)
+    @Test
+    fun getArticleByIdShouldReturnOk() {
+        val articleId = 1L
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .`when`()
+            .get("/api/articles/$articleId")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .`as`(ArticleResponse::class.java)
+
+        assertEquals(articleId, response.id)
+    }
+
     private fun registerTestUser() {
         val signUpRequest = SignUpRequest(username = "testuser", fullName = "Test User", password = "password")
         RestAssured.given()
