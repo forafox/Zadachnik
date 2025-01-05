@@ -64,10 +64,10 @@ export interface UpdateTeamRequest {
 export interface TaskResponse {
   /** @format int64 */
   id: number;
-  type: string;
+  type: "TASK" | "STORY" | "EPIC";
   title: string;
   description?: string;
-  assignee: UserResponse;
+  assignee?: UserResponse;
   status: string;
 }
 
@@ -76,6 +76,8 @@ export interface CreateTaskRequest {
   title: string;
   description?: string;
   status: string;
+  /** @format int64 */
+  assigneeId?: number;
 }
 
 export interface ProductResponse {
@@ -120,12 +122,11 @@ export interface ContentDisposition {
 export interface ErrorResponse {
   body?: ProblemDetail;
   statusCode?: HttpStatusCode;
-  typeMessageCode?: string;
   detailMessageCode?: string;
   titleMessageCode?: string;
+  typeMessageCode?: string;
   detailMessageArguments?: Array<object>;
   headers?: {
-    accept?: Array<MediaType>;
     empty?: boolean;
     /** @format uri */
     location?: string;
@@ -162,18 +163,44 @@ export interface ErrorResponse {
     contentLength?: number;
     origin?: string;
     range?: Array<HttpRange>;
-    acceptCharset?: Array<string>;
     contentDisposition?: ContentDisposition;
-    accessControlAllowOrigin?: string;
-    accessControlAllowMethods?: Array<HttpMethod>;
-    accessControlAllowHeaders?: Array<string>;
-    accessControlExposeHeaders?: Array<string>;
+    acceptCharset?: Array<string>;
+    accept?: Array<MediaType>;
+    acceptLanguageAsLocales?: Array<{
+      language?: string;
+      displayName?: string;
+      country?: string;
+      variant?: string;
+      script?: string;
+      /** @uniqueItems true */
+      extensionKeys?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleAttributes?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleKeys?: Array<string>;
+      iso3Language?: string;
+      iso3Country?: string;
+      displayLanguage?: string;
+      displayScript?: string;
+      displayCountry?: string;
+      displayVariant?: string;
+    }>;
+    acceptPatch?: Array<MediaType>;
     accessControlAllowCredentials?: boolean;
+    accessControlAllowHeaders?: Array<string>;
+    accessControlAllowMethods?: Array<HttpMethod>;
+    accessControlAllowOrigin?: string;
+    accessControlExposeHeaders?: Array<string>;
     /** @format int64 */
     accessControlMaxAge?: number;
+    /** @uniqueItems true */
+    allow?: Array<HttpMethod>;
+    cacheControl?: string;
+    etag?: string;
     accessControlRequestMethod?: HttpMethod;
     accessControlRequestHeaders?: Array<string>;
-    acceptPatch?: Array<MediaType>;
+    basicAuth?: string;
+    connection?: Array<string>;
     bearerAuth?: string;
     contentLanguage?: {
       language?: string;
@@ -194,7 +221,6 @@ export interface ErrorResponse {
       displayCountry?: string;
       displayVariant?: string;
     };
-    etag?: string;
     /** @format int64 */
     expires?: number;
     ifMatch?: Array<string>;
@@ -204,35 +230,11 @@ export interface ErrorResponse {
     pragma?: string;
     upgrade?: string;
     vary?: Array<string>;
-    /** @uniqueItems true */
-    allow?: Array<HttpMethod>;
-    cacheControl?: string;
     acceptLanguage?: Array<{
       range?: string;
       /** @format double */
       weight?: number;
     }>;
-    basicAuth?: string;
-    acceptLanguageAsLocales?: Array<{
-      language?: string;
-      displayName?: string;
-      country?: string;
-      variant?: string;
-      script?: string;
-      /** @uniqueItems true */
-      extensionKeys?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleAttributes?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleKeys?: Array<string>;
-      iso3Language?: string;
-      iso3Country?: string;
-      displayLanguage?: string;
-      displayScript?: string;
-      displayCountry?: string;
-      displayVariant?: string;
-    }>;
-    connection?: Array<string>;
     contentType?: MediaType;
     /** @format int64 */
     ifModifiedSince?: number;
@@ -325,6 +327,10 @@ export interface CreateArticleRequest {
   content: string;
 }
 
+export interface CreateCommentRequest {
+  content: string;
+}
+
 export interface TeamMeetingResponse {
   /** @format int64 */
   id: number;
@@ -387,8 +393,8 @@ export interface Page {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
   last?: boolean;
+  pageable?: PageableObject;
   first?: boolean;
   empty?: boolean;
 }
@@ -397,12 +403,12 @@ export interface PageableObject {
   /** @format int64 */
   offset?: number;
   sort?: Array<SortObject>;
+  unpaged?: boolean;
   paged?: boolean;
   /** @format int32 */
   pageNumber?: number;
   /** @format int32 */
   pageSize?: number;
-  unpaged?: boolean;
 }
 
 export interface SortObject {
@@ -426,8 +432,8 @@ export interface PageUserResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
   last?: boolean;
+  pageable?: PageableObject;
   first?: boolean;
   empty?: boolean;
 }
@@ -470,8 +476,8 @@ export interface PageTeamResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
   last?: boolean;
+  pageable?: PageableObject;
   first?: boolean;
   empty?: boolean;
 }
@@ -489,8 +495,8 @@ export interface PageProductResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
   last?: boolean;
+  pageable?: PageableObject;
   first?: boolean;
   empty?: boolean;
 }
@@ -508,8 +514,8 @@ export interface PageTaskChangeResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
   last?: boolean;
+  pageable?: PageableObject;
   first?: boolean;
   empty?: boolean;
 }
@@ -523,19 +529,12 @@ export interface TaskChangeResponse {
   changedAt: string;
 }
 
-import type {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  HeadersDefaults,
-  ResponseType,
-} from "axios";
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface FullRequestParams
-  extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
+export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -550,13 +549,9 @@ export interface FullRequestParams
   body?: unknown;
 }
 
-export type RequestParams = Omit<
-  FullRequestParams,
-  "body" | "method" | "query" | "path"
->;
+export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
 
-export interface ApiConfig<SecurityDataType = unknown>
-  extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
+export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
@@ -578,16 +573,8 @@ export class HttpClient<SecurityDataType = unknown> {
   private secure?: boolean;
   private format?: ResponseType;
 
-  constructor({
-    securityWorker,
-    secure,
-    format,
-    ...axiosConfig
-  }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({
-      ...axiosConfig,
-      baseURL: axiosConfig.baseURL || "http://localhost:8080",
-    });
+  constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
+    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "http://localhost:8080" });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -597,10 +584,7 @@ export class HttpClient<SecurityDataType = unknown> {
     this.securityData = data;
   };
 
-  protected mergeRequestParams(
-    params1: AxiosRequestConfig,
-    params2?: AxiosRequestConfig,
-  ): AxiosRequestConfig {
+  protected mergeRequestParams(params1: AxiosRequestConfig, params2?: AxiosRequestConfig): AxiosRequestConfig {
     const method = params1.method || (params2 && params2.method);
 
     return {
@@ -608,11 +592,7 @@ export class HttpClient<SecurityDataType = unknown> {
       ...params1,
       ...(params2 || {}),
       headers: {
-        ...((method &&
-          this.instance.defaults.headers[
-            method.toLowerCase() as keyof HeadersDefaults
-          ]) ||
-          {}),
+        ...((method && this.instance.defaults.headers[method.toLowerCase() as keyof HeadersDefaults]) || {}),
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
@@ -633,15 +613,11 @@ export class HttpClient<SecurityDataType = unknown> {
     }
     return Object.keys(input || {}).reduce((formData, key) => {
       const property = input[key];
-      const propertyContent: any[] =
-        property instanceof Array ? property : [property];
+      const propertyContent: any[] = property instanceof Array ? property : [property];
 
       for (const formItem of propertyContent) {
         const isFileType = formItem instanceof Blob || formItem instanceof File;
-        formData.append(
-          key,
-          isFileType ? formItem : this.stringifyFormItem(formItem),
-        );
+        formData.append(key, isFileType ? formItem : this.stringifyFormItem(formItem));
       }
 
       return formData;
@@ -665,21 +641,11 @@ export class HttpClient<SecurityDataType = unknown> {
     const requestParams = this.mergeRequestParams(params, secureParams);
     const responseFormat = format || this.format || undefined;
 
-    if (
-      type === ContentType.FormData &&
-      body &&
-      body !== null &&
-      typeof body === "object"
-    ) {
+    if (type === ContentType.FormData && body && body !== null && typeof body === "object") {
       body = this.createFormData(body as Record<string, unknown>);
     }
 
-    if (
-      type === ContentType.Text &&
-      body &&
-      body !== null &&
-      typeof body !== "string"
-    ) {
+    if (type === ContentType.Text && body && body !== null && typeof body !== "string") {
       body = JSON.stringify(body);
     }
 
@@ -704,9 +670,7 @@ export class HttpClient<SecurityDataType = unknown> {
  *
  * Sample API
  */
-export class Api<
-  SecurityDataType extends unknown,
-> extends HttpClient<SecurityDataType> {
+export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
     /**
      * No description
@@ -716,11 +680,7 @@ export class Api<
      * @request GET:/api/teams/{teamId}/sprints/{sprintId}
      * @secure
      */
-    getSprintsByTeamIdAndSprintId: (
-      teamId: number,
-      sprintId: number,
-      params: RequestParams = {},
-    ) =>
+    getSprintsByTeamIdAndSprintId: (teamId: number, sprintId: number, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/teams/${teamId}/sprints/${sprintId}`,
         method: "GET",
@@ -801,11 +761,7 @@ export class Api<
      * @request PUT:/api/teams/{id}
      * @secure
      */
-    updateTeamById: (
-      id: number,
-      data: UpdateTeamRequest,
-      params: RequestParams = {},
-    ) =>
+    updateTeamById: (id: number, data: UpdateTeamRequest, params: RequestParams = {}) =>
       this.request<TeamResponse, ErrorMessage | TeamResponse>({
         path: `/api/teams/${id}`,
         method: "PUT",
@@ -825,11 +781,7 @@ export class Api<
      * @request GET:/api/products/{productId}/tasks/{taskId}
      * @secure
      */
-    getTaskById: (
-      taskId: number,
-      productId: number,
-      params: RequestParams = {},
-    ) =>
+    getTaskById: (taskId: number, productId: number, params: RequestParams = {}) =>
       this.request<TaskResponse, ErrorMessage | TaskResponse>({
         path: `/api/products/${productId}/tasks/${taskId}`,
         method: "GET",
@@ -847,12 +799,7 @@ export class Api<
      * @request PUT:/api/products/{productId}/tasks/{taskId}
      * @secure
      */
-    updateTaskById: (
-      taskId: number,
-      productId: number,
-      data: CreateTaskRequest,
-      params: RequestParams = {},
-    ) =>
+    updateTaskById: (taskId: number, productId: number, data: CreateTaskRequest, params: RequestParams = {}) =>
       this.request<TaskResponse, ErrorMessage | TaskResponse>({
         path: `/api/products/${productId}/tasks/${taskId}`,
         method: "PUT",
@@ -890,11 +837,7 @@ export class Api<
      * @request PUT:/api/products/{id}
      * @secure
      */
-    updateProductById: (
-      id: number,
-      data: UpdateProductRequest,
-      params: RequestParams = {},
-    ) =>
+    updateProductById: (id: number, data: UpdateProductRequest, params: RequestParams = {}) =>
       this.request<ProductResponse, ErrorMessage | ErrorResponse>({
         path: `/api/products/${id}`,
         method: "PUT",
@@ -909,15 +852,27 @@ export class Api<
      * No description
      *
      * @tags Articles API
+     * @name GetArticle
+     * @request GET:/api/articles/{id}
+     * @secure
+     */
+    getArticle: (id: number, params: RequestParams = {}) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/articles/${id}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Articles API
      * @name UpdateArticle
      * @request PUT:/api/articles/{id}
      * @secure
      */
-    updateArticle: (
-      id: number,
-      data: UpdateArticleRequest,
-      params: RequestParams = {},
-    ) =>
+    updateArticle: (id: number, data: UpdateArticleRequest, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/articles/${id}`,
         method: "PUT",
@@ -1021,11 +976,7 @@ export class Api<
      * @request POST:/api/teams/{teamId}/sprints
      * @secure
      */
-    createSprint: (
-      teamId: number,
-      data: CreateSprintRequest,
-      params: RequestParams = {},
-    ) =>
+    createSprint: (teamId: number, data: CreateSprintRequest, params: RequestParams = {}) =>
       this.request<SprintResponse, ErrorMessage>({
         path: `/api/teams/${teamId}/sprints`,
         method: "POST",
@@ -1044,14 +995,61 @@ export class Api<
      * @request POST:/api/teams/{teamId}/meetings/{meetingId}/minutes
      * @secure
      */
-    createArticle: (
+    createArticle: (meetingId: number, teamId: number, data: CreateArticleRequest, params: RequestParams = {}) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/meetings/${meetingId}/minutes`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Teams API
+     * @name GetCommentsByArticleId
+     * @request GET:/api/teams/{teamId}/meetings/{meetingId}/minutes/{articleId}/comments
+     * @secure
+     */
+    getCommentsByArticleId: (
       meetingId: number,
       teamId: number,
-      data: CreateArticleRequest,
+      articleId: number,
+      query?: {
+        /** @format int32 */
+        page?: number;
+        /** @format int32 */
+        size?: number;
+      },
       params: RequestParams = {},
     ) =>
       this.request<any, ErrorMessage>({
-        path: `/api/teams/${teamId}/meetings/${meetingId}/minutes`,
+        path: `/api/teams/${teamId}/meetings/${meetingId}/minutes/${articleId}/comments`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Teams API
+     * @name CreateComment
+     * @request POST:/api/teams/{teamId}/meetings/{meetingId}/minutes/{articleId}/comments
+     * @secure
+     */
+    createComment: (
+      meetingId: number,
+      teamId: number,
+      articleId: number,
+      data: CreateCommentRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/meetings/${meetingId}/minutes/${articleId}/comments`,
         method: "POST",
         body: data,
         secure: true,
@@ -1068,11 +1066,7 @@ export class Api<
      * @request POST:/api/teams/{id}/meetings
      * @secure
      */
-    createTeamMeeting: (
-      id: number,
-      data: CreateTeamMeetingRequest,
-      params: RequestParams = {},
-    ) =>
+    createTeamMeeting: (id: number, data: CreateTeamMeetingRequest, params: RequestParams = {}) =>
       this.request<TeamMeetingResponse, ErrorMessage>({
         path: `/api/teams/${id}/meetings`,
         method: "POST",
@@ -1181,11 +1175,7 @@ export class Api<
      * @request POST:/api/products/{productId}/tasks
      * @secure
      */
-    createTask: (
-      productId: number,
-      data: CreateTaskRequest,
-      params: RequestParams = {},
-    ) =>
+    createTask: (productId: number, data: CreateTaskRequest, params: RequestParams = {}) =>
       this.request<TaskResponse, ErrorMessage>({
         path: `/api/products/${productId}/tasks`,
         method: "POST",
@@ -1193,6 +1183,51 @@ export class Api<
         secure: true,
         type: ContentType.Json,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Tasks API
+     * @name GetCommentsByTaskId
+     * @request GET:/api/products/{productId}/tasks/{taskId}/comments
+     * @secure
+     */
+    getCommentsByTaskId: (
+      productId: number,
+      taskId: number,
+      query?: {
+        /** @format int32 */
+        page?: number;
+        /** @format int32 */
+        size?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/products/${productId}/tasks/${taskId}/comments`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Tasks API
+     * @name CreateComment1
+     * @request POST:/api/products/{productId}/tasks/{taskId}/comments
+     * @secure
+     */
+    createComment1: (productId: number, taskId: number, data: CreateCommentRequest, params: RequestParams = {}) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/products/${productId}/tasks/${taskId}/comments`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 
