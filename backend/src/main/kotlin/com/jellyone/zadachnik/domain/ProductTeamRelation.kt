@@ -18,7 +18,7 @@ data class ProductTeamRelation(
     val team: Team,
 
     @Enumerated(EnumType.STRING)
-    val status: ProductTeamStatus? = null,
+    val status: ProductTeamStatus,
 )
 
 enum class ProductTeamStatus {
