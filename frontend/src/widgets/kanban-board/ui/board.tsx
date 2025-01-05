@@ -8,6 +8,7 @@ import {
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useQueries } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { GripHorizontalIcon, LoaderCircle, TextIcon } from "lucide-react";
 import { useState } from "react";
 import {
@@ -124,11 +125,16 @@ function BoardColumn({
       <main className="space-y-2 p-2">
         {isOverCurrent && activeTask && (
           <div className="opacity-50">
-            <TaskCard task={activeTask} />
+            <TaskCard productId={productId} task={activeTask} />
           </div>
         )}
         {tasks?.map((task) => (
-          <DraggableTask isPending={isPending} key={task.id} task={task} />
+          <DraggableTask
+            productId={productId}
+            isPending={isPending}
+            key={task.id}
+            task={task}
+          />
         ))}
       </main>
     </Card>
@@ -138,9 +144,11 @@ function BoardColumn({
 function DraggableTask({
   task,
   isPending,
+  productId,
 }: {
   task: Task;
   isPending: boolean;
+  productId: number;
 }) {
   const { setNodeRef, transform, attributes, listeners, isDragging } =
     useDraggable({
@@ -162,6 +170,7 @@ function DraggableTask({
     <div ref={setNodeRef} style={style}>
       <TaskCard
         task={task}
+        productId={productId}
         dragSlot={
           <GripHorizontalIcon
             {...attributes}
@@ -177,15 +186,22 @@ function DraggableTask({
 function TaskCard({
   task,
   dragSlot,
+  productId,
 }: {
   task: Task;
   dragSlot?: React.ReactNode;
+  productId: number;
 }) {
   return (
-    <Card className="cursor-pointer transition-all">
+    <Card className="transition-all">
       <CardHeader className="p-2">
         <CardTitle className="flex flex-row items-center">
-          {task.title}
+          <Link
+            to="/products/$productId/tasks/$taskId"
+            params={{ productId: String(productId), taskId: String(task.id) }}
+          >
+            {task.title}
+          </Link>
           {dragSlot ?? <GripHorizontalIcon className="ml-auto size-4" />}
         </CardTitle>
       </CardHeader>
