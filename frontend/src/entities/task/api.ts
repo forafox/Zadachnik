@@ -1,6 +1,6 @@
 import { queryOptions, useMutation } from "@tanstack/react-query";
 import z from "zod";
-import { Task, taskSchema, taskStatus } from "@/entities/task/model.ts";
+import { taskSchema, taskStatus } from "@/entities/task/model.ts";
 import { api } from "@/shared/api";
 import { paginatedResponseSchema } from "@/shared/api/schemas.ts";
 
