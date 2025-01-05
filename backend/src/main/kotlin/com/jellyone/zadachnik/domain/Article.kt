@@ -16,5 +16,5 @@ data class Article(
 
     @ManyToOne
     @JoinColumn(name = "team_meeting_id")
-    val teamMeeting: TeamMeeting
+    val teamMeeting: TeamMeeting? = null,
 )
