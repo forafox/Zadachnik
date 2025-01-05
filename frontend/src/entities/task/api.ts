@@ -1,9 +1,6 @@
-import {
-  queryOptions,
-  useMutation,
-} from "@tanstack/react-query";
+import { queryOptions, useMutation } from "@tanstack/react-query";
 import z from "zod";
-import { taskSchema, taskStatus } from "@/entities/task/model.ts";
+import { Task, taskSchema, taskStatus } from "@/entities/task/model.ts";
 import { api } from "@/shared/api";
 import { paginatedResponseSchema } from "@/shared/api/schemas.ts";
 
@@ -75,7 +72,7 @@ export const getTeamTasksQueryOptions = (reqRaw: GetTeamTasksRequestValues) => {
 export const createTaskMutationRequestSchema = taskSchema
   .omit({ id: true })
   .extend({ productId: z.number() })
-  .partial({ assignee: true })
+  .partial({ assignee: true });
 export type CreateTaskValues = z.infer<typeof createTaskMutationRequestSchema>;
 
 export function useCreateTaskMutation() {
@@ -90,6 +87,23 @@ export function useCreateTaskMutation() {
         assigneeId: values.assignee?.id,
       });
       return taskSchema.parse(data);
+    },
+  });
+}
+
+const updateTaskSchema = taskSchema.extend({ productId: z.number() });
+
+export function useUpdateTaskMutation() {
+  return useMutation({
+    mutationFn: async (valuesRaw: z.infer<typeof updateTaskSchema>) => {
+      const values = updateTaskSchema.parse(valuesRaw);
+      return api.api.updateTaskById(values.id, values.productId, {
+        type: values.type.toUpperCase(),
+        title: values.title,
+        description: values.description,
+        status: values.status.toUpperCase(),
+        assigneeId: values.assignee?.id,
+      });
     },
   });
 }

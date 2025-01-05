@@ -1,12 +1,22 @@
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, useDraggable, useDroppable } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragOverlay,
+  DragStartEvent,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useQueries } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
+import { useState } from "react";
 import {
   getProductTasksQueryOptions,
   StatusGroup,
   statusGroups,
   Task,
+  useUpdateTaskMutation,
 } from "@/entities/task";
 import {
   Card,
@@ -14,7 +24,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
-import { useState } from "react";
 
 type Props = {
   productId: number;
@@ -29,28 +38,50 @@ const groups: Array<StatusGroup> = [
 
 export function KanbanBoard({ productId }: Props) {
   const [activeTask, setActiveTask] = useState<Task | undefined>();
+  const { mutate: updateTask } = useUpdateTaskMutation();
+  const [overGroup, setOverGroup] = useState<StatusGroup | undefined>();
 
   const handleDragStart = ({ active }: DragStartEvent) => {
-    setActiveTask(active.data.current.task as Task);
+    setActiveTask(active.data.current!.task as Task);
   };
 
   function handleDragEnd({ active, over }: DragEndEvent) {
-    console.log("drag end", active.data.current.task, over?.id);
+    const task = active.data.current!.task as Task;
+    const group = over!.id as StatusGroup;
+    const firstStatus = statusGroups[group][0];
+    updateTask({
+      productId,
+      ...task,
+      status: firstStatus,
+    });
+
+    setActiveTask(undefined);
+    setOverGroup(undefined);
+  }
+
+  function handleDragOver({ over }: DragOverEvent) {
+    setOverGroup((over?.id ?? undefined) as StatusGroup | undefined);
   }
 
   return (
     <DndContext
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragOver={handleDragOver}
     >
       <div className="flex w-full flex-row gap-2">
         {groups.map((group) => (
-          <BoardColumn productId={productId} group={group} key={group} />
+          <BoardColumn
+            productId={productId}
+            group={group}
+            key={group}
+            isPending={false}
+            isOverCurrent={overGroup === group}
+            activeTask={activeTask}
+          />
         ))}
       </div>
-      <DragOverlay>
-        {activeTask && <TaskCard task={activeTask} />}
-      </DragOverlay>
+      {/*<DragOverlay>{activeTask && <TaskCard task={activeTask} />}</DragOverlay>*/}
     </DndContext>
   );
 }
@@ -58,12 +89,19 @@ export function KanbanBoard({ productId }: Props) {
 function BoardColumn({
   group,
   productId,
+  isPending,
+  isOverCurrent,
+  activeTask,
 }: {
   group: StatusGroup;
   productId: number;
+  isPending: boolean;
+  isOverCurrent: boolean;
+  activeTask: Task | undefined;
 }) {
   const { setNodeRef } = useDroppable({
     id: group,
+    disabled: isPending,
   });
   const { data: tasks, pending } = useQueries({
     queries: statusGroups[group].map((status) =>
@@ -83,20 +121,34 @@ function BoardColumn({
         <h3>{group}</h3>
         {pending && <LoaderCircle className="ml-auto size-4 animate-spin" />}
       </CardHeader>
-      <main className="p-2">
-        {tasks?.map((task) => <DraggableTask key={task.id} task={task} />)}
+      <main className="space-y-2 p-2">
+        {isOverCurrent && activeTask && (
+          <div className="opacity-50">
+            <TaskCard task={activeTask} />
+          </div>
+        )}
+        {tasks?.map((task) => (
+          <DraggableTask isPending={isPending} key={task.id} task={task} />
+        ))}
       </main>
     </Card>
   );
 }
 
-function DraggableTask({task}: {task: Task}) {
+function DraggableTask({
+  task,
+  isPending,
+}: {
+  task: Task;
+  isPending: boolean;
+}) {
   const { setNodeRef, transform, attributes, listeners, isDragging } =
     useDraggable({
       id: task.id,
       data: {
         task,
       },
+      disabled: isPending,
     });
 
   const style = {
@@ -104,14 +156,16 @@ function DraggableTask({task}: {task: Task}) {
     opacity: isDragging ? 0 : 1,
   };
 
+  if (isDragging) return null;
 
-  return <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
-    <TaskCard task={task} />
-  </div>
+  return (
+    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+      <TaskCard task={task} />
+    </div>
+  );
 }
 
 function TaskCard({ task }: { task: Task }) {
-
   return (
     <Card>
       <CardHeader className="p-2">

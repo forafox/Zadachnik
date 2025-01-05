@@ -2,11 +2,14 @@ import z from "zod";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { userSchema } from "@/entities/user";
 
+
 export const taskType = z
   .string()
   .toLowerCase()
   .pipe(z.enum(["task", "story", "epic"]));
 export type TaskType = z.infer<typeof taskType>;
+
+export const taskTypes: Array<TaskType> = ["task", "story", "epic"]
 
 export const taskStatus = z
   .string()

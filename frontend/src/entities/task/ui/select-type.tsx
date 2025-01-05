@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { TaskType, taskType } from "@/entities/task";
+import { TaskType, taskTypes } from "@/entities/task";
 import {
   Select,
   SelectContent,
@@ -22,7 +22,7 @@ export function SelectTaskType({ value, onChange }: Props) {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        {taskType.options.map((type) => (
+        {taskTypes.map((type) => (
           <SelectItem value={type}>
             {t(`items.type.items.${type}.label`)}
           </SelectItem>
