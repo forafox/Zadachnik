@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
+import { LoaderCircle } from "lucide-react";
 
 type Tasks = Record<StatusGroup, Array<Task>>;
 
@@ -22,7 +23,7 @@ const groups: Array<StatusGroup> = [
   "backlog",
   "started",
   "completed",
-  "canceled",
+  "cancelled",
 ];
 
 export function KanbanBoard({ productId }: Props) {
@@ -42,7 +43,7 @@ function BoardColumn({
   group: StatusGroup;
   productId: number;
 }) {
-  const { data: tasks } = useQueries({
+  const { data: tasks, pending } = useQueries({
     queries: statusGroups[group].map((status) =>
       getProductTasksQueryOptions({ productId, status, page: 1, pageSize: 50 }),
     ),
@@ -56,10 +57,11 @@ function BoardColumn({
 
   return (
     <Card className="w-full bg-gray-50">
-      <CardHeader className="font-bold capitalize">
+      <CardHeader className="flex flex-row items-center justify-between p-2 font-bold capitalize">
         <h3>{group}</h3>
+        {pending && <LoaderCircle className="ml-auto size-4 animate-spin" />}
       </CardHeader>
-      <main className="p-1">
+      <main className="p-2">
         {tasks?.map((task) => (
           <Card key={task.id}>
             <CardHeader className="p-2">

@@ -27,7 +27,7 @@ export const getProductTasksQueryOptions = (
 ) => {
   const req = getProductTasksRequestSchema.parse(reqRaw);
   return queryOptions({
-    queryKey: ["products", "detail", req.productId, "tasks"],
+    queryKey: ["products", "detail", req.productId, "tasks", req],
     queryFn: async () => {
       const { data } = await api.api.getTasksByProductId(req.productId, {
         ...req,

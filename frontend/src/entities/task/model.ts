@@ -19,7 +19,7 @@ export const taskStatus = z
       "in_progress",
       "ready_to_merge",
       "done",
-      "canceled",
+      "cancelled",
       "could_not_reproduce",
       "will_not_fix",
       "duplicate",
@@ -27,13 +27,13 @@ export const taskStatus = z
   );
 
 export type TaskStatus = z.infer<typeof taskStatus>;
-export type StatusGroup = "backlog" | "started" | "completed" | "canceled";
+export type StatusGroup = "backlog" | "started" | "completed" | "cancelled";
 
 export const statusGroups = {
   backlog: ["backlog", "to_do"],
   started: ["in_progress", "in_review", "ready_to_merge"],
   completed: ["done"],
-  canceled: ["canceled", "could_not_reproduce", "will_not_fix", "duplicate"],
+  cancelled: ["cancelled", "could_not_reproduce", "will_not_fix", "duplicate"],
 } satisfies Record<StatusGroup, TaskStatus[]>;
 
 export const taskSchema = z.object({
