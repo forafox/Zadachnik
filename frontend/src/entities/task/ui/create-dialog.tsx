@@ -7,6 +7,8 @@ import {
   useCreateTaskMutation,
 } from "@/entities/task";
 import { SelectTaskType } from "@/entities/task/ui/select-type.tsx";
+// eslint-disable-next-line @conarti/feature-sliced/layers-slices
+import { SelectUser } from "@/entities/user";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   DialogContent,
@@ -21,7 +23,6 @@ import {
   FormLabel,
 } from "@/shared/components/ui/form.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
-import { SelectUser } from "@/entities/user";
 
 type Props = {
   productId: number;
