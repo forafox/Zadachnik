@@ -21,7 +21,7 @@ class ProductsInvitationsService(
         val team = teamService.getTeamById(teamId)
 
         val productTeamRelation = productTeamRelationRepository.findAllByStatus(ProductTeamStatus.PENDING)
-        if(productTeamRelation.isNotEmpty()) {
+        if (productTeamRelation.isNotEmpty()) {
             throw IllegalStateException("There are still unanswered requests")
         }
 
@@ -58,4 +58,10 @@ class ProductsInvitationsService(
         size: Int,
         page: Int
     ) = productTeamRelationRepository.findAllByProductIdAndTeamId(productId, teamId, PageRequest.of(page, size))
+
+    fun getProductTeams(
+        productId: Long,
+        page: Int,
+        size: Int
+    ) = productTeamRelationRepository.findAllTeamsByProductId(productId, PageRequest.of(page, size))
 }

@@ -54,4 +54,10 @@ class TeamsInvitationsService(
             teamId = teamId,
             PageRequest.of(page, size)
         )
+
+    fun getUsersOfTeams(teamId: Long, page: Int, size: Int) =
+        userTeamRelationRepository.findAllUsersOfTeams(
+            teamId,
+            PageRequest.of(page, size)
+        )
 }
