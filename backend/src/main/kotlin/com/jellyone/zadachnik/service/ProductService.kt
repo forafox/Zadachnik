@@ -2,6 +2,7 @@ package com.jellyone.zadachnik.service
 
 import com.jellyone.zadachnik.domain.Product
 import com.jellyone.zadachnik.domain.Task
+import com.jellyone.zadachnik.domain.enums.TaskStatus
 import com.jellyone.zadachnik.exception.ResourceNotFoundException
 import com.jellyone.zadachnik.repository.ProductRepository
 import org.springframework.data.domain.Page
@@ -64,7 +65,7 @@ class ProductService(
         productId: Long,
         assigneeId: Long?,
         teamId: Long?,
-        status: String?,
+        status: TaskStatus?,
         pageNumber: Int,
         pageSize: Int
     ): Page<Task> {

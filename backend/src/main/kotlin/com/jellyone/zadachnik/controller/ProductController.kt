@@ -1,5 +1,6 @@
 package com.jellyone.zadachnik.controller
 
+import com.jellyone.zadachnik.domain.enums.TaskStatus
 import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.ProductService
 import com.jellyone.zadachnik.web.request.CreateProductRequest
@@ -177,7 +178,14 @@ class ProductController(
         @RequestParam(required = false) teamId: Long?,
         @RequestParam(defaultValue = "0") pageNumber: Int,
         @RequestParam(defaultValue = "10") pageSize: Int
-    ) = productService.getTasksByProductId(productId, assigneeId, teamId, status, pageNumber, pageSize).map { task ->
+    ) = productService.getTasksByProductId(
+        productId,
+        assigneeId,
+        teamId,
+        status?.let { TaskStatus.valueOf(it) },
+        pageNumber,
+        pageSize
+    ).map { task ->
         task.toResponse()
     }
 }

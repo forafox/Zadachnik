@@ -6,12 +6,12 @@ data class ArticleResponse(
     val id: Long,
     val content: String,
     val author: UserResponse,
-    val teamMeeting: TeamMeetingResponse
+    val teamMeeting: TeamMeetingResponse?
 )
 
 fun Article.toResponse() = ArticleResponse(
     id = id,
     content = content,
     author = author.toResponse(),
-    teamMeeting = teamMeeting.toResponse()
+    teamMeeting = teamMeeting?.toResponse()
 )

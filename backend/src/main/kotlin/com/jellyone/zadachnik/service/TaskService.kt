@@ -1,9 +1,11 @@
 package com.jellyone.zadachnik.service
 
+import com.jellyone.zadachnik.domain.ProductTeamStatus
 import com.jellyone.zadachnik.domain.Task
 import com.jellyone.zadachnik.domain.enums.TaskStatus
 import com.jellyone.zadachnik.domain.enums.TaskType
 import com.jellyone.zadachnik.exception.ResourceNotFoundException
+import com.jellyone.zadachnik.repository.ProductTeamRelationRepository
 import com.jellyone.zadachnik.repository.TaskRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -15,7 +17,8 @@ class TaskService(
     private val taskRepository: TaskRepository,
     private val productService: ProductService,
     private val taskChangeService: TaskChangeService,
-    private val userService: UserService
+    private val userService: UserService,
+    private val productTeamRelationRepository: ProductTeamRelationRepository,
 ) {
 
     fun createTask(
@@ -84,5 +87,12 @@ class TaskService(
 
     fun getTasksByIds(ids: List<Long>): List<Task> {
         return taskRepository.findAllById(ids)
+    }
+
+    fun getTasksByTeamId(teamId: Long): List<Task> {
+        val productTeams = productTeamRelationRepository.findAllByTeamIdAndStatus(teamId, ProductTeamStatus.ACCEPTED)
+        val productIds = productTeams.map { it.product.id }
+
+        return taskRepository.findAllByProductIdIn(productIds)
     }
 }

@@ -10,7 +10,9 @@ import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestMethodOrder
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
@@ -24,6 +26,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class ProductControllerTest {
 
     @LocalServerPort

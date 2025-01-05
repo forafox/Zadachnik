@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class ArticleService(
-    val articleRepository: ArticleRepository
+    val articleRepository: ArticleRepository,
+    val userService: UserService
 ) {
     fun updateArticleById(
         id: Long,
@@ -21,5 +22,19 @@ class ArticleService(
 
     fun getArticleById(id: Long): Article {
         return articleRepository.findById(id).orElseThrow { ResourceNotFoundException("Article with id $id not found") }
+    }
+
+    fun createArticleWithoutTeamMeeting(
+        content: String,
+        authorUsername: String
+    ): Article {
+        return articleRepository.save(
+            Article(
+                id = 0,
+                content = content,
+                author = userService.getByUsername(authorUsername),
+                teamMeeting = null,
+            )
+        )
     }
 }
