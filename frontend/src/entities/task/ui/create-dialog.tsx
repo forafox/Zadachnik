@@ -21,6 +21,7 @@ import {
   FormLabel,
 } from "@/shared/components/ui/form.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
+import { SelectUser } from "@/entities/user";
 
 type Props = {
   productId: number;
@@ -82,6 +83,16 @@ export function CreateTaskDialogContent({ productId, onClose }: Props) {
                 <FormItem>
                   <FormLabel>{t("items.description.label")}</FormLabel>
                   <Input {...field} />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="assignee"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("items.assignee.label")}</FormLabel>
+                  <SelectUser {...field} />
                 </FormItem>
               )}
             />
