@@ -39,4 +39,9 @@ class ArticleController(
         id = id,
         content = request.content
     ).toResponse()
+
+    @GetMapping("/{id}")
+    fun getArticle(
+        @PathVariable id: Long
+    ) = articleService.getArticleById(id).toResponse()
 }

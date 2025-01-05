@@ -2,6 +2,7 @@ package com.jellyone.zadachnik.service
 
 import com.jellyone.zadachnik.domain.Task
 import com.jellyone.zadachnik.domain.enums.TaskStatus
+import com.jellyone.zadachnik.domain.enums.TaskType
 import com.jellyone.zadachnik.exception.ResourceNotFoundException
 import com.jellyone.zadachnik.repository.TaskRepository
 import org.springframework.data.domain.Page
@@ -23,18 +24,19 @@ class TaskService(
         description: String?,
         productId: Long,
         status: String,
-        username: String
+        assigneeId: Long?,
     ): Task {
-        val user = userService.getByUsername(username)
+
+        val assignee = assigneeId?.let { userService.getById(it) }
 
         return taskRepository.save(
             Task(
                 id = 0,
-                type = type,
+                type = TaskType.valueOf(type),
                 title = title,
                 description = description,
                 status = TaskStatus.valueOf(status),
-                assignee = user,
+                assignee = assignee,
                 product = productService.getProductById(productId)
             )
         ).also { taskChangeService.createLogChanges(it) }
@@ -51,13 +53,17 @@ class TaskService(
         description: String?,
         productId: Long,
         status: String,
+        assigneeId: Long?,
     ): Task {
+        val assignee = assigneeId?.let { userService.getById(it) }
+
         val task = taskRepository.findById(id).orElseThrow { ResourceNotFoundException("Task with id $id not found") }
         val updatedTask = task.copy(
-            type = type,
+            type = TaskType.valueOf(type),
             title = title,
             description = description,
             status = TaskStatus.valueOf(status),
+            assignee = assignee,
             product = productService.getProductById(productId)
         )
 
