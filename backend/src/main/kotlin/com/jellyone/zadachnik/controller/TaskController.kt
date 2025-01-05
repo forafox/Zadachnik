@@ -1,8 +1,10 @@
 package com.jellyone.zadachnik.controller
 
 import com.jellyone.zadachnik.exception.ErrorMessage
+import com.jellyone.zadachnik.service.CommentService
 import com.jellyone.zadachnik.service.TaskChangeService
 import com.jellyone.zadachnik.service.TaskService
+import com.jellyone.zadachnik.web.request.CreateCommentRequest
 import com.jellyone.zadachnik.web.request.CreateTaskRequest
 import com.jellyone.zadachnik.web.response.TaskChangeResponse
 import com.jellyone.zadachnik.web.response.TaskResponse
@@ -35,7 +37,8 @@ import java.security.Principal
 )
 class TaskController(
     private val taskService: TaskService,
-    private val taskChangeService: TaskChangeService
+    private val taskChangeService: TaskChangeService,
+    private val commentService: CommentService
 ) {
     @Operation(
         summary = "Create task",
@@ -149,5 +152,28 @@ class TaskController(
     ): Page<TaskChangeResponse> {
         val changes = taskChangeService.getTaskChanges(taskId, page, size)
         return changes.map { it.toResponse() }
+    }
+
+    @PostMapping("/{taskId}/comments")
+    fun createComment(
+        @PathVariable productId: Long,
+        @PathVariable taskId: Long,
+        @RequestBody request: CreateCommentRequest,
+        principal: Principal
+    ) = commentService.createComment(
+        authorUsername = principal.name,
+        content = request.content,
+        articleId = null,
+        taskId = taskId
+    ).toResponse()
+
+    @GetMapping("/{taskId}/comments")
+    fun getCommentsByTaskId(
+        @PathVariable productId: Long,
+        @PathVariable taskId: Long,
+        @RequestParam(required = false) page: Int,
+        @RequestParam(required = false) size: Int
+    ) = commentService.getCommentsByTaskId(taskId, page, size).map { comment ->
+        comment.toResponse()
     }
 }

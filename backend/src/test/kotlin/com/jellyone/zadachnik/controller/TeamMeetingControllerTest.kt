@@ -1,11 +1,13 @@
 package com.jellyone.zadachnik.controller
 
+import com.jellyone.zadachnik.controller.TaskControllerTest.Companion
 import com.jellyone.zadachnik.domain.enums.TeamMeetingType
 import com.jellyone.zadachnik.web.dto.SignUpRequest
 import com.jellyone.zadachnik.web.dto.auth.JwtRequest
 import com.jellyone.zadachnik.web.dto.auth.JwtResponse
 import com.jellyone.zadachnik.web.request.*
 import com.jellyone.zadachnik.web.response.ArticleResponse
+import com.jellyone.zadachnik.web.response.CommentResponse
 import com.jellyone.zadachnik.web.response.TeamMeetingResponse
 import com.jellyone.zadachnik.web.response.TeamResponse
 import io.restassured.RestAssured
@@ -133,6 +135,56 @@ class TeamMeetingControllerTest {
 
         assertEquals(articleId, response.id)
         assertEquals("Updated content", response.content)
+    }
+
+    @Order(6)
+    @Test
+    fun createCommentShouldReturnOk() {
+        val articleId = 1L
+        val meetingId = 1L
+        val teamId = 1L
+
+        val request = CreateCommentRequest(
+            content = "Test comment"
+        )
+
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .contentType(ContentType.JSON)
+            .body(request)
+            .`when`()
+            .post("/api/teams/${teamId}/meetings/${meetingId}/minutes/${articleId}/comments")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .`as`(CommentResponse::class.java)
+
+        assertEquals("Test comment", response.content)
+    }
+
+    @Order(7)
+    @Test
+    fun getCommentsByTaskIdShouldReturnOk() {
+        val articleId = 1L
+        val meetingId = 1L
+        val teamId = 1L
+
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .contentType(ContentType.JSON)
+            .queryParam("page", 0)
+            .queryParam("size", 10)
+            .`when`()
+            .get("/api/teams/${teamId}/meetings/${meetingId}/minutes/${articleId}/comments")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .jsonPath()
+
+        val comments = response.getList("content", Map::class.java)
+        assertEquals(1, comments.size)
     }
 
     private fun registerTestUser() {

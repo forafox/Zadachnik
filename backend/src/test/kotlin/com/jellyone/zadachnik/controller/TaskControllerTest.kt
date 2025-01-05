@@ -1,7 +1,10 @@
 package com.jellyone.zadachnik.controller
 
+import com.jellyone.zadachnik.controller.ProductControllerTest.Companion
+import com.jellyone.zadachnik.web.request.CreateCommentRequest
 import com.jellyone.zadachnik.web.request.CreateProductRequest
 import com.jellyone.zadachnik.web.request.CreateTaskRequest
+import com.jellyone.zadachnik.web.response.CommentResponse
 import com.jellyone.zadachnik.web.response.ProductResponse
 import com.jellyone.zadachnik.web.response.TaskResponse
 import io.restassured.RestAssured
@@ -163,6 +166,56 @@ class TaskControllerTest {
         assert(content.isNotEmpty()) { "Content should not be empty" }
         assert(content[0]["field"] != null) { "First change should have a field type" }
     }
+
+
+    @Order(6)
+    @Test
+    fun createCommentShouldReturnOk() {
+        val productId = 1L
+        val taskId = 1L
+
+        val request = CreateCommentRequest(
+            content = "Test comment"
+        )
+
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .contentType(ContentType.JSON)
+            .body(request)
+            .`when`()
+            .post("/api/products/$productId/tasks/$taskId/comments")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .`as`(CommentResponse::class.java)
+
+        assertEquals("Test comment", response.content)
+    }
+
+    @Order(7)
+    @Test
+    fun getCommentsByTaskIdShouldReturnOk() {
+        val productId = 1L
+        val taskId = 1L
+
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .contentType(ContentType.JSON)
+            .queryParam("page", 0)
+            .queryParam("size", 10)
+            .`when`()
+            .get("/api/products/$productId/tasks/$taskId/comments")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .jsonPath()
+
+        val comments = response.getList("content", Map::class.java)
+        assertEquals(1, comments.size)
+    }
+
 
     private fun registerTestUser() {
         val signUpRequest = mapOf(
