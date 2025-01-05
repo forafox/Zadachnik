@@ -3,6 +3,7 @@ package com.jellyone.zadachnik.repository
 import com.jellyone.zadachnik.domain.Product
 import com.jellyone.zadachnik.domain.Task
 import com.jellyone.zadachnik.domain.User
+import com.jellyone.zadachnik.domain.enums.TaskStatus
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.JpaRepository
@@ -32,7 +33,7 @@ interface ProductRepository : JpaRepository<Product, Long>, JpaSpecificationExec
         @Param("productId") productId: Long,
         @Param("assigneeId") assigneeId: Long?,
         @Param("teamId") teamId: Long?,
-        @Param("status") status: String?,
+        @Param("status") status: TaskStatus?,
         pageable: org.springframework.data.domain.Pageable
     ): Page<Task>
 }
