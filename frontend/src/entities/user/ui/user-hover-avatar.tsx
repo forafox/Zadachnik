@@ -6,7 +6,13 @@ import {
 } from "@/shared/components/ui/hover-card.tsx";
 import { cn } from "@/shared/lib/utils.ts";
 
-export function UserHoverAvatar({ user, className }: { user: User, className?: string }) {
+export function UserHoverAvatar({
+  user,
+  className,
+}: {
+  user: User;
+  className?: string;
+}) {
   return (
     <HoverCard>
       <HoverCardTrigger>
