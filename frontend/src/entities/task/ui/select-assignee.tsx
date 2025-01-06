@@ -2,7 +2,6 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { useQuery } from "@tanstack/react-query";
 import { UserMinus, UserSearch } from "lucide-react";
 import { forwardRef, useState } from "react";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import {
   getUsersQueryOptions,
   User,

@@ -1,7 +1,7 @@
 import { Extension } from "@tiptap/core";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Task, useUpdateTaskMutation } from "@/entities/task";
 import { Button } from "@/shared/components/ui/button.tsx";
 import { Separator } from "@/shared/components/ui/separator";
@@ -17,6 +17,7 @@ import { OrderedListToolbar } from "@/shared/components/ui/toolbars/ordered-list
 import { RedoToolbar } from "@/shared/components/ui/toolbars/redo.tsx";
 import { StrikeThroughToolbar } from "@/shared/components/ui/toolbars/strikethrough.tsx";
 import { ToolbarProvider } from "@/shared/components/ui/toolbars/toolbar-provider.tsx";
+import { cn } from "@/shared/lib/utils.ts";
 
 const extensions = [
   StarterKit.configure({
@@ -84,9 +85,13 @@ export function TaskDescription({ task }: { task: Task }) {
 
   return (
     <>
-      <div className="relative w-full overflow-hidden rounded-md border pb-3">
+      <div className={cn("relative w-full overflow-hidden rounded-md")}>
         {isDirty && (
-          <header className="sticky left-0 top-0 z-20 flex w-full items-center  justify-between border-b bg-background px-2 py-2">
+          <header
+            className={cn(
+              "sticky left-0 top-1 z-20 flex w-full items-center justify-between rounded border bg-background",
+            )}
+          >
             <ToolbarProvider editor={editor}>
               <div className="flex items-center gap-2">
                 <RedoToolbar />
@@ -120,7 +125,9 @@ export function TaskDescription({ task }: { task: Task }) {
       </div>
       {isDirty && (
         <footer>
-          <Button onClick={handleSave}>Save</Button>
+          <Button loading={isPending} onClick={handleSave}>
+            Save
+          </Button>
         </footer>
       )}
     </>

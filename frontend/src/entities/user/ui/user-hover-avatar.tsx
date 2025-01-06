@@ -19,7 +19,7 @@ export function UserHoverAvatar({ user }: { user: User }) {
 
 export function UserAvatar({
   user,
-  className
+  className,
 }: {
   user: User;
   className?: string;

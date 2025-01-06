@@ -3,7 +3,6 @@ import { Badge } from "@/shared/components/ui/badge.tsx";
 import { cn } from "@/shared/lib/utils.ts";
 
 export function TaskTypeBadge({ type }: { type: TaskType }) {
-
   return (
     <Badge
       className={cn("capitalize", {

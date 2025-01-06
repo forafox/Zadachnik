@@ -140,7 +140,7 @@
 }
 
 .ProseMirror {
-  @apply px-4 pt-2;
+  @apply px-0 pt-2;
   outline: none !important;
 }
 

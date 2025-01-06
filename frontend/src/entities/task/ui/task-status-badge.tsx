@@ -18,8 +18,7 @@ export function TaskStatusBadge({ status }: { status: TaskStatus }) {
         "bg-gray-300 text-gray-600 hover:bg-gray-200": group === "backlog",
         "bg-blue-300 text-blue-600 hover:bg-blue-200": group === "started",
         "bg-green-300 text-green-600 hover:bg-green-200": group === "completed",
-        "bg-amber-300 text-amber-600 hover:bg-amber-200":
-          group === "cancelled",
+        "bg-amber-300 text-amber-600 hover:bg-amber-200": group === "cancelled",
       })}
     >
       {status.replace(new RegExp("_", "g"), " ")}

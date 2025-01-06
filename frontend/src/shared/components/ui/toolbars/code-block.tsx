@@ -1,6 +1,6 @@
 "use client";
 
-import { Code }  from "lucide-react";
+import { Code } from "lucide-react";
 import React from "react";
 import { Button, type ButtonProps } from "@/shared/components/ui/button";
 import { useToolbar } from "@/shared/components/ui/toolbars/toolbar-provider.tsx";
