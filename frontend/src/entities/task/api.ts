@@ -1,9 +1,16 @@
 import { queryOptions, useMutation } from "@tanstack/react-query";
 import z from "zod";
-import { taskSchema, taskStatus } from "@/entities/task/model.ts";
+import {
+  taskCommentSchema,
+  taskSchema,
+  taskStatus,
+} from "@/entities/task/model.ts";
 import { api } from "@/shared/api";
 import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
-import { paginatedResponseSchema } from "@/shared/api/schemas.ts";
+import {
+  paginatedRequestSchema,
+  paginatedResponseSchema,
+} from "@/shared/api/schemas.ts";
 
 export const getProductTasksRequestSchema = z.object({
   productId: z.number(),
@@ -130,5 +137,53 @@ export const getTaskByIdQueryOptions = generateQueryOptions(
     "tasks",
     "detail",
     taskId,
+  ],
+);
+
+const createTaskCommentMutationRequest = z.object({
+  productId: z.number(),
+  taskId: z.number(),
+  content: z.string(),
+});
+
+export function useCreateTaskCommentMutation() {
+  return useMutation({
+    mutationFn: async (
+      valuesRaw: z.infer<typeof createTaskCommentMutationRequest>,
+    ) => {
+      const values = createTaskCommentMutationRequest.parse(valuesRaw);
+      const { data } = await api.api.createComment1(
+        values.productId,
+        values.taskId,
+        { content: values.content },
+      );
+      return taskCommentSchema.parse(data);
+    },
+  });
+}
+
+export const getTaskCommentsQueryOptions = generateQueryOptions(
+  paginatedResponseSchema(taskCommentSchema),
+  paginatedRequestSchema.extend({ productId: z.number(), taskId: z.number() }),
+  async ({ productId, taskId, page, pageSize }) => {
+    const { data } = await api.api.getCommentsByTaskId(productId, taskId, {
+      page: page - 1,
+      size: pageSize,
+    });
+    return {
+      values: data.content,
+      page: data.number + 1,
+      pageSize: data.size,
+      total: data.totalElements,
+    };
+  },
+  ({ productId, taskId, ...query }) => [
+    "products",
+    "detail",
+    productId,
+    "tasks",
+    taskId,
+    "comments",
+    query,
   ],
 );
