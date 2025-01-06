@@ -2,6 +2,7 @@ import { queryOptions, useMutation } from "@tanstack/react-query";
 import z from "zod";
 import { taskSchema, taskStatus } from "@/entities/task/model.ts";
 import { api } from "@/shared/api";
+import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
 import { paginatedResponseSchema } from "@/shared/api/schemas.ts";
 
 export const getProductTasksRequestSchema = z.object({
@@ -107,3 +108,24 @@ export function useUpdateTaskMutation() {
     },
   });
 }
+
+export const getTaskByIdQueryOptions = generateQueryOptions(
+  taskSchema,
+  z.object({
+    taskId: z.number(),
+    productId: z.number(),
+  }),
+  // @ts-expect-error bad status typing on backend
+  async (query) => {
+    const { data } = await api.api.getTaskById(query.taskId, query.productId);
+    return data;
+  },
+  ({ productId, taskId }) => [
+    "products",
+    "detail",
+    productId,
+    "tasks",
+    "detail",
+    taskId,
+  ],
+);
