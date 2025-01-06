@@ -1,9 +1,14 @@
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { useQuery } from "@tanstack/react-query";
-import { UserSearch } from "lucide-react";
+import { UserMinus, UserSearch } from "lucide-react";
 import { forwardRef, useState } from "react";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
-import { getUsersQueryOptions, User, UserHoverCard } from "@/entities/user";
+import {
+  getUsersQueryOptions,
+  User,
+  UserAvatar,
+  UserHoverCard,
+} from "@/entities/user";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   Select,
@@ -35,6 +40,7 @@ export const SelectAssignee = ({ value, onChange }) => {
       onOpenChange={setOpen}
       value={value ? String(value?.id) : undefined}
       onValueChange={handleChange}
+      key={value?.id}
     >
       {value && (
         <>
@@ -47,16 +53,30 @@ export const SelectAssignee = ({ value, onChange }) => {
       )}
       {!value && (
         <SelectPrimitive.Trigger asChild>
-          <Button variant="ghost" size="sm">
+          <Button variant="outline" size="sm" className="h-6">
             <UserSearch className="mr-2 size-4" />
             Assign
           </Button>
         </SelectPrimitive.Trigger>
       )}
       <SelectContent>
+        {value && (
+          <SelectItem value={"undefined"}>
+            <div className="flex items-center">
+              <UserMinus className="mr-2 size-4" />
+              No assignee
+            </div>
+          </SelectItem>
+        )}
         {data?.values.map((user) => (
           <SelectItem key={user.id} value={String(user.id)}>
-            {user.fullName}
+            <div className="flex items-center">
+              <UserAvatar
+                user={user}
+                className="mr-2 size-4 text-xs font-light"
+              />
+              {user.fullName}
+            </div>
           </SelectItem>
         ))}
       </SelectContent>

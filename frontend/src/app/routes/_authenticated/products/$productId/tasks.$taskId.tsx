@@ -60,7 +60,7 @@ function RouteComponent() {
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell>Status</TableCell>
+              <TableCell className="w-[200px]">Status</TableCell>
               <TableCell>
                 <TaskStatusBadge status={task.status} />
               </TableCell>

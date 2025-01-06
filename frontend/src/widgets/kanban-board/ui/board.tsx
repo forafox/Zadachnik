@@ -18,7 +18,7 @@ import {
   Task,
   useUpdateTaskMutation,
 } from "@/entities/task";
-import { UserAvatar } from "@/entities/user";
+import { UserHoverAvatar } from "@/entities/user";
 import {
   Card,
   CardContent,
@@ -207,7 +207,7 @@ function TaskCard({
       </CardHeader>
       <CardContent className="p-2">
         {task.description && <TextIcon className="size-4" />}
-        {task.assignee && <UserAvatar user={task.assignee} />}
+        {task.assignee && <UserHoverAvatar user={task.assignee} />}
       </CardContent>
     </Card>
   );
