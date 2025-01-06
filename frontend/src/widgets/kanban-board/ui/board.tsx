@@ -205,9 +205,16 @@ function TaskCard({
           {dragSlot ?? <GripHorizontalIcon className="ml-auto size-4" />}
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-2">
-        {task.description && <TextIcon className="size-4" />}
-        {task.assignee && <UserHoverAvatar user={task.assignee} />}
+      <CardContent className="flex items-center gap-2 p-2">
+        {task.assignee && (
+          <UserHoverAvatar
+            className="size-6 text-xs font-light"
+            user={task.assignee}
+          />
+        )}
+        {(task.description?.trim() ?? "").length > 0 && (
+          <TextIcon className="size-4" />
+        )}
       </CardContent>
     </Card>
   );
