@@ -40,6 +40,7 @@ export const statusGroups = {
 
 export const taskSchema = z.object({
   id: z.number(),
+  productId: z.number(),
   type: taskType,
   title: z.string(),
   description: z

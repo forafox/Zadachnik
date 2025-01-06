@@ -33,7 +33,7 @@ export const getProductTasksQueryOptions = (
         status: req.status?.toUpperCase(),
       });
       return getProductTasksResponseSchema.parse({
-        values: data.content,
+        values: data.content.map((it) => ({ ...it, productId: req.productId })),
         page: data.number + 1,
         pageSize: data.size,
         total: data.totalElements,
@@ -116,9 +116,9 @@ export const getTaskByIdQueryOptions = generateQueryOptions(
     productId: z.number(),
   }),
   // @ts-expect-error bad status typing on backend
-  async (query) => {
-    const { data } = await api.api.getTaskById(query.taskId, query.productId);
-    return data;
+  async ({ taskId, productId }) => {
+    const { data } = await api.api.getTaskById(taskId, productId);
+    return { ...data, productId };
   },
   ({ productId, taskId }) => [
     "products",
