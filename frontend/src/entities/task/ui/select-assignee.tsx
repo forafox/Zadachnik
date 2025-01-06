@@ -1,12 +1,13 @@
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { useQuery } from "@tanstack/react-query";
 import { UserMinus, UserSearch } from "lucide-react";
-import { forwardRef, useState } from "react";
+import { useState } from "react";
 import {
   getUsersQueryOptions,
   User,
   UserAvatar,
   UserHoverCard,
+  // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 } from "@/entities/user";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
@@ -20,7 +21,7 @@ type Props = {
   onChange: (value: User | undefined) => void;
 };
 
-export const SelectAssignee = ({ value, onChange }) => {
+export const SelectAssignee = ({ value, onChange }: Props) => {
   const { data } = useQuery(getUsersQueryOptions({ page: 1, pageSize: 50 }));
   const [open, setOpen] = useState(false);
 

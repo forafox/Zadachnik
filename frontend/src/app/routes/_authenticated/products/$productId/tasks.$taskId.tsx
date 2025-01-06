@@ -1,7 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { EditorContent, useEditor } from "@tiptap/react";
-import { StarterKit } from "@tiptap/starter-kit";
 import {
   getTaskByIdQueryOptions,
   TaskTypeBadge,
@@ -9,12 +7,11 @@ import {
 } from "@/entities/task";
 import { TaskStatusBadge } from "@/entities/task";
 import { SelectAssignee } from "@/entities/task";
-import { TaskDescription } from "@/entities/task/ui/task-description.tsx";
+import { TaskDescription } from "@/entities/task";
 import { User } from "@/entities/user";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
@@ -24,7 +21,6 @@ import {
   TableCell,
   TableRow,
 } from "@/shared/components/ui/table.tsx";
-import { Textarea } from "@/shared/components/ui/textarea.tsx";
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/tasks/$taskId",
@@ -41,7 +37,7 @@ function RouteComponent() {
     }),
   );
 
-  const { mutate, isPending } = useUpdateTaskMutation();
+  const { mutate } = useUpdateTaskMutation();
 
   function handleSetAssignee(assignee: User | undefined) {
     mutate({

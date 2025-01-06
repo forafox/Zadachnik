@@ -33,7 +33,10 @@ export const getProductTasksQueryOptions = (
         status: req.status?.toUpperCase(),
       });
       return getProductTasksResponseSchema.parse({
-        values: data.content.map((it) => ({ ...it, productId: req.productId })),
+        values: data.content.map((it: Record<string, unknown>) => ({
+          ...it,
+          productId: req.productId,
+        })),
         page: data.number + 1,
         pageSize: data.size,
         total: data.totalElements,

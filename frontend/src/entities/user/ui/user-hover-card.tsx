@@ -1,11 +1,5 @@
-import { HoverCardPortal } from "@radix-ui/react-hover-card";
-import { useQuery } from "@tanstack/react-query";
-/* eslint-disable */
 import { forwardRef } from "react";
-import { getPrincipalQueryOptions } from "@/entities/principal";
-/* eslint-enable */
 import { User } from "@/entities/user";
-import { UserNameLink } from "@/entities/user/ui/user-name-link.tsx";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar.tsx";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
@@ -13,7 +7,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/shared/components/ui/hover-card.tsx";
-import { cn } from "@/shared/lib/utils";
+import { UserNameLink } from "./user-name-link.tsx";
 
 export function UserHoverCardContent({ user }: { user: User }) {
   const userAvatarFallback = user.fullName
@@ -45,7 +39,7 @@ export const UserHoverCard = forwardRef<HTMLButtonElement, CardProps>(
     return (
       <HoverCard>
         <HoverCardTrigger asChild>
-          <UserNameLink username={user.username} {...props} />
+          <UserNameLink username={user.username} {...props} ref={ref} />
         </HoverCardTrigger>
         <UserHoverCardContent user={user} />
       </HoverCard>

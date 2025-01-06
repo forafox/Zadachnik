@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { forwardRef } from "react";
+// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { getPrincipalQueryOptions } from "@/entities/principal";
 import { Button } from "@/shared/components/ui/button.tsx";
 import { cn } from "@/shared/lib/utils.ts";
