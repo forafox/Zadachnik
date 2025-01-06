@@ -1,5 +1,6 @@
 {
   "items": {
+    "label": "Properties",
     "title": {
       "label": "Title"
     },
@@ -19,6 +20,9 @@
           "label": "Task"
         }
       }
+    },
+    "status": {
+      "label": "Status"
     },
     "assignee": {
       "label": "Assignee"
