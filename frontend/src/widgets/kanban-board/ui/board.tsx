@@ -51,7 +51,6 @@ export function KanbanBoard({ productId }: Props) {
     const group = over!.id as StatusGroup;
     const firstStatus = statusGroups[group][0];
     updateTask({
-      productId,
       ...task,
       status: firstStatus,
     });

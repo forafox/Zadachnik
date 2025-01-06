@@ -58,7 +58,7 @@ const extensions = [
 export function TaskDescription({ task }: { task: Task }) {
   const editor = useEditor({
     extensions: extensions as Extension[],
-    content: task.description,
+    content: task.description ?? "Add description",
     immediatelyRender: false,
   });
   const [isDirty, setIsDirty] = useState(false);
