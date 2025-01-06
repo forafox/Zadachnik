@@ -26,6 +26,19 @@
     },
     "assignee": {
       "label": "Assignee"
+    },
+    "comments": {
+      "label": "Comments",
+      "feedback": {
+        "noData": {
+          "label": "There are no comments yet"
+        }
+      },
+      "actions": {
+        "send": {
+          "label": "Send"
+        }
+      }
     }
   },
   "actions": {

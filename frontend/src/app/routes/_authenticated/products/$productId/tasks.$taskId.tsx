@@ -142,6 +142,7 @@ function RouteComponent() {
 }
 
 function TaskComments({ task }: { task: Task }) {
+  const { t } = useTranslation("task");
   const { data: comments } = useSuspenseQuery(
     getTaskCommentsQueryOptions({
       productId: task.productId,
@@ -176,10 +177,12 @@ function TaskComments({ task }: { task: Task }) {
 
   return (
     <div>
-      <h2 className="font-bold">Comments</h2>
+      <h2 className="font-bold">{t("items.comments.label")}</h2>
       <div className="space-y-2">
         {comments.values.length == 0 && (
-          <p className="text-muted-foreground">There are no comments yet..</p>
+          <p className="text-muted-foreground">
+            {t("items.comments.feedback.noData.label")}
+          </p>
         )}
         {comments.values.map((comment) => (
           <Card>
@@ -206,7 +209,7 @@ function TaskComments({ task }: { task: Task }) {
         <Input placeholder={"Leave a comment"} ref={ref} required />
         <div className="flex flex-row justify-end">
           <Button variant="outline" type="submit" size="sm" loading={isPending}>
-            Send
+            {t("items.comments.actions.send.label")}
           </Button>
         </div>
       </form>
