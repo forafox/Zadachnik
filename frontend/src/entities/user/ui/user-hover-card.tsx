@@ -1,5 +1,7 @@
+import { HoverCardPortal } from "@radix-ui/react-hover-card";
 import { useQuery } from "@tanstack/react-query";
 /* eslint-disable */
+import { forwardRef } from "react";
 import { getPrincipalQueryOptions } from "@/entities/principal";
 /* eslint-enable */
 import { User } from "@/entities/user";
@@ -11,6 +13,7 @@ import {
   HoverCardTrigger,
 } from "@/shared/components/ui/hover-card.tsx";
 import { cn } from "@/shared/lib/utils";
+import { UserNameLink } from "@/entities/user/ui/user-name-link.tsx";
 
 export function UserHoverCardContent({ user }: { user: User }) {
   const userAvatarFallback = user.fullName
@@ -33,22 +36,19 @@ export function UserHoverCardContent({ user }: { user: User }) {
   );
 }
 
-export function UserHoverCard({ user }: { user: User }) {
-  const { data: principal } = useQuery(getPrincipalQueryOptions);
+type CardProps = {
+  user: User;
+} & Omit<React.ComponentProps<typeof Button>, "children">;
 
-  const isCurrentUser = principal?.id === user.id;
-  const buttonClassName = cn("px-0 py-0 h-auto", {
-    "bg-yellow-200/40": isCurrentUser,
-  });
-
-  return (
-    <HoverCard>
-      <HoverCardTrigger asChild>
-        <Button className={buttonClassName} variant="link">
-          @{user.username}
-        </Button>
-      </HoverCardTrigger>
-      <UserHoverCardContent user={user} />
-    </HoverCard>
-  );
-}
+export const UserHoverCard = forwardRef<HTMLButtonElement, CardProps>(
+  function UserHoverCard({ user, ...props }, ref) {
+    return (
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <UserNameLink username={user.username} {...props} />
+        </HoverCardTrigger>
+        <UserHoverCardContent user={user} />
+      </HoverCard>
+    );
+  },
+);

@@ -42,7 +42,10 @@ export const taskSchema = z.object({
   id: z.number(),
   type: taskType,
   title: z.string(),
-  description: z.string().optional(),
+  description: z
+    .string()
+    .nullish()
+    .transform((it) => it ?? undefined),
   assignee: userSchema.nullish().transform((it) => it ?? undefined),
   status: taskStatus,
 });

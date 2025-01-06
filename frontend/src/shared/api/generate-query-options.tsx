@@ -16,7 +16,7 @@ export function generateQueryOptions<
       queryKey: queryKey(query),
       queryFn: async () => {
         const response = await method(query);
-        return responseSchema.parse(response);
+        return responseSchema.parse(response) as z.infer<Response>;
       },
     });
   };
