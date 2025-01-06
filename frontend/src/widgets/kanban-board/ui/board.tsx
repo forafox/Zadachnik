@@ -8,7 +8,8 @@ import {
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useQueries } from "@tanstack/react-query";
-import { LoaderCircle } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { GripHorizontalIcon, LoaderCircle, TextIcon } from "lucide-react";
 import { useState } from "react";
 import {
   getProductTasksQueryOptions,
@@ -17,6 +18,7 @@ import {
   Task,
   useUpdateTaskMutation,
 } from "@/entities/task";
+import { UserHoverAvatar } from "@/entities/user";
 import {
   Card,
   CardContent,
@@ -49,7 +51,6 @@ export function KanbanBoard({ productId }: Props) {
     const group = over!.id as StatusGroup;
     const firstStatus = statusGroups[group][0];
     updateTask({
-      productId,
       ...task,
       status: firstStatus,
     });
@@ -123,11 +124,16 @@ function BoardColumn({
       <main className="space-y-2 p-2">
         {isOverCurrent && activeTask && (
           <div className="opacity-50">
-            <TaskCard task={activeTask} />
+            <TaskCard productId={productId} task={activeTask} />
           </div>
         )}
         {tasks?.map((task) => (
-          <DraggableTask isPending={isPending} key={task.id} task={task} />
+          <DraggableTask
+            productId={productId}
+            isPending={isPending}
+            key={task.id}
+            task={task}
+          />
         ))}
       </main>
     </Card>
@@ -137,9 +143,11 @@ function BoardColumn({
 function DraggableTask({
   task,
   isPending,
+  productId,
 }: {
   task: Task;
   isPending: boolean;
+  productId: number;
 }) {
   const { setNodeRef, transform, attributes, listeners, isDragging } =
     useDraggable({
@@ -158,19 +166,55 @@ function DraggableTask({
   if (isDragging) return null;
 
   return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
-      <TaskCard task={task} />
+    <div ref={setNodeRef} style={style}>
+      <TaskCard
+        task={task}
+        productId={productId}
+        dragSlot={
+          <GripHorizontalIcon
+            {...attributes}
+            {...listeners}
+            className="ml-auto size-4"
+          />
+        }
+      />
     </div>
   );
 }
 
-function TaskCard({ task }: { task: Task }) {
+function TaskCard({
+  task,
+  dragSlot,
+  productId,
+}: {
+  task: Task;
+  dragSlot?: React.ReactNode;
+  productId: number;
+}) {
   return (
-    <Card>
+    <Card className="transition-all">
       <CardHeader className="p-2">
-        <CardTitle>{task.title}</CardTitle>
+        <CardTitle className="flex flex-row items-center">
+          <Link
+            to="/products/$productId/tasks/$taskId"
+            params={{ productId: String(productId), taskId: String(task.id) }}
+          >
+            {task.title}
+          </Link>
+          {dragSlot ?? <GripHorizontalIcon className="ml-auto size-4" />}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="p-2">{task.description}</CardContent>
+      <CardContent className="flex items-center gap-2 p-2">
+        {task.assignee && (
+          <UserHoverAvatar
+            className="size-6 text-xs font-light"
+            user={task.assignee}
+          />
+        )}
+        {(task.description?.trim() ?? "").length > 0 && (
+          <TextIcon className="size-4" />
+        )}
+      </CardContent>
     </Card>
   );
 }

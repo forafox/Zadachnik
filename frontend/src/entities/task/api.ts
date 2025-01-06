@@ -2,6 +2,7 @@ import { queryOptions, useMutation } from "@tanstack/react-query";
 import z from "zod";
 import { taskSchema, taskStatus } from "@/entities/task/model.ts";
 import { api } from "@/shared/api";
+import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
 import { paginatedResponseSchema } from "@/shared/api/schemas.ts";
 
 export const getProductTasksRequestSchema = z.object({
@@ -32,7 +33,10 @@ export const getProductTasksQueryOptions = (
         status: req.status?.toUpperCase(),
       });
       return getProductTasksResponseSchema.parse({
-        values: data.content,
+        values: data.content.map((it: Record<string, unknown>) => ({
+          ...it,
+          productId: req.productId,
+        })),
         page: data.number + 1,
         pageSize: data.size,
         total: data.totalElements,
@@ -107,3 +111,24 @@ export function useUpdateTaskMutation() {
     },
   });
 }
+
+export const getTaskByIdQueryOptions = generateQueryOptions(
+  taskSchema,
+  z.object({
+    taskId: z.number(),
+    productId: z.number(),
+  }),
+  // @ts-expect-error bad status typing on backend
+  async ({ taskId, productId }) => {
+    const { data } = await api.api.getTaskById(taskId, productId);
+    return { ...data, productId };
+  },
+  ({ productId, taskId }) => [
+    "products",
+    "detail",
+    productId,
+    "tasks",
+    "detail",
+    taskId,
+  ],
+);
