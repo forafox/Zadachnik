@@ -14,14 +14,16 @@ export const releaseSchema = z.object({
   productId: z.number(),
 });
 
+export const createReleaseMutationRequestSchema = z.object({
+  version: z.string(),
+  releaseNotes: z.string(),
+  sprintId: z.number(),
+  tasks: z.object({ id: z.number() }).array(),
+  productId: z.number(),
+});
+
 export const useCreateReleaseMutation = generateMutation(
-  z.object({
-    version: z.string(),
-    releaseNotes: z.string(),
-    sprintId: z.number(),
-    tasks: z.object({ id: z.number() }).array(),
-    productId: z.number(),
-  }),
+  createReleaseMutationRequestSchema,
   releaseSchema,
   async (query) => {
     const { data } = await api.api.createProductRelease(query.productId, {

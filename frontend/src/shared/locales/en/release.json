@@ -1,0 +1,18 @@
+{
+  "items": {
+    "version": {
+      "label": "Version",
+      "placeholder": "v1.2.3 or anything else"
+    },
+    "releaseNotes": {
+      "label": "Release Notes",
+      "placeholder": "We are very happy to ..."
+    }
+  },
+  "actions": {
+    "create": {
+      "title": "Create a Release",
+      "label": "Create"
+    }
+  }
+}

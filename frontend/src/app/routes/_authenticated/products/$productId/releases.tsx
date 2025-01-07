@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { getProductByIdQueryOptions, ProductLink } from "@/entities/product";
+import { CreateReleaseDialogContent } from "@/entities/release";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
 import {
@@ -10,6 +11,9 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/shared/components/ui/breadcrumb.tsx";
+import { Button } from "@/shared/components/ui/button";
+import { DialogTrigger } from "@/shared/components/ui/dialog.tsx";
+import { useDialog } from "@/shared/hooks/use-dialog.tsx";
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/releases",
@@ -28,6 +32,7 @@ function RouteComponent() {
     getProductByIdQueryOptions(productId),
   );
   const { t } = useTranslation("product");
+  const { Dialog: CreateDialog } = useDialog();
 
   return (
     <div>
@@ -50,7 +55,15 @@ function RouteComponent() {
           </BreadcrumbList>
         </Breadcrumb>
       </SetSidebarBreadcrumbs>
-      <main>Releases will be here</main>
+      <header>
+        <CreateDialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Create</Button>
+          </DialogTrigger>
+          <CreateReleaseDialogContent />
+        </CreateDialog>
+      </header>
+      <main></main>
     </div>
   );
 }
