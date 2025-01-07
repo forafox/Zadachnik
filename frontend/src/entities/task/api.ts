@@ -77,6 +77,44 @@ export const getTeamTasksQueryOptions = (reqRaw: GetTeamTasksRequestValues) => {
   });
 };
 
+export const getTasksRequestSchema = z.union([
+  z.object({
+    productId: z.number(),
+  }),
+  z.object({
+    teamId: z.number(),
+  }),
+  z.object({
+    sprintId: z.number(),
+    teamId: z.number(),
+  }),
+]);
+
+export const getTasksQueryOptions = generateQueryOptions(
+  getTeamTasksResponseSchema,
+  getTasksRequestSchema,
+  async ({ ...req }) => {
+    if ("productId" in req) {
+      const { productId } = req;
+      const { data } = await api.api.getTasksByProductId(productId);
+      const paginated = fromBackendPagination(data)
+      console.log(paginated);
+      return paginated;
+    }
+    if ("teamId" in req && !("sprintId" in req)) {
+      const { teamId } = req;
+      const { data } = await api.api.getTasksByTeamId(teamId);
+      return data;
+    }
+    if ("sprintId" in req && "teamId" in req) {
+      const { sprintId, teamId } = req;
+      const { data } = await api.api.getSprintTasks(teamId, sprintId);
+      return data;
+    }
+  },
+  (req) => ["tasks", req],
+);
+
 export const createTaskMutationRequestSchema = taskSchema
   .omit({ id: true })
   .extend({ productId: z.number() })

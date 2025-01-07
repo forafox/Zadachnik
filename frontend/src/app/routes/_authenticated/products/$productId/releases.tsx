@@ -60,7 +60,7 @@ function RouteComponent() {
           <DialogTrigger asChild>
             <Button variant="outline">Create</Button>
           </DialogTrigger>
-          <CreateReleaseDialogContent />
+          <CreateReleaseDialogContent productId={product.id} />
         </CreateDialog>
       </header>
       <main></main>

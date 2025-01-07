@@ -6,7 +6,9 @@ import {
   createReleaseMutationRequestSchema,
   useCreateReleaseMutation,
 } from "@/entities/release";
-import { SelectSprint } from "@/entities/sprint/ui/select-sprint.tsx";
+// eslint-disable-next-line @conarti/feature-sliced/layers-slices
+import { SelectSprint } from "@/entities/sprint";
+import { SelectTask } from "@/entities/task";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   DialogContent,
@@ -37,6 +39,7 @@ export function CreateReleaseDialogContent({
     resolver: zodResolver(createReleaseMutationRequestSchema),
     defaultValues: {
       productId,
+      tasks: [],
     },
   });
   const { mutate, isPending } = useCreateReleaseMutation();
@@ -88,6 +91,16 @@ export function CreateReleaseDialogContent({
                 <FormItem>
                   <FormLabel>{t("items.sprint.label")}</FormLabel>
                   <SelectSprint teamId={1} {...field} />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tasks"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("items.tasks.label")}</FormLabel>
+                  <SelectTask productId={productId} {...field} />
                 </FormItem>
               )}
             />

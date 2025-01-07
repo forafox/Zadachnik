@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
 import React, { forwardRef } from "react";
+import z from "zod";
 import {
+  getTasksQueryOptions,
+  getTasksRequestSchema,
   getTeamTasksQueryOptions,
   GetTeamTasksRequestValues,
   Task,
@@ -22,19 +25,19 @@ import {
 } from "@/shared/components/ui/popover.tsx";
 import { cn } from "@/shared/lib/utils.ts";
 
-type TaskFilter = Omit<GetTeamTasksRequestValues, "page" | "pageSize">;
+type TaskFilter = z.infer<typeof getTasksRequestSchema>;
 
 type Props = {
   value: Task[];
   onChange: (value: Task[]) => void;
 } & TaskFilter;
 
-export const SelectTeamTasks = forwardRef<HTMLButtonElement, Props>(
+export const SelectTask = forwardRef<HTMLButtonElement, Props>(
   function SelectTeamTasks({ value, onChange, ...filters }, ref) {
     const [open, setOpen] = React.useState(false);
-    const { data } = useQuery(
-      getTeamTasksQueryOptions({ ...filters, page: 1, pageSize: 100 }),
-    );
+    const { data, error } = useQuery(getTasksQueryOptions(filters));
+
+    console.log("Error:", error);
 
     return (
       <Popover open={open} onOpenChange={setOpen}>

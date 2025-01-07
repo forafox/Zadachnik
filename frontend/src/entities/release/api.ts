@@ -20,7 +20,7 @@ export const createReleaseMutationRequestSchema = z.object({
   version: z.string(),
   releaseNotes: z.string(),
   sprint: sprintSchema,
-  tasks: z.object({ id: z.number() }).array(),
+  tasks: taskSchema.array(),
   productId: z.number(),
 });
 
@@ -30,7 +30,7 @@ export const useCreateReleaseMutation = generateMutation(
   async ({ productId, ...query }) => {
     const { data } = await api.api.createProductRelease(productId, {
       releaseNotes: query.releaseNotes,
-      tasks: query.tasks,
+      tasks: query.tasks.map((it) => ({id: it.id})),
       version: query.version,
       sprintId: query.sprint.id,
     });
