@@ -7,6 +7,10 @@
     "releaseNotes": {
       "label": "Release Notes",
       "placeholder": "We are very happy to ..."
+    },
+    "sprint": {
+      "label": "Sprint",
+      "description": "Select a sprint that these release was produced by"
     }
   },
   "actions": {

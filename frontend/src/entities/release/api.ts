@@ -2,6 +2,8 @@ import { z } from "zod";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { articleSchema } from "@/entities/article";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
+import { sprintSchema } from "@/entities/sprint";
+// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { taskSchema } from "@/entities/task";
 import { api } from "@/shared/api";
 import { generateMutation } from "@/shared/api/generate-mutation.tsx";
@@ -17,7 +19,7 @@ export const releaseSchema = z.object({
 export const createReleaseMutationRequestSchema = z.object({
   version: z.string(),
   releaseNotes: z.string(),
-  sprintId: z.number(),
+  sprint: sprintSchema,
   tasks: z.object({ id: z.number() }).array(),
   productId: z.number(),
 });
@@ -25,9 +27,12 @@ export const createReleaseMutationRequestSchema = z.object({
 export const useCreateReleaseMutation = generateMutation(
   createReleaseMutationRequestSchema,
   releaseSchema,
-  async (query) => {
-    const { data } = await api.api.createProductRelease(query.productId, {
-      ...query,
+  async ({ productId, ...query }) => {
+    const { data } = await api.api.createProductRelease(productId, {
+      releaseNotes: query.releaseNotes,
+      tasks: query.tasks,
+      version: query.version,
+      sprintId: query.sprint.id,
     });
     return data;
   },

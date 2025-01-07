@@ -6,6 +6,7 @@ import {
   createReleaseMutationRequestSchema,
   useCreateReleaseMutation,
 } from "@/entities/release";
+import { SelectSprint } from "@/entities/sprint/ui/select-sprint.tsx";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   DialogContent,
@@ -20,17 +21,23 @@ import {
   FormLabel,
 } from "@/shared/components/ui/form.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
-import { useDialogOnClose } from "@/shared/hooks/use-dialog.tsx";
 import { Textarea } from "@/shared/components/ui/textarea.tsx";
+import { useDialogOnClose } from "@/shared/hooks/use-dialog.tsx";
 
 type Values = z.infer<typeof createReleaseMutationRequestSchema>;
 
-export function CreateReleaseDialogContent() {
+export function CreateReleaseDialogContent({
+  productId,
+}: {
+  productId: number;
+}) {
   const onClose = useDialogOnClose();
   const { t } = useTranslation("release");
   const form = useForm<Values>({
     resolver: zodResolver(createReleaseMutationRequestSchema),
-    defaultValues: {},
+    defaultValues: {
+      productId,
+    },
   });
   const { mutate, isPending } = useCreateReleaseMutation();
 
@@ -71,6 +78,16 @@ export function CreateReleaseDialogContent() {
                     placeholder={t("items.releaseNotes.placeholder")}
                     {...field}
                   />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="sprint"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("items.sprint.label")}</FormLabel>
+                  <SelectSprint teamId={1} {...field} />
                 </FormItem>
               )}
             />
