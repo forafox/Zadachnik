@@ -8,6 +8,7 @@ import {
 import { api } from "@/shared/api";
 import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
 import {
+  fromBackendPagination,
   paginatedRequestSchema,
   paginatedResponseSchema,
 } from "@/shared/api/schemas.ts";
@@ -66,16 +67,12 @@ export type GetTeamTasksRequestValues = z.infer<
 export const getTeamTasksResponseSchema = paginatedResponseSchema(taskSchema);
 
 export const getTeamTasksQueryOptions = (reqRaw: GetTeamTasksRequestValues) => {
-  const req = getTeamTasksRequestSchema.parse(reqRaw);
+  const { teamId, ...req } = getTeamTasksRequestSchema.parse(reqRaw);
   return queryOptions({
-    queryKey: ["teams", "detail", req.teamId, "tasks"],
+    queryKey: ["teams", "detail", teamId, "tasks", req],
     queryFn: async () => {
-      return getTeamTasksResponseSchema.parse({
-        total: 0,
-        page: 0,
-        pageSize: 0,
-        values: [],
-      });
+      const { data } = await api.api.getTasksByTeamId(teamId);
+      return getTeamTasksResponseSchema.parse(fromBackendPagination(data));
     },
   });
 };
