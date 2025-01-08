@@ -1,5 +1,6 @@
 package com.jellyone.zadachnik.repository
 
+import com.jellyone.zadachnik.domain.Product
 import com.jellyone.zadachnik.domain.ProductRelease
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -15,4 +16,6 @@ interface ProductReleaseRepository : JpaRepository<ProductRelease, Long> {
         @Param("productId") productId: Long,
         pageable: Pageable
     ): Page<ProductRelease>
+
+    fun findByProductIdAndId(productId: Long, releaseId: Long): ProductRelease
 }

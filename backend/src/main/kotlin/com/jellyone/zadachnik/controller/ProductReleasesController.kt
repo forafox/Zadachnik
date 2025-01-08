@@ -54,4 +54,10 @@ class ProductReleasesController(
     ) = productReleasesService.getProductReleases(productId, page, size).map { release ->
         release.toResponse()
     }
+
+    @GetMapping("/{releaseId}")
+    fun getProductReleases(
+        @PathVariable productId: Long,
+        @PathVariable releaseId: Long,
+    ) = productReleasesService.getProductRelease(productId, releaseId)
 }

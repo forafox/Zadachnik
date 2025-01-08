@@ -6,7 +6,9 @@ import {
   CreateReleaseDialogContent,
   getReleasesQueryOptions,
 } from "@/entities/release";
+import { useReleasesTable } from "@/entities/release/ui/releases-table.tsx";
 import { defaultPagination } from "@/shared/api/schemas.ts";
+import { DataTable } from "@/shared/components/data-table.tsx";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
 import {
   Breadcrumb,
@@ -17,11 +19,9 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { DialogTrigger } from "@/shared/components/ui/dialog.tsx";
 import { useDialog } from "@/shared/hooks/use-dialog.tsx";
-import { useReleasesTable } from "@/entities/release/ui/releases-table.tsx";
-import { DataTable } from "@/shared/components/data-table.tsx";
 
 export const Route = createFileRoute(
-  "/_authenticated/products/$productId/releases",
+  "/_authenticated/products/$productId/releases/",
 )({
   component: RouteComponent,
   loader: ({ context, params }) => {
@@ -41,7 +41,7 @@ function RouteComponent() {
   );
   const { t } = useTranslation("product");
   const { Dialog: CreateDialog } = useDialog();
-  const table = useReleasesTable(releases.values)
+  const table = useReleasesTable(releases.values);
 
   return (
     <div className="space-y-4">

@@ -61,3 +61,16 @@ export const getReleasesQueryOptions = generateQueryOptions(
   },
   ({ productId, ...req }) => ["products", productId, "releases", req],
 );
+
+export const getReleaseByIdQueryOptions = generateQueryOptions(
+  paginatedResponseSchema(releaseSchema),
+  paginatedRequestSchema.extend({ productId: z.number() }),
+  async ({ productId, ...req }) => {
+    const { data } = await api.api.getProductReleases(
+      productId,
+      toBackendPagination(req),
+    );
+    return fromBackendPagination(data);
+  },
+  ({ productId, ...req }) => ["products", productId, "releases", req],
+);
