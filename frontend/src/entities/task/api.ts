@@ -98,10 +98,7 @@ export const getTasksQueryOptions = generateQueryOptions(
       const { productId } = req;
       const { data } = await api.api.getTasksByProductId(productId);
       const paginated = fromBackendPagination(data);
-      return {
-        ...paginated,
-        values: paginated.values.map((it) => ({ ...it, productId })),
-      };
+      return paginated;
     }
     if ("teamId" in req && !("sprintId" in req)) {
       const { teamId } = req;
@@ -139,13 +136,13 @@ export function useCreateTaskMutation() {
   });
 }
 
-const updateTaskSchema = taskSchema.extend({ productId: z.number() });
+const updateTaskSchema = taskSchema;
 
 export function useUpdateTaskMutation() {
   return useMutation({
     mutationFn: async (valuesRaw: z.infer<typeof updateTaskSchema>) => {
       const values = updateTaskSchema.parse(valuesRaw);
-      return api.api.updateTaskById(values.id, values.productId, {
+      return api.api.updateTaskById(values.id, values.product.id, {
         type: values.type.toUpperCase(),
         title: values.title,
         description: values.description,
@@ -165,7 +162,7 @@ export const getTaskByIdQueryOptions = generateQueryOptions(
   // @ts-expect-error bad status typing on backend
   async ({ taskId, productId }) => {
     const { data } = await api.api.getTaskById(taskId, productId);
-    return { ...data, productId };
+    return data;
   },
   ({ productId, taskId }) => [
     "products",

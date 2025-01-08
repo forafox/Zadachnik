@@ -1,6 +1,7 @@
 import z from "zod";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { userSchema } from "@/entities/user";
+import { productSchema } from "@/entities/product";
 
 export const taskType = z
   .string()
@@ -40,7 +41,7 @@ export const statusGroups = {
 
 export const taskSchema = z.object({
   id: z.number(),
-  productId: z.number(),
+  product: productSchema,
   type: taskType,
   title: z.string(),
   description: z
