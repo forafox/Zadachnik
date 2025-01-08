@@ -11,6 +11,9 @@
     "sprint": {
       "label": "Sprint",
       "description": "Select a sprint that these release was produced by"
+    },
+    "tasks": {
+      "label": "Tasks"
     }
   },
   "actions": {

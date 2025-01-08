@@ -23,6 +23,9 @@ const queryClient = new QueryClient({
         await queryClient.invalidateQueries();
       },
     },
+    queries: {
+      retry: false,
+    }
   },
 });
 

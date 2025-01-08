@@ -7,7 +7,7 @@ import {
   useCreateSprintMutation,
 } from "@/entities/sprint";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
-import { SelectTask } from "@/entities/task";
+import { SelectTasks } from "@/entities/task";
 import { Button } from "@/shared/components/ui/button.tsx";
 import { DateTimePicker } from "@/shared/components/ui/date-time-picker.tsx";
 import {
@@ -116,7 +116,7 @@ export function CreateSprintDialogContent({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.tasks.label")}</FormLabel>
-                  <SelectTask teamId={teamId} {...field} />
+                  <SelectTasks modal teamId={teamId} {...field} />
                 </FormItem>
               )}
             />

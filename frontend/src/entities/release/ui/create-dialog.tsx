@@ -8,7 +8,7 @@ import {
 } from "@/entities/release";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { SelectSprint } from "@/entities/sprint";
-import { SelectTask } from "@/entities/task";
+import { SelectTasks } from "@/entities/task";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   DialogContent,
@@ -53,7 +53,7 @@ export function CreateReleaseDialogContent({
   return (
     <DialogContent>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit, (e) => console.log(e))}>
           <DialogHeader>
             <DialogTitle>{t("actions.create.title")}</DialogTitle>
           </DialogHeader>
@@ -100,7 +100,7 @@ export function CreateReleaseDialogContent({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.tasks.label")}</FormLabel>
-                  <SelectTask productId={productId} {...field} />
+                  <SelectTasks modal productId={productId} {...field} />
                 </FormItem>
               )}
             />

@@ -2,7 +2,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { getProductByIdQueryOptions, ProductLink } from "@/entities/product";
-import { CreateReleaseDialogContent } from "@/entities/release";
+import {
+  CreateReleaseDialogContent,
+  getReleasesQueryOptions,
+} from "@/entities/release";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
 import {
@@ -30,6 +33,9 @@ function RouteComponent() {
   const productId = parseInt(Route.useParams().productId);
   const { data: product } = useSuspenseQuery(
     getProductByIdQueryOptions(productId),
+  );
+  const { data: releases } = useSuspenseQuery(
+    getReleasesQueryOptions({ productId, page: 1, pageSize: 50 }),
   );
   const { t } = useTranslation("product");
   const { Dialog: CreateDialog } = useDialog();
@@ -63,7 +69,7 @@ function RouteComponent() {
           <CreateReleaseDialogContent productId={product.id} />
         </CreateDialog>
       </header>
-      <main></main>
+      <main>{releases.values.map(it => it.id)}</main>
     </div>
   );
 }

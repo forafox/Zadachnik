@@ -7,6 +7,13 @@ import { sprintSchema } from "@/entities/sprint";
 import { taskSchema } from "@/entities/task";
 import { api } from "@/shared/api";
 import { generateMutation } from "@/shared/api/generate-mutation.tsx";
+import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
+import {
+  fromBackendPagination,
+  paginatedRequestSchema,
+  paginatedResponseSchema,
+  toBackendPagination,
+} from "@/shared/api/schemas.ts";
 
 export const releaseSchema = z.object({
   id: z.number(),
@@ -30,10 +37,23 @@ export const useCreateReleaseMutation = generateMutation(
   async ({ productId, ...query }) => {
     const { data } = await api.api.createProductRelease(productId, {
       releaseNotes: query.releaseNotes,
-      tasks: query.tasks.map((it) => ({id: it.id})),
+      tasks: query.tasks.map((it) => ({ id: it.id })),
       version: query.version,
       sprintId: query.sprint.id,
     });
     return data;
   },
+);
+
+export const getReleasesQueryOptions = generateQueryOptions(
+  paginatedResponseSchema(releaseSchema),
+  paginatedRequestSchema.extend({ productId: z.number() }),
+  async ({ productId, ...req }) => {
+    const { data } = await api.api.getProductReleases(
+      productId,
+      toBackendPagination(req),
+    );
+    return fromBackendPagination(data);
+  },
+  ({ productId, ...req }) => ["products", productId, "releases", req],
 );

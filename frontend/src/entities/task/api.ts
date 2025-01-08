@@ -97,9 +97,11 @@ export const getTasksQueryOptions = generateQueryOptions(
     if ("productId" in req) {
       const { productId } = req;
       const { data } = await api.api.getTasksByProductId(productId);
-      const paginated = fromBackendPagination(data)
-      console.log(paginated);
-      return paginated;
+      const paginated = fromBackendPagination(data);
+      return {
+        ...paginated,
+        values: paginated.values.map((it) => ({ ...it, productId })),
+      };
     }
     if ("teamId" in req && !("sprintId" in req)) {
       const { teamId } = req;
