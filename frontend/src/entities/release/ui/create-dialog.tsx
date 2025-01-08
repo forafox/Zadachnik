@@ -8,6 +8,7 @@ import {
 } from "@/entities/release";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { SelectSprint } from "@/entities/sprint";
+// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { SelectTasks } from "@/entities/task";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
@@ -16,6 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog.tsx";
+import { RichTextEditor } from "@/shared/components/ui/editor.tsx";
 import {
   Form,
   FormField,
@@ -23,7 +25,6 @@ import {
   FormLabel,
 } from "@/shared/components/ui/form.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
-import { Textarea } from "@/shared/components/ui/textarea.tsx";
 import { useDialogOnClose } from "@/shared/hooks/use-dialog.tsx";
 
 type Values = z.infer<typeof createReleaseMutationRequestSchema>;
@@ -77,9 +78,9 @@ export function CreateReleaseDialogContent({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("items.releaseNotes.label")}</FormLabel>
-                  <Textarea
-                    placeholder={t("items.releaseNotes.placeholder")}
-                    {...field}
+                  <RichTextEditor
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormItem>
               )}
@@ -104,9 +105,7 @@ export function CreateReleaseDialogContent({
                 </FormItem>
               )}
             />
-            {error && <p className="text-destructive">
-              {error.message}
-            </p>}
+            {error && <p className="text-destructive">{error.message}</p>}
           </div>
           <DialogFooter>
             <Button type="submit" loading={isPending}>
