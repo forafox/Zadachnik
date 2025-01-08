@@ -2,6 +2,7 @@ import { z } from "zod";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { articleSchema } from "@/entities/article";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
+import { productSchema } from "@/entities/product";
 import { sprintSchema } from "@/entities/sprint";
 // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { taskSchema } from "@/entities/task";
@@ -14,14 +15,17 @@ import {
   paginatedResponseSchema,
   toBackendPagination,
 } from "@/shared/api/schemas.ts";
+// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 
 export const releaseSchema = z.object({
   id: z.number(),
   version: z.string(),
   releaseNotes: articleSchema,
   tasks: taskSchema.array(),
-  productId: z.number(),
+  product: productSchema,
 });
+
+export type Release = z.infer<typeof releaseSchema>;
 
 export const createReleaseMutationRequestSchema = z.object({
   version: z.string(),

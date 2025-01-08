@@ -17,6 +17,8 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { DialogTrigger } from "@/shared/components/ui/dialog.tsx";
 import { useDialog } from "@/shared/hooks/use-dialog.tsx";
+import { useReleasesTable } from "@/entities/release/ui/releases-table.tsx";
+import { DataTable } from "@/shared/components/data-table.tsx";
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/releases",
@@ -39,9 +41,10 @@ function RouteComponent() {
   );
   const { t } = useTranslation("product");
   const { Dialog: CreateDialog } = useDialog();
+  const table = useReleasesTable(releases.values)
 
   return (
-    <div>
+    <div className="space-y-4">
       <SetSidebarBreadcrumbs>
         <Breadcrumb>
           <BreadcrumbList>
@@ -69,7 +72,9 @@ function RouteComponent() {
           <CreateReleaseDialogContent productId={product.id} />
         </CreateDialog>
       </header>
-      <main>{releases.values.map(it => it.id)}</main>
+      <main>
+        <DataTable table={table} />
+      </main>
     </div>
   );
 }

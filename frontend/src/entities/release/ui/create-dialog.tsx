@@ -42,7 +42,7 @@ export function CreateReleaseDialogContent({
       tasks: [],
     },
   });
-  const { mutate, isPending } = useCreateReleaseMutation();
+  const { mutate, error, isPending } = useCreateReleaseMutation();
 
   function handleSubmit(values: Values) {
     mutate(values, {
@@ -104,6 +104,9 @@ export function CreateReleaseDialogContent({
                 </FormItem>
               )}
             />
+            {error && <p className="text-destructive">
+              {error.message}
+            </p>}
           </div>
           <DialogFooter>
             <Button type="submit" loading={isPending}>
