@@ -22,7 +22,59 @@
       }
     },
     "status": {
-      "label": "Status"
+      "label": "Status",
+      "items": {
+        "backlog": {
+          "label": "Backlog",
+          "items": {
+            "backlog": {
+              "label": "Backlog"
+            },
+            "to_do": {
+              "label": "To Do"
+            }
+          }
+        },
+        "started": {
+          "label": "Started",
+          "items": {
+            "in_progress": {
+              "label": "In Progress"
+            },
+            "in_review": {
+              "label": "In Review"
+            },
+            "ready_to_merge": {
+              "label": "Ready to Merge"
+            }
+          }
+        },
+        "completed": {
+          "label": "Completed",
+          "items": {
+            "done": {
+              "label": "Done"
+            }
+          }
+        },
+        "cancelled": {
+          "label": "Cancelled",
+          "items": {
+            "cancelled": {
+              "label": "Cancelled"
+            },
+            "could_not_reproduce": {
+              "label": "Could Not Reproduce"
+            },
+            "will_not_fix": {
+              "label": "Will Not Fix"
+            },
+            "duplicate": {
+              "label": "Duplicate"
+            }
+          }
+        }
+      }
     },
     "assignee": {
       "label": "Assignee"
