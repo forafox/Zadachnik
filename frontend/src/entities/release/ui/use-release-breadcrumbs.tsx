@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Product, ProductLink } from "@/entities/product";
 import { Release } from "@/entities/release";
 import { ReleaseLink } from "@/entities/release/ui/release-link.tsx";
-import { Section, Team, TeamLink } from "@/entities/team";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { useBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
 import {

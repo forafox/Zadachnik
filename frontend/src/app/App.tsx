@@ -25,7 +25,7 @@ const queryClient = new QueryClient({
     },
     queries: {
       retry: false,
-    }
+    },
   },
 });
 

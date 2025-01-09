@@ -2,7 +2,13 @@ import { TaskType } from "@/entities/task";
 import { Badge } from "@/shared/components/ui/badge.tsx";
 import { cn } from "@/shared/lib/utils.ts";
 
-export function TaskTypeBadge({ type, children }: { type: TaskType, children ?: React.ReactNode }) {
+export function TaskTypeBadge({
+  type,
+  children,
+}: {
+  type: TaskType;
+  children?: React.ReactNode;
+}) {
   return (
     <Badge
       className={cn("capitalize", {

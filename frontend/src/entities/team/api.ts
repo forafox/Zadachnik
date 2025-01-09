@@ -5,7 +5,6 @@ import {
   paginatedRequestSchema,
   paginatedResponseSchema,
 } from "@/shared/api/schemas";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { userSchema } from "../user";
 
 export const teamSchema = z.object({

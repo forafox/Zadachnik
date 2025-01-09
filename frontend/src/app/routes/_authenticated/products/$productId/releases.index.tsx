@@ -6,7 +6,8 @@ import {
   CreateReleaseDialogContent,
   getReleasesQueryOptions,
 } from "@/entities/release";
-import { useReleasesTable } from "@/entities/release/ui/releases-table.tsx";
+import { useReleasesTable } from "@/entities/release";
+import { useReleaseBreadcrumbs } from "@/entities/release";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { DataTable } from "@/shared/components/data-table.tsx";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
@@ -19,7 +20,6 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { DialogTrigger } from "@/shared/components/ui/dialog.tsx";
 import { useDialog } from "@/shared/hooks/use-dialog.tsx";
-import { useReleaseBreadcrumbs } from "@/entities/release/ui/use-release-breadcrumbs.tsx";
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/releases/",

@@ -1,7 +1,6 @@
 import z from "zod";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
-import { userSchema } from "@/entities/user";
 import { productSchema } from "@/entities/product";
+import { userSchema } from "@/entities/user";
 
 export const taskType = z
   .string()

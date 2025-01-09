@@ -6,9 +6,7 @@ import {
   createReleaseMutationRequestSchema,
   useCreateReleaseMutation,
 } from "@/entities/release";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { SelectSprint } from "@/entities/sprint";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { SelectTasks } from "@/entities/task";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {

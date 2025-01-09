@@ -6,7 +6,6 @@ import {
   CreateSprintValues,
   useCreateSprintMutation,
 } from "@/entities/sprint";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { SelectTasks } from "@/entities/task";
 import { Button } from "@/shared/components/ui/button.tsx";
 import { DateTimePicker } from "@/shared/components/ui/date-time-picker.tsx";

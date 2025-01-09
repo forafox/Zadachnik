@@ -5,9 +5,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { Release } from "@/entities/release";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { TaskTypeBadge } from "@/entities/task";
 
 // eslint-disable-next-line react-refresh/only-export-components
