@@ -20,6 +20,18 @@ const columnDef: Array<ColumnDef<Release>> = [
   {
     accessorKey: "version",
     header: () => <RenderTranslation str="items.version.label" />,
+    cell: ({ row }) => {
+      const releaseId = String(row.original.id);
+      const productId = String(row.original.product.id);
+      return (
+        <Link
+          to="/products/$productId/releases/$releaseId"
+          params={{ releaseId, productId }}
+        >
+          {row.original.version}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "taks",
