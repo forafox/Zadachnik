@@ -56,8 +56,8 @@ class ProductReleasesController(
     }
 
     @GetMapping("/{releaseId}")
-    fun getProductReleases(
+    fun getProductReleaseById(
         @PathVariable productId: Long,
         @PathVariable releaseId: Long,
-    ) = productReleasesService.getProductRelease(productId, releaseId)
+    ) = productReleasesService.getProductRelease(productId, releaseId).toResponse()
 }

@@ -123,8 +123,8 @@ export interface ContentDisposition {
    * @format date-time
    */
   readDate?: string;
-  attachment?: boolean;
   inline?: boolean;
+  attachment?: boolean;
   formData?: boolean;
 }
 
@@ -168,6 +168,41 @@ export interface ErrorResponse {
     lastModified?: number;
     /** @format int64 */
     date?: number;
+    accessControlAllowOrigin?: string;
+    accessControlAllowMethods?: Array<HttpMethod>;
+    accessControlAllowHeaders?: Array<string>;
+    accessControlExposeHeaders?: Array<string>;
+    accessControlAllowCredentials?: boolean;
+    accessControlRequestMethod?: HttpMethod;
+    accessControlRequestHeaders?: Array<string>;
+    range?: Array<HttpRange>;
+    /** @uniqueItems true */
+    allow?: Array<HttpMethod>;
+    origin?: string;
+    contentLanguage?: {
+      language?: string;
+      displayName?: string;
+      country?: string;
+      variant?: string;
+      script?: string;
+      /** @uniqueItems true */
+      unicodeLocaleAttributes?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleKeys?: Array<string>;
+      displayLanguage?: string;
+      displayScript?: string;
+      displayCountry?: string;
+      displayVariant?: string;
+      /** @uniqueItems true */
+      extensionKeys?: Array<string>;
+      iso3Language?: string;
+      iso3Country?: string;
+    };
+    cacheControl?: string;
+    acceptCharset?: Array<string>;
+    contentDisposition?: ContentDisposition;
+    /** @format int64 */
+    accessControlMaxAge?: number;
     acceptPatch?: Array<MediaType>;
     acceptLanguage?: Array<{
       range?: string;
@@ -194,45 +229,10 @@ export interface ErrorResponse {
       iso3Language?: string;
       iso3Country?: string;
     }>;
-    /** @format int64 */
-    accessControlMaxAge?: number;
-    acceptCharset?: Array<string>;
     bearerAuth?: string;
-    contentDisposition?: ContentDisposition;
-    contentLanguage?: {
-      language?: string;
-      displayName?: string;
-      country?: string;
-      variant?: string;
-      script?: string;
-      /** @uniqueItems true */
-      unicodeLocaleAttributes?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleKeys?: Array<string>;
-      displayLanguage?: string;
-      displayScript?: string;
-      displayCountry?: string;
-      displayVariant?: string;
-      /** @uniqueItems true */
-      extensionKeys?: Array<string>;
-      iso3Language?: string;
-      iso3Country?: string;
-    };
     ifNoneMatch?: Array<string>;
     /** @format int64 */
     ifUnmodifiedSince?: number;
-    cacheControl?: string;
-    /** @uniqueItems true */
-    allow?: Array<HttpMethod>;
-    range?: Array<HttpRange>;
-    origin?: string;
-    accessControlAllowOrigin?: string;
-    accessControlAllowMethods?: Array<HttpMethod>;
-    accessControlAllowHeaders?: Array<string>;
-    accessControlExposeHeaders?: Array<string>;
-    accessControlAllowCredentials?: boolean;
-    accessControlRequestMethod?: HttpMethod;
-    accessControlRequestHeaders?: Array<string>;
     etag?: string;
     accept?: Array<MediaType>;
     /** @format int64 */
@@ -243,12 +243,12 @@ export interface ErrorResponse {
     vary?: Array<string>;
     [key: string]: any;
   };
+  body?: ProblemDetail;
   detailMessageArguments?: Array<object>;
   typeMessageCode?: string;
   detailMessageCode?: string;
   titleMessageCode?: string;
   statusCode?: HttpStatusCode;
-  body?: ProblemDetail;
 }
 
 export type HttpMethod = object;
@@ -270,11 +270,11 @@ export interface MediaType {
   parameters?: Record<string, string>;
   /** @format double */
   qualityValue?: number;
+  concrete?: boolean;
+  charset?: string;
   wildcardType?: boolean;
   wildcardSubtype?: boolean;
   subtypeSuffix?: string;
-  concrete?: boolean;
-  charset?: string;
 }
 
 export interface ProblemDetail {
@@ -425,12 +425,12 @@ export interface PageableObject {
   /** @format int64 */
   offset?: number;
   sort?: Array<SortObject>;
+  paged?: boolean;
+  unpaged?: boolean;
   /** @format int32 */
   pageNumber?: number;
   /** @format int32 */
   pageSize?: number;
-  unpaged?: boolean;
-  paged?: boolean;
 }
 
 export interface SortObject {
@@ -1710,11 +1710,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Products Releases API
-     * @name GetProductReleases1
+     * @name GetProductReleaseById
      * @request GET:/api/products/{productId}/releases/{releaseId}
      * @secure
      */
-    getProductReleases1: (productId: number, releaseId: number, params: RequestParams = {}) =>
+    getProductReleaseById: (productId: number, releaseId: number, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/products/${productId}/releases/${releaseId}`,
         method: "GET",

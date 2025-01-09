@@ -23,6 +23,7 @@ export const releaseSchema = z.object({
   releaseNotes: articleSchema,
   tasks: taskSchema.array(),
   product: productSchema,
+  sprint: sprintSchema,
 });
 
 export type Release = z.infer<typeof releaseSchema>;
@@ -63,14 +64,11 @@ export const getReleasesQueryOptions = generateQueryOptions(
 );
 
 export const getReleaseByIdQueryOptions = generateQueryOptions(
-  paginatedResponseSchema(releaseSchema),
-  paginatedRequestSchema.extend({ productId: z.number() }),
-  async ({ productId, ...req }) => {
-    const { data } = await api.api.getProductReleases(
-      productId,
-      toBackendPagination(req),
-    );
-    return fromBackendPagination(data);
+  releaseSchema,
+  z.object({ productId: z.number(), releaseId: z.number() }),
+  async ({ productId, releaseId }) => {
+    const { data } = await api.api.getProductReleaseById(productId, releaseId);
+    return data;
   },
   ({ productId, ...req }) => ["products", productId, "releases", req],
 );

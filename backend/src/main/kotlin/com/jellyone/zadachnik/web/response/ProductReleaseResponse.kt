@@ -8,6 +8,7 @@ data class ProductReleaseResponse(
     val releaseNotes: ArticleResponse,
     val tasks: List<TaskResponse>,
     val product: ProductResponse,
+    val sprint: SprintResponse,
 )
 
 fun ProductRelease.toResponse() = ProductReleaseResponse(
@@ -15,5 +16,6 @@ fun ProductRelease.toResponse() = ProductReleaseResponse(
     version = version,
     releaseNotes = notes.toResponse(),
     tasks = tasks.map { it.toResponse() },
-    product = product.toResponse()
+    product = product.toResponse(),
+    sprint = sprint.toResponse()
 )
