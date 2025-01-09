@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { addDays } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { getReleaseByIdQueryOptions } from "@/entities/release";
+import { useReleaseBreadcrumbs } from "@/entities/release";
 import { TaskStatusBadge, TaskTypeBadge } from "@/entities/task";
 import { UserHoverAvatar } from "@/entities/user";
 import {
@@ -25,6 +26,7 @@ function RouteComponent() {
   const { data: release } = useSuspenseQuery(
     getReleaseByIdQueryOptions({ productId, releaseId }),
   );
+  useReleaseBreadcrumbs(release.product, release);
   const { t } = useTranslation("release");
 
   return (

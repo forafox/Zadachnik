@@ -19,6 +19,7 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { DialogTrigger } from "@/shared/components/ui/dialog.tsx";
 import { useDialog } from "@/shared/hooks/use-dialog.tsx";
+import { useReleaseBreadcrumbs } from "@/entities/release/ui/use-release-breadcrumbs.tsx";
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/releases/",
@@ -39,6 +40,7 @@ function RouteComponent() {
   const { data: releases } = useSuspenseQuery(
     getReleasesQueryOptions({ productId, page: 1, pageSize: 50 }),
   );
+  useReleaseBreadcrumbs(product);
   const { t } = useTranslation("product");
   const { Dialog: CreateDialog } = useDialog();
   const table = useReleasesTable(releases.values);
