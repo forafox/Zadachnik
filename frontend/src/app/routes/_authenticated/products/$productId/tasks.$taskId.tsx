@@ -1,6 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef } from "react";
+import { Pencil, SaveIcon } from "lucide-react";
+import { useRef, useState } from "react";
+import { Simulate } from "react-dom/test-utils";
 import { useTranslation } from "react-i18next";
 import { getProductByIdQueryOptions, ProductLink } from "@/entities/product";
 import {
@@ -38,6 +40,7 @@ import {
   TableCell,
   TableRow,
 } from "@/shared/components/ui/table.tsx";
+import input = Simulate.input;
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/tasks/$taskId",
@@ -48,6 +51,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { t } = useTranslation("task");
   const { t: tProduct } = useTranslation("product");
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
   const { productId, taskId } = Route.useParams();
   const { data: product } = useSuspenseQuery(
     getProductByIdQueryOptions(Number(productId)),
@@ -58,6 +62,7 @@ function RouteComponent() {
       taskId: Number(taskId),
     }),
   );
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const { mutate, isPending } = useUpdateTaskMutation();
 
@@ -75,6 +80,17 @@ function RouteComponent() {
     });
   }
 
+  const handleSaveTitle = () => {
+    mutate(
+      {
+        ...task,
+        title: inputRef.current?.value ?? task.title,
+      },
+      {
+        onSuccess: () => setIsEditingTitle(false),
+      },
+    );
+  };
   return (
     <Card className="mx-auto max-w-lg">
       <SetSidebarBreadcrumbs>
@@ -107,7 +123,33 @@ function RouteComponent() {
       </SetSidebarBreadcrumbs>
       <CardHeader className="space-y-2">
         <CardTitle className="flex flex-row items-center gap-2 text-xl">
-          {task.title}
+          <div className="flex-1">
+            {!isEditingTitle && task.title}
+            {isEditingTitle && (
+              <Input className="h-8" ref={inputRef} defaultValue={task.title} />
+            )}
+          </div>
+          <div className="ml-auto">
+            {isEditingTitle ? (
+              <Button
+                size="icon"
+                variant="outline"
+                className="size-8"
+                onClick={handleSaveTitle}
+              >
+                <SaveIcon />
+              </Button>
+            ) : (
+              <Button
+                size="icon"
+                variant="outline"
+                className="size-8"
+                onClick={() => setIsEditingTitle(true)}
+              >
+                <Pencil />
+              </Button>
+            )}
+          </div>
         </CardTitle>
         <TaskDescription task={task} />
       </CardHeader>
