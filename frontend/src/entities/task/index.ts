@@ -6,3 +6,4 @@ export * from "./ui/task-status-badge.tsx";
 export * from "./ui/task-type-badge.tsx";
 export * from "./ui/select-assignee";
 export * from "./ui/task-description.tsx";
+export * from "./ui/select-task-status.tsx";

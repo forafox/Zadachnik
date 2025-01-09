@@ -1,19 +1,21 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef } from "react";
+import { Pencil, SaveIcon } from "lucide-react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getProductByIdQueryOptions, ProductLink } from "@/entities/product";
 import {
   getTaskByIdQueryOptions,
   getTaskCommentsQueryOptions,
   Task,
+  TaskStatus,
   TaskTypeBadge,
   useCreateTaskCommentMutation,
   useUpdateTaskMutation,
 } from "@/entities/task";
-import { TaskStatusBadge } from "@/entities/task";
 import { SelectAssignee } from "@/entities/task";
 import { TaskDescription } from "@/entities/task";
+import { SelectTaskStatus } from "@/entities/task";
 import { User, UserAvatar } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
@@ -47,6 +49,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { t } = useTranslation("task");
   const { t: tProduct } = useTranslation("product");
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
   const { productId, taskId } = Route.useParams();
   const { data: product } = useSuspenseQuery(
     getProductByIdQueryOptions(Number(productId)),
@@ -57,8 +60,9 @@ function RouteComponent() {
       taskId: Number(taskId),
     }),
   );
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { mutate } = useUpdateTaskMutation();
+  const { mutate, isPending } = useUpdateTaskMutation();
 
   function handleSetAssignee(assignee: User | undefined) {
     mutate({
@@ -67,6 +71,24 @@ function RouteComponent() {
     });
   }
 
+  function handleSetStatus(status: TaskStatus) {
+    mutate({
+      ...task,
+      status,
+    });
+  }
+
+  const handleSaveTitle = () => {
+    mutate(
+      {
+        ...task,
+        title: inputRef.current?.value ?? task.title,
+      },
+      {
+        onSuccess: () => setIsEditingTitle(false),
+      },
+    );
+  };
   return (
     <Card className="mx-auto max-w-lg">
       <SetSidebarBreadcrumbs>
@@ -99,7 +121,33 @@ function RouteComponent() {
       </SetSidebarBreadcrumbs>
       <CardHeader className="space-y-2">
         <CardTitle className="flex flex-row items-center gap-2 text-xl">
-          {task.title}
+          <div className="flex-1">
+            {!isEditingTitle && task.title}
+            {isEditingTitle && (
+              <Input className="h-8" ref={inputRef} defaultValue={task.title} />
+            )}
+          </div>
+          <div className="ml-auto">
+            {isEditingTitle ? (
+              <Button
+                size="icon"
+                variant="outline"
+                className="size-8"
+                onClick={handleSaveTitle}
+              >
+                <SaveIcon />
+              </Button>
+            ) : (
+              <Button
+                size="icon"
+                variant="outline"
+                className="size-8"
+                onClick={() => setIsEditingTitle(true)}
+              >
+                <Pencil />
+              </Button>
+            )}
+          </div>
         </CardTitle>
         <TaskDescription task={task} />
       </CardHeader>
@@ -113,7 +161,11 @@ function RouteComponent() {
                   {t("items.status.label")}
                 </TableCell>
                 <TableCell>
-                  <TaskStatusBadge status={task.status} />
+                  <SelectTaskStatus
+                    disabled={isPending}
+                    value={task.status}
+                    onChange={handleSetStatus}
+                  />
                 </TableCell>
               </TableRow>
               <TableRow>

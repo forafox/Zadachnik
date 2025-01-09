@@ -84,7 +84,7 @@ export function TaskDescription({ task }: { task: Task }) {
           }}
           className="cursor-text bg-background"
         >
-          <EditorContent className="outline-none" editor={editor} />
+          <EditorContent className="p-1 outline-none" editor={editor} />
         </div>
       </div>
       {isDirty && (
