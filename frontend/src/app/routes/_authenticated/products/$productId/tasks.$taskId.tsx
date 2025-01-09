@@ -7,13 +7,14 @@ import {
   getTaskByIdQueryOptions,
   getTaskCommentsQueryOptions,
   Task,
+  TaskStatus,
   TaskTypeBadge,
   useCreateTaskCommentMutation,
   useUpdateTaskMutation,
 } from "@/entities/task";
-import { TaskStatusBadge } from "@/entities/task";
 import { SelectAssignee } from "@/entities/task";
 import { TaskDescription } from "@/entities/task";
+import { SelectTaskStatus } from "@/entities/task";
 import { User, UserAvatar } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
@@ -58,13 +59,19 @@ function RouteComponent() {
     }),
   );
 
-  const { mutate } = useUpdateTaskMutation();
+  const { mutate, isPending } = useUpdateTaskMutation();
 
   function handleSetAssignee(assignee: User | undefined) {
     mutate({
       ...task,
-      productId: Number(productId),
       assignee,
+    });
+  }
+
+  function handleSetStatus(status: TaskStatus) {
+    mutate({
+      ...task,
+      status,
     });
   }
 
@@ -114,7 +121,11 @@ function RouteComponent() {
                   {t("items.status.label")}
                 </TableCell>
                 <TableCell>
-                  <TaskStatusBadge status={task.status} />
+                  <SelectTaskStatus
+                    disabled={isPending}
+                    value={task.status}
+                    onChange={handleSetStatus}
+                  />
                 </TableCell>
               </TableRow>
               <TableRow>
