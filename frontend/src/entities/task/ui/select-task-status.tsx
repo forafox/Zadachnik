@@ -15,7 +15,7 @@ import { cn } from "@/shared/lib/utils.ts";
 type Props = {
   value: TaskStatus;
   onChange: (value: TaskStatus) => void;
-  disabled ?: boolean
+  disabled?: boolean;
 };
 
 const groups = statusGroups;

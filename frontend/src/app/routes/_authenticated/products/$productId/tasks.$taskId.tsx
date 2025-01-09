@@ -2,7 +2,6 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Pencil, SaveIcon } from "lucide-react";
 import { useRef, useState } from "react";
-import { Simulate } from "react-dom/test-utils";
 import { useTranslation } from "react-i18next";
 import { getProductByIdQueryOptions, ProductLink } from "@/entities/product";
 import {
@@ -40,7 +39,6 @@ import {
   TableCell,
   TableRow,
 } from "@/shared/components/ui/table.tsx";
-import input = Simulate.input;
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/tasks/$taskId",
