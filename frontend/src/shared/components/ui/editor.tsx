@@ -19,7 +19,7 @@ import { cn } from "@/shared/lib/utils.ts";
 type Props = {
   value: string;
   onChange: (value: string) => void;
-  showToolbar?: boolean;
+  editable?: boolean;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -59,7 +59,7 @@ export const extensions = [
   }),
 ];
 
-export function RichTextEditor({ value, onChange }: Props) {
+export function RichTextEditor({ value, onChange, editable = true }: Props) {
   const editor = useEditor({
     extensions: extensions as Extension[],
     content: value,
@@ -67,6 +67,7 @@ export function RichTextEditor({ value, onChange }: Props) {
     onUpdate: (e) => {
       onChange(e.editor.getHTML());
     },
+    editable,
   });
 
   if (!editor) {
@@ -76,7 +77,7 @@ export function RichTextEditor({ value, onChange }: Props) {
   return (
     <>
       <div className={cn("relative w-full overflow-hidden rounded-md border")}>
-        {
+        {editable && (
           <header
             className={cn(
               "sticky left-0 top-0 z-20 flex w-full items-center justify-between rounded border-b bg-background",
@@ -99,7 +100,7 @@ export function RichTextEditor({ value, onChange }: Props) {
               </div>
             </ToolbarProvider>
           </header>
-        }
+        )}
         <div
           onClick={() => {
             editor?.chain().focus().run();

@@ -41,6 +41,7 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
 import { getDefaultColumn } from "@/shared/components/ui/default-column.tsx";
+import { RichTextEditor } from "@/shared/components/ui/editor.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
 import {
   Table,
@@ -295,10 +296,36 @@ const taskChangesTable: Array<ColumnDef<TaskChangeEntry>> = [
   {
     accessorKey: "previousValue",
     header: "Previous Value",
+    cell: ({ row }) => {
+      const { field, previousValue } = row.original;
+      if (field == "description") {
+        return (
+          <RichTextEditor
+            value={previousValue}
+            onChange={() => {}}
+            editable={false}
+          />
+        );
+      }
+      return previousValue;
+    },
   },
   {
     accessorKey: "newValue",
     header: "New Value",
+    cell: ({ row }) => {
+      const { field, newValue } = row.original;
+      if (field == "description") {
+        return (
+          <RichTextEditor
+            value={newValue}
+            onChange={() => {}}
+            editable={false}
+          />
+        );
+      }
+      return newValue;
+    },
   },
 ];
 
