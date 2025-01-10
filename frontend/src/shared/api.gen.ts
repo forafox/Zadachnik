@@ -123,8 +123,8 @@ export interface ContentDisposition {
    * @format date-time
    */
   readDate?: string;
-  inline?: boolean;
   attachment?: boolean;
+  inline?: boolean;
   formData?: boolean;
 }
 
@@ -168,41 +168,13 @@ export interface ErrorResponse {
     lastModified?: number;
     /** @format int64 */
     date?: number;
+    accessControlRequestMethod?: HttpMethod;
     accessControlAllowOrigin?: string;
     accessControlAllowMethods?: Array<HttpMethod>;
     accessControlAllowHeaders?: Array<string>;
     accessControlExposeHeaders?: Array<string>;
     accessControlAllowCredentials?: boolean;
-    accessControlRequestMethod?: HttpMethod;
     accessControlRequestHeaders?: Array<string>;
-    range?: Array<HttpRange>;
-    /** @uniqueItems true */
-    allow?: Array<HttpMethod>;
-    origin?: string;
-    contentLanguage?: {
-      language?: string;
-      displayName?: string;
-      country?: string;
-      variant?: string;
-      script?: string;
-      /** @uniqueItems true */
-      unicodeLocaleAttributes?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleKeys?: Array<string>;
-      displayLanguage?: string;
-      displayScript?: string;
-      displayCountry?: string;
-      displayVariant?: string;
-      /** @uniqueItems true */
-      extensionKeys?: Array<string>;
-      iso3Language?: string;
-      iso3Country?: string;
-    };
-    cacheControl?: string;
-    acceptCharset?: Array<string>;
-    contentDisposition?: ContentDisposition;
-    /** @format int64 */
-    accessControlMaxAge?: number;
     acceptPatch?: Array<MediaType>;
     acceptLanguage?: Array<{
       range?: string;
@@ -229,11 +201,39 @@ export interface ErrorResponse {
       iso3Language?: string;
       iso3Country?: string;
     }>;
+    /** @format int64 */
+    accessControlMaxAge?: number;
+    acceptCharset?: Array<string>;
     bearerAuth?: string;
+    contentDisposition?: ContentDisposition;
+    contentLanguage?: {
+      language?: string;
+      displayName?: string;
+      country?: string;
+      variant?: string;
+      script?: string;
+      /** @uniqueItems true */
+      unicodeLocaleAttributes?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleKeys?: Array<string>;
+      displayLanguage?: string;
+      displayScript?: string;
+      displayCountry?: string;
+      displayVariant?: string;
+      /** @uniqueItems true */
+      extensionKeys?: Array<string>;
+      iso3Language?: string;
+      iso3Country?: string;
+    };
     ifNoneMatch?: Array<string>;
     /** @format int64 */
     ifUnmodifiedSince?: number;
+    /** @uniqueItems true */
+    allow?: Array<HttpMethod>;
     etag?: string;
+    range?: Array<HttpRange>;
+    origin?: string;
+    cacheControl?: string;
     accept?: Array<MediaType>;
     /** @format int64 */
     expires?: number;
@@ -425,8 +425,8 @@ export interface PageableObject {
   /** @format int64 */
   offset?: number;
   sort?: Array<SortObject>;
-  paged?: boolean;
   unpaged?: boolean;
+  paged?: boolean;
   /** @format int32 */
   pageNumber?: number;
   /** @format int32 */
@@ -1566,6 +1566,54 @@ export class Api<
         body: data,
         type: ContentType.Json,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Articles API
+     * @name GetArticleComments
+     * @request GET:/api/articles/{articleId}/comments
+     * @secure
+     */
+    getArticleComments: (
+      articleId: number,
+      query?: {
+        /** @format int32 */
+        page?: number;
+        /** @format int32 */
+        size?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/articles/${articleId}/comments`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Articles API
+     * @name CreateArticleComment
+     * @request POST:/api/articles/{articleId}/comments
+     * @secure
+     */
+    createArticleComment: (
+      articleId: number,
+      data: CreateCommentRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/articles/${articleId}/comments`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 

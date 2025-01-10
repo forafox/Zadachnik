@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { addDays } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { ArticleContent } from "@/entities/article";
+import { ArticleComments } from "@/entities/article";
 import { getReleaseByIdQueryOptions } from "@/entities/release";
 import { useReleaseBreadcrumbs } from "@/entities/release";
 import { TaskStatusBadge, TaskTypeBadge } from "@/entities/task";
@@ -71,6 +72,7 @@ function RouteComponent() {
             />
           </span>
         </div>
+        <ArticleComments articleId={release.releaseNotes.id} />
       </CardContent>
     </Card>
   );
