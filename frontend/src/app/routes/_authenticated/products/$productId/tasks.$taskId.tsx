@@ -23,11 +23,7 @@ import {
 import { SelectAssignee } from "@/entities/task";
 import { TaskDescription } from "@/entities/task";
 import { SelectTaskStatus } from "@/entities/task";
-import {
-  User,
-  UserAvatar,
-  UserHoverCard,
-} from "@/entities/user";
+import { User, UserAvatar, UserHoverCard } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { DataTable } from "@/shared/components/data-table.tsx";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
@@ -210,7 +206,7 @@ function TaskComments({ task }: { task: Task }) {
   const { t } = useTranslation("task");
   const { data: comments } = useSuspenseQuery(
     getTaskCommentsQueryOptions({
-      productId: task.productId,
+      productId: task.product.id,
       taskId: task.id,
       page: 1,
       pageSize: 50,
@@ -228,7 +224,7 @@ function TaskComments({ task }: { task: Task }) {
 
     mutate(
       {
-        productId: task.productId,
+        productId: task.product.id,
         taskId: task.id,
         content: value,
       },
@@ -310,7 +306,7 @@ function TaskChanges({ task }: { task: Task }) {
   const { t } = useTranslation("task");
   const { data: changes } = useSuspenseQuery(
     getTaskHistoryQueryOptions({
-      productId: task.productId,
+      productId: task.product.id,
       taskId: task.id,
       page: 1,
       pageSize: 50,

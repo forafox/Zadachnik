@@ -2,7 +2,13 @@ import { TaskType } from "@/entities/task";
 import { Badge } from "@/shared/components/ui/badge.tsx";
 import { cn } from "@/shared/lib/utils.ts";
 
-export function TaskTypeBadge({ type }: { type: TaskType }) {
+export function TaskTypeBadge({
+  type,
+  children,
+}: {
+  type: TaskType;
+  children?: React.ReactNode;
+}) {
   return (
     <Badge
       className={cn("capitalize", {
@@ -11,7 +17,7 @@ export function TaskTypeBadge({ type }: { type: TaskType }) {
         "bg-violet-300 text-violet-600 hover:bg-violet-200": type === "epic",
       })}
     >
-      {type}
+      {children ?? type}
     </Badge>
   );
 }

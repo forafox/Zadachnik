@@ -8,6 +8,7 @@ import {
 import { api } from "@/shared/api";
 import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
 import {
+  fromBackendPagination,
   paginatedRequestSchema,
   paginatedResponseSchema,
 } from "@/shared/api/schemas.ts";
@@ -66,19 +67,52 @@ export type GetTeamTasksRequestValues = z.infer<
 export const getTeamTasksResponseSchema = paginatedResponseSchema(taskSchema);
 
 export const getTeamTasksQueryOptions = (reqRaw: GetTeamTasksRequestValues) => {
-  const req = getTeamTasksRequestSchema.parse(reqRaw);
+  const { teamId, ...req } = getTeamTasksRequestSchema.parse(reqRaw);
   return queryOptions({
-    queryKey: ["teams", "detail", req.teamId, "tasks"],
+    queryKey: ["teams", "detail", teamId, "tasks", req],
     queryFn: async () => {
-      return getTeamTasksResponseSchema.parse({
-        total: 0,
-        page: 0,
-        pageSize: 0,
-        values: [],
-      });
+      const { data } = await api.api.getTasksByTeamId(teamId);
+      return getTeamTasksResponseSchema.parse(fromBackendPagination(data));
     },
   });
 };
+
+export const getTasksRequestSchema = z.union([
+  z.object({
+    productId: z.number(),
+  }),
+  z.object({
+    teamId: z.number(),
+  }),
+  z.object({
+    sprintId: z.number(),
+    teamId: z.number(),
+  }),
+]);
+
+export const getTasksQueryOptions = generateQueryOptions(
+  getTeamTasksResponseSchema,
+  getTasksRequestSchema,
+  async ({ ...req }) => {
+    if ("productId" in req) {
+      const { productId } = req;
+      const { data } = await api.api.getTasksByProductId(productId);
+      const paginated = fromBackendPagination(data);
+      return paginated;
+    }
+    if ("teamId" in req && !("sprintId" in req)) {
+      const { teamId } = req;
+      const { data } = await api.api.getTasksByTeamId(teamId);
+      return data;
+    }
+    if ("sprintId" in req && "teamId" in req) {
+      const { sprintId, teamId } = req;
+      const { data } = await api.api.getSprintTasks(teamId, sprintId);
+      return data;
+    }
+  },
+  (req) => ["tasks", req],
+);
 
 export const createTaskMutationRequestSchema = taskSchema
   .omit({ id: true })
@@ -102,13 +136,13 @@ export function useCreateTaskMutation() {
   });
 }
 
-const updateTaskSchema = taskSchema.extend({ productId: z.number() });
+const updateTaskSchema = taskSchema;
 
 export function useUpdateTaskMutation() {
   return useMutation({
     mutationFn: async (valuesRaw: z.infer<typeof updateTaskSchema>) => {
       const values = updateTaskSchema.parse(valuesRaw);
-      return api.api.updateTaskById(values.id, values.productId, {
+      return api.api.updateTaskById(values.id, values.product.id, {
         type: values.type.toUpperCase(),
         title: values.title,
         description: values.description,
@@ -128,7 +162,7 @@ export const getTaskByIdQueryOptions = generateQueryOptions(
   // @ts-expect-error bad status typing on backend
   async ({ taskId, productId }) => {
     const { data } = await api.api.getTaskById(taskId, productId);
-    return { ...data, productId };
+    return data;
   },
   ({ productId, taskId }) => [
     "products",

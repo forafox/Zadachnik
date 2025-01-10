@@ -17,5 +17,6 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "@conarti/feature-sliced/absolute-relative": "off",
+    "@conarti/feature-sliced/layers-slices": "off",
   },
 };

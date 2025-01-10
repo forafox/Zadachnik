@@ -7,7 +7,6 @@ import {
   User,
   UserAvatar,
   UserHoverCard,
-  // eslint-disable-next-line @conarti/feature-sliced/layers-slices
 } from "@/entities/user";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {

@@ -1,5 +1,5 @@
-import z, { string } from "zod";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
+import z from "zod";
+import { productSchema } from "@/entities/product";
 import { userSchema } from "@/entities/user";
 import { api } from "@/shared/api";
 import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
@@ -48,7 +48,7 @@ export const statusGroups = {
 
 export const taskSchema = z.object({
   id: z.number(),
-  productId: z.number(),
+  product: productSchema,
   type: taskType,
   title: z.string(),
   description: z
@@ -85,7 +85,7 @@ export const taskChangeSchema = z.object({
   changedAt: z.coerce.date(),
 });
 
-export type TaskChangeEntry = z.infer<typeof taskChangeSchema>
+export type TaskChangeEntry = z.infer<typeof taskChangeSchema>;
 
 export const getTaskHistoryQueryOptions = generateQueryOptions(
   paginatedResponseSchema(taskChangeSchema),
