@@ -94,7 +94,10 @@
     },
     "changes": {
       "label": "History of Changes",
-      "entry": "<0></0> made changes at {{changedAt}}"
+      "items": {
+        "changedBy": "Changed By",
+        "changedAt": "Changed At"
+      }
     }
   },
   "actions": {

@@ -1,10 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  ColumnDef,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
 import { Pencil, SaveIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,9 +7,7 @@ import { getProductByIdQueryOptions, ProductLink } from "@/entities/product";
 import {
   getTaskByIdQueryOptions,
   getTaskCommentsQueryOptions,
-  getTaskHistoryQueryOptions,
   Task,
-  TaskChangeEntry,
   TaskStatus,
   TaskTypeBadge,
   useCreateTaskCommentMutation,
@@ -23,9 +16,9 @@ import {
 import { SelectAssignee } from "@/entities/task";
 import { TaskDescription } from "@/entities/task";
 import { SelectTaskStatus } from "@/entities/task";
-import { User, UserAvatar, UserHoverCard } from "@/entities/user";
+import { TaskChanges } from "@/entities/task";
+import { User, UserAvatar} from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
-import { DataTable } from "@/shared/components/data-table.tsx";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
 import {
   Breadcrumb,
@@ -40,8 +33,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
-import { getDefaultColumn } from "@/shared/components/ui/default-column.tsx";
-import { RichTextEditor } from "@/shared/components/ui/editor.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
 import {
   Table,
@@ -275,82 +266,6 @@ function TaskComments({ task }: { task: Task }) {
           </Button>
         </div>
       </form>
-    </div>
-  );
-}
-
-const taskChangesTable: Array<ColumnDef<TaskChangeEntry>> = [
-  {
-    accessorKey: "user",
-    header: "User",
-    cell: ({ row }) => <UserHoverCard user={row.original.changedBy} />,
-  },
-  {
-    accessorKey: "changedAt",
-    header: "Changed At",
-  },
-  {
-    accessorKey: "field",
-    header: "Field",
-  },
-  {
-    accessorKey: "previousValue",
-    header: "Previous Value",
-    cell: ({ row }) => {
-      const { field, previousValue } = row.original;
-      if (field == "description") {
-        return (
-          <RichTextEditor
-            value={previousValue}
-            onChange={() => {}}
-            editable={false}
-          />
-        );
-      }
-      return previousValue;
-    },
-  },
-  {
-    accessorKey: "newValue",
-    header: "New Value",
-    cell: ({ row }) => {
-      const { field, newValue } = row.original;
-      if (field == "description") {
-        return (
-          <RichTextEditor
-            value={newValue}
-            onChange={() => {}}
-            editable={false}
-          />
-        );
-      }
-      return newValue;
-    },
-  },
-];
-
-function TaskChanges({ task }: { task: Task }) {
-  const { t } = useTranslation("task");
-  const { data: changes } = useSuspenseQuery(
-    getTaskHistoryQueryOptions({
-      productId: task.product.id,
-      taskId: task.id,
-      page: 1,
-      pageSize: 50,
-    }),
-  );
-  const table = useReactTable({
-    columns: taskChangesTable,
-    data: changes.values,
-    getCoreRowModel: getCoreRowModel(),
-    enableSorting: false,
-    defaultColumn: getDefaultColumn<TaskChangeEntry>(),
-  });
-
-  return (
-    <div>
-      <h2 className="font-bold">{t("items.changes.label")}</h2>
-      <DataTable table={table} />
     </div>
   );
 }
