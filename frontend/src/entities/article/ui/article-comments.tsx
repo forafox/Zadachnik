@@ -6,7 +6,7 @@ import {
 } from "@/entities/article";
 import { CommentItem } from "@/entities/comment";
 import { Button } from "@/shared/components/ui/button.tsx";
-import { Input } from "@/shared/components/ui/input.tsx";
+import { Textarea } from "@/shared/components/ui/textarea.tsx";
 
 export function ArticleComments({ articleId }: { articleId: number }) {
   const {
@@ -14,7 +14,7 @@ export function ArticleComments({ articleId }: { articleId: number }) {
   } = useSuspenseQuery(
     getArticleCommentsQueryOptions({ articleId, page: 1, pageSize: 50 }),
   );
-  const ref = useRef<HTMLInputElement | null>(null);
+  const ref = useRef<HTMLTextAreaElement | null>(null);
 
   const { mutate, isPending } = useCreateArticleComment();
 
@@ -38,30 +38,32 @@ export function ArticleComments({ articleId }: { articleId: number }) {
   }
 
   return (
-    <div>
-      <h2 className="font-bold">Comments</h2>
-      <div className="space-y-2">
-        {comments.values.length == 0 && (
-          <p className="text-muted-foreground">No comments</p>
-        )}
-        {comments.map((comment) => (
-          <CommentItem comment={comment} key={comment.id} />
-        ))}
-      </div>
+    <section className="space-y-6">
+      <main className="space-y-2">
+        <h2 className="font-bold">Comments</h2>
+        <div className="space-y-2">
+          {comments.length == 0 && (
+            <p className="text-muted-foreground">No comments</p>
+          )}
+          {comments.map((comment) => (
+            <CommentItem comment={comment} key={comment.id} />
+          ))}
+        </div>
+      </main>
       <form
-        className="space-y-2"
+        className="mt-4 space-y-2"
         onSubmit={(e) => {
           e.preventDefault();
           onSend();
         }}
       >
-        <Input placeholder={"Leave a comment"} ref={ref} required />
+        <Textarea placeholder={"Leave a comment"} ref={ref} required />
         <div className="flex flex-row justify-end">
           <Button variant="outline" type="submit" size="sm" loading={isPending}>
-            Sen
+            Send
           </Button>
         </div>
       </form>
-    </div>
+    </section>
   );
 }
