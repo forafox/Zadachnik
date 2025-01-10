@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
 import React, { forwardRef } from "react";
+import { useTranslation } from "react-i18next";
 import z from "zod";
 import {
   getTasksQueryOptions,
@@ -13,7 +14,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/shared/components/ui/command.tsx";
@@ -44,6 +44,7 @@ export const SelectTasks = forwardRef<HTMLButtonElement, Props>(
         onChange([...value, task]);
       }
     }
+    const { t } = useTranslation("task");
 
     return (
       <Popover open={open} onOpenChange={setOpen} modal={modal}>
@@ -52,23 +53,33 @@ export const SelectTasks = forwardRef<HTMLButtonElement, Props>(
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between"
+            className="w-full justify-between px-3 py-2"
             ref={ref}
           >
-            {value.length == 0 && <span></span>}
-            {value.map((it) => (
-              <TaskTypeBadge key={it.id} type={it.type}>
-                {it.title}
-              </TaskTypeBadge>
-            ))}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <div className="flex flex-row gap-2">
+              {value.length == 0 && <span></span>}
+              {value.map((it) => (
+                <TaskTypeBadge key={it.id} type={it.type}>
+                  {it.title}
+                </TaskTypeBadge>
+              ))}
+            </div>
+            <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
           <Command>
-            <CommandInput placeholder="Search framework..." />
+            {/* TODO: fix command input */}
+            {/*<CommandInput*/}
+            {/*  value={search}*/}
+            {/*  onValueChange={setSearch}*/}
+            {/*  placeholder={t("actions.search.label")}*/}
+            {/*  aria-modal={modal}*/}
+            {/*/>*/}
             <CommandList>
-              <CommandEmpty>No framework found.</CommandEmpty>
+              <CommandEmpty>
+                {t("actions.search.feedback.notFound.label")}
+              </CommandEmpty>
               <CommandGroup>
                 {data?.values.map((task) => {
                   const isSelected = value.some((it) => it.id === task.id);

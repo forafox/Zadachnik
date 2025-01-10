@@ -16,6 +16,7 @@ import {
 import { SelectAssignee } from "@/entities/task";
 import { TaskDescription } from "@/entities/task";
 import { SelectTaskStatus } from "@/entities/task";
+import { TaskChanges } from "@/entities/task";
 import { User, UserAvatar } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
@@ -90,7 +91,7 @@ function RouteComponent() {
     );
   };
   return (
-    <Card className="mx-auto max-w-lg">
+    <Card className="mx-auto">
       <SetSidebarBreadcrumbs>
         <Breadcrumb>
           <BreadcrumbList>
@@ -187,6 +188,7 @@ function RouteComponent() {
           </Table>
         </div>
         <TaskComments task={task} />
+        <TaskChanges task={task} />
       </CardContent>
     </Card>
   );

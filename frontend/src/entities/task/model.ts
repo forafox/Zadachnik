@@ -1,6 +1,14 @@
 import z from "zod";
 import { productSchema } from "@/entities/product";
 import { userSchema } from "@/entities/user";
+import { api } from "@/shared/api";
+import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
+import {
+  fromBackendPagination,
+  paginatedRequestSchema,
+  paginatedResponseSchema,
+  toBackendPagination,
+} from "@/shared/api/schemas.ts";
 
 export const taskType = z
   .string()
@@ -59,3 +67,45 @@ export const taskCommentSchema = z.object({
   author: userSchema,
 });
 export type TaskComment = z.infer<typeof taskCommentSchema>;
+
+const taskField = z.enum([
+  "id",
+  "type",
+  "title",
+  "description",
+  "product",
+  "status",
+]);
+
+export const taskChangeSchema = z.object({
+  field: z.string().toLowerCase().pipe(taskField),
+  previousValue: z.coerce.string(),
+  newValue: z.coerce.string(),
+  changedBy: userSchema,
+  changedAt: z.coerce.date(),
+});
+
+export type TaskChangeEntry = z.infer<typeof taskChangeSchema>;
+
+export const getTaskHistoryQueryOptions = generateQueryOptions(
+  paginatedResponseSchema(taskChangeSchema),
+  paginatedRequestSchema.extend({ productId: z.number(), taskId: z.number() }),
+  // @ts-expect-error bad typing on backend
+  async ({ productId, taskId, ...req }) => {
+    const { data } = await api.api.getTaskChanges(
+      taskId,
+      productId,
+      toBackendPagination(req),
+    );
+    // @ts-expect-error bad typing on backend
+    return fromBackendPagination(data);
+  },
+  ({ productId, taskId, ...req }) => [
+    "products",
+    productId,
+    "tasks",
+    taskId,
+    "history",
+    req,
+  ],
+);

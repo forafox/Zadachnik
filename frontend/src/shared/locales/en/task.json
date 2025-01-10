@@ -91,12 +91,27 @@
           "label": "Send"
         }
       }
+    },
+    "changes": {
+      "label": "History of Changes",
+      "items": {
+        "changedBy": "Changed By",
+        "changedAt": "Changed At"
+      }
     }
   },
   "actions": {
     "create": {
       "title": "Create a Task",
       "label": "Create"
+    },
+    "search": {
+      "label": "Search tasks",
+      "feedback": {
+        "notFound": {
+          "label": "No tasks found \uD83D\uDE22"
+        }
+      }
     }
   }
 }

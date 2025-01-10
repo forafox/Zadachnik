@@ -29,6 +29,7 @@ export function UserAvatar({
 }: {
   user: User;
   className?: string;
+  props?: string;
 }) {
   const avatarFallback = user.fullName
     .split(" ")

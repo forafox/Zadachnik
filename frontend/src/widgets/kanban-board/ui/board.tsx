@@ -116,7 +116,7 @@ function BoardColumn({
   });
 
   return (
-    <Card className="w-full bg-gray-50" ref={setNodeRef}>
+    <Card className="w-full min-w-[320px] bg-gray-50" ref={setNodeRef}>
       <CardHeader className="flex flex-row items-center justify-between p-2 font-bold capitalize">
         <h3>{group}</h3>
         {pending && <LoaderCircle className="ml-auto size-4 animate-spin" />}
@@ -124,16 +124,11 @@ function BoardColumn({
       <main className="space-y-2 p-2">
         {isOverCurrent && activeTask && (
           <div className="opacity-50">
-            <TaskCard productId={productId} task={activeTask} />
+            <TaskCard task={activeTask} />
           </div>
         )}
         {tasks?.map((task) => (
-          <DraggableTask
-            productId={productId}
-            isPending={isPending}
-            key={task.id}
-            task={task}
-          />
+          <DraggableTask isPending={isPending} key={task.id} task={task} />
         ))}
       </main>
     </Card>
@@ -143,11 +138,9 @@ function BoardColumn({
 function DraggableTask({
   task,
   isPending,
-  productId,
 }: {
   task: Task;
   isPending: boolean;
-  productId: number;
 }) {
   const { setNodeRef, transform, attributes, listeners, isDragging } =
     useDraggable({
@@ -169,7 +162,6 @@ function DraggableTask({
     <div ref={setNodeRef} style={style}>
       <TaskCard
         task={task}
-        productId={productId}
         dragSlot={
           <GripHorizontalIcon
             {...attributes}
@@ -185,11 +177,9 @@ function DraggableTask({
 function TaskCard({
   task,
   dragSlot,
-  productId,
 }: {
   task: Task;
   dragSlot?: React.ReactNode;
-  productId: number;
 }) {
   return (
     <Card className="transition-all">
@@ -197,9 +187,12 @@ function TaskCard({
         <CardTitle className="flex flex-row items-center">
           <Link
             to="/products/$productId/tasks/$taskId"
-            params={{ productId: String(productId), taskId: String(task.id) }}
+            params={{
+              productId: String(task.product.id),
+              taskId: String(task.id),
+            }}
           >
-            {task.title}
+            [{task.product.ticker}-{task.id}] {task.title}
           </Link>
           {dragSlot ?? <GripHorizontalIcon className="ml-auto size-4" />}
         </CardTitle>
