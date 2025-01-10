@@ -4,7 +4,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { UserHoverCard } from "@/entities/user";
 import { getDefaultColumn } from "@/shared/components/ui/default-column.tsx";
 import { Team } from "../api";

@@ -69,6 +69,15 @@ export interface UpdateTeamRequest {
   title: string;
 }
 
+export interface ProductResponse {
+  /** @format int64 */
+  id: number;
+  ticker: string;
+  title: string;
+  description?: string;
+  owner: UserResponse;
+}
+
 export interface TaskResponse {
   /** @format int64 */
   id: number;
@@ -77,6 +86,7 @@ export interface TaskResponse {
   description?: string;
   assignee?: UserResponse;
   status: string;
+  product: ProductResponse;
 }
 
 export interface CreateTaskRequest {
@@ -86,15 +96,6 @@ export interface CreateTaskRequest {
   status: string;
   /** @format int64 */
   assigneeId?: number;
-}
-
-export interface ProductResponse {
-  /** @format int64 */
-  id: number;
-  ticker: string;
-  title: string;
-  description?: string;
-  owner: UserResponse;
 }
 
 export interface ContentDisposition {
@@ -128,31 +129,23 @@ export interface ContentDisposition {
 }
 
 export interface ErrorResponse {
-  body?: ProblemDetail;
-  statusCode?: HttpStatusCode;
-  detailMessageArguments?: Array<object>;
-  typeMessageCode?: string;
-  detailMessageCode?: string;
-  titleMessageCode?: string;
   headers?: {
-    accept?: Array<MediaType>;
-    acceptLanguage?: Array<{
-      range?: string;
-      /** @format double */
-      weight?: number;
-    }>;
-    empty?: boolean;
-    /** @format uri */
-    location?: string;
+    connection?: Array<string>;
+    /** @format int64 */
+    ifModifiedSince?: number;
+    contentType?: MediaType;
+    /** @format int64 */
+    contentLength?: number;
     host?: {
+      hostString?: string;
       address?: {
         hostAddress?: string;
         /** @format byte */
         address?: string;
         hostName?: string;
         linkLocalAddress?: boolean;
-        multicastAddress?: boolean;
         anyLocalAddress?: boolean;
+        multicastAddress?: boolean;
         loopbackAddress?: boolean;
         siteLocalAddress?: boolean;
         mcglobal?: boolean;
@@ -166,22 +159,56 @@ export interface ErrorResponse {
       port?: number;
       unresolved?: boolean;
       hostName?: string;
-      hostString?: string;
     };
+    empty?: boolean;
+    /** @format uri */
+    location?: string;
     all?: Record<string, string>;
     /** @format int64 */
     lastModified?: number;
     /** @format int64 */
     date?: number;
-    /** @format int64 */
-    contentLength?: number;
-    origin?: string;
+    accessControlAllowOrigin?: string;
+    accessControlAllowMethods?: Array<HttpMethod>;
+    accessControlAllowHeaders?: Array<string>;
+    accessControlExposeHeaders?: Array<string>;
+    accessControlAllowCredentials?: boolean;
+    accessControlRequestMethod?: HttpMethod;
+    accessControlRequestHeaders?: Array<string>;
     range?: Array<HttpRange>;
-    contentDisposition?: ContentDisposition;
-    acceptCharset?: Array<string>;
-    acceptPatch?: Array<MediaType>;
     /** @uniqueItems true */
     allow?: Array<HttpMethod>;
+    origin?: string;
+    contentLanguage?: {
+      language?: string;
+      displayName?: string;
+      country?: string;
+      variant?: string;
+      script?: string;
+      /** @uniqueItems true */
+      unicodeLocaleAttributes?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleKeys?: Array<string>;
+      displayLanguage?: string;
+      displayScript?: string;
+      displayCountry?: string;
+      displayVariant?: string;
+      /** @uniqueItems true */
+      extensionKeys?: Array<string>;
+      iso3Language?: string;
+      iso3Country?: string;
+    };
+    cacheControl?: string;
+    acceptCharset?: Array<string>;
+    contentDisposition?: ContentDisposition;
+    /** @format int64 */
+    accessControlMaxAge?: number;
+    acceptPatch?: Array<MediaType>;
+    acceptLanguage?: Array<{
+      range?: string;
+      /** @format double */
+      weight?: number;
+    }>;
     basicAuth?: string;
     acceptLanguageAsLocales?: Array<{
       language?: string;
@@ -190,64 +217,38 @@ export interface ErrorResponse {
       variant?: string;
       script?: string;
       /** @uniqueItems true */
-      extensionKeys?: Array<string>;
-      /** @uniqueItems true */
       unicodeLocaleAttributes?: Array<string>;
       /** @uniqueItems true */
       unicodeLocaleKeys?: Array<string>;
-      iso3Language?: string;
-      iso3Country?: string;
       displayLanguage?: string;
       displayScript?: string;
       displayCountry?: string;
       displayVariant?: string;
+      /** @uniqueItems true */
+      extensionKeys?: Array<string>;
+      iso3Language?: string;
+      iso3Country?: string;
     }>;
-    cacheControl?: string;
-    accessControlAllowOrigin?: string;
-    accessControlAllowMethods?: Array<HttpMethod>;
-    accessControlAllowHeaders?: Array<string>;
-    accessControlExposeHeaders?: Array<string>;
-    accessControlAllowCredentials?: boolean;
-    /** @format int64 */
-    accessControlMaxAge?: number;
-    accessControlRequestMethod?: HttpMethod;
-    accessControlRequestHeaders?: Array<string>;
     bearerAuth?: string;
-    contentLanguage?: {
-      language?: string;
-      displayName?: string;
-      country?: string;
-      variant?: string;
-      script?: string;
-      /** @uniqueItems true */
-      extensionKeys?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleAttributes?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleKeys?: Array<string>;
-      iso3Language?: string;
-      iso3Country?: string;
-      displayLanguage?: string;
-      displayScript?: string;
-      displayCountry?: string;
-      displayVariant?: string;
-    };
-    etag?: string;
-    /** @format int64 */
-    expires?: number;
-    ifMatch?: Array<string>;
     ifNoneMatch?: Array<string>;
     /** @format int64 */
     ifUnmodifiedSince?: number;
+    etag?: string;
+    accept?: Array<MediaType>;
+    /** @format int64 */
+    expires?: number;
+    ifMatch?: Array<string>;
     pragma?: string;
     upgrade?: string;
     vary?: Array<string>;
-    connection?: Array<string>;
-    contentType?: MediaType;
-    /** @format int64 */
-    ifModifiedSince?: number;
     [key: string]: any;
   };
+  body?: ProblemDetail;
+  detailMessageArguments?: Array<object>;
+  typeMessageCode?: string;
+  detailMessageCode?: string;
+  titleMessageCode?: string;
+  statusCode?: HttpStatusCode;
 }
 
 export type HttpMethod = object;
@@ -269,11 +270,11 @@ export interface MediaType {
   parameters?: Record<string, string>;
   /** @format double */
   qualityValue?: number;
+  concrete?: boolean;
   charset?: string;
   wildcardType?: boolean;
   wildcardSubtype?: boolean;
   subtypeSuffix?: string;
-  concrete?: boolean;
 }
 
 export interface ProblemDetail {
@@ -406,17 +407,17 @@ export interface Page {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
+  first?: boolean;
+  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<object>;
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
+  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
-  last?: boolean;
-  first?: boolean;
   empty?: boolean;
 }
 
@@ -425,11 +426,11 @@ export interface PageableObject {
   offset?: number;
   sort?: Array<SortObject>;
   paged?: boolean;
+  unpaged?: boolean;
   /** @format int32 */
   pageNumber?: number;
   /** @format int32 */
   pageSize?: number;
-  unpaged?: boolean;
 }
 
 export interface SortObject {
@@ -445,17 +446,17 @@ export interface PageUserResponse {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
+  first?: boolean;
+  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<UserResponse>;
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
+  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
-  last?: boolean;
-  first?: boolean;
   empty?: boolean;
 }
 
@@ -489,17 +490,17 @@ export interface PageTeamResponse {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
+  first?: boolean;
+  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<TeamResponse>;
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
+  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
-  last?: boolean;
-  first?: boolean;
   empty?: boolean;
 }
 
@@ -508,17 +509,17 @@ export interface PageProductResponse {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
+  first?: boolean;
+  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<ProductResponse>;
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
+  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
-  last?: boolean;
-  first?: boolean;
   empty?: boolean;
 }
 
@@ -527,17 +528,17 @@ export interface PageTaskChangeResponse {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
+  first?: boolean;
+  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<TaskChangeResponse>;
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
+  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
-  pageable?: PageableObject;
-  last?: boolean;
-  first?: boolean;
   empty?: boolean;
 }
 
@@ -1803,6 +1804,26 @@ export class Api<
         query: query,
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Products Releases API
+     * @name GetProductReleaseById
+     * @request GET:/api/products/{productId}/releases/{releaseId}
+     * @secure
+     */
+    getProductReleaseById: (
+      productId: number,
+      releaseId: number,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/products/${productId}/releases/${releaseId}`,
+        method: "GET",
+        secure: true,
         ...params,
       }),
 

@@ -6,7 +6,6 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 import { Product } from "@/entities/product";
-// eslint-disable-next-line @conarti/feature-sliced/layers-slices
 import { UserHoverCard } from "@/entities/user";
 
 // eslint-disable-next-line react-refresh/only-export-components

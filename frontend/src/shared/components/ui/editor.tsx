@@ -1,12 +1,9 @@
 import { Extension } from "@tiptap/core";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { useState } from "react";
-import { Task, useUpdateTaskMutation } from "@/entities/task";
-import { Button } from "@/shared/components/ui/button.tsx";
-import { extensions } from "@/shared/components/ui/editor.tsx";
-import { Separator } from "@/shared/components/ui/separator";
+import { StarterKit } from "@tiptap/starter-kit";
+import { Separator } from "@/shared/components/ui/separator.tsx";
 import { BlockquoteToolbar } from "@/shared/components/ui/toolbars/blockquote.tsx";
-import { BoldToolbar } from "@/shared/components/ui/toolbars/bold";
+import { BoldToolbar } from "@/shared/components/ui/toolbars/bold.tsx";
 import { BulletListToolbar } from "@/shared/components/ui/toolbars/bullet-list.tsx";
 import { CodeBlockToolbar } from "@/shared/components/ui/toolbars/code-block.tsx";
 import { CodeToolbar } from "@/shared/components/ui/toolbars/code.tsx";
@@ -19,41 +16,70 @@ import { StrikeThroughToolbar } from "@/shared/components/ui/toolbars/strikethro
 import { ToolbarProvider } from "@/shared/components/ui/toolbars/toolbar-provider.tsx";
 import { cn } from "@/shared/lib/utils.ts";
 
-export function TaskDescription({ task }: { task: Task }) {
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
+  showToolbar?: boolean;
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const extensions = [
+  StarterKit.configure({
+    orderedList: {
+      HTMLAttributes: {
+        class: "list-decimal",
+      },
+    },
+    bulletList: {
+      HTMLAttributes: {
+        class: "list-disc",
+      },
+    },
+    code: {
+      HTMLAttributes: {
+        class: "bg-accent rounded-md p-1",
+      },
+    },
+    horizontalRule: {
+      HTMLAttributes: {
+        class: "my-2",
+      },
+    },
+    codeBlock: {
+      HTMLAttributes: {
+        class: "bg-primary text-primary-foreground p-2 text-sm rounded-md p-1",
+      },
+    },
+    heading: {
+      levels: [1, 2, 3, 4],
+      HTMLAttributes: {
+        class: "tiptap-heading",
+      },
+    },
+  }),
+];
+
+export function RichTextEditor({ value, onChange }: Props) {
   const editor = useEditor({
     extensions: extensions as Extension[],
-    content: task.description ?? "Add description",
+    content: value,
     immediatelyRender: false,
+    onUpdate: (e) => {
+      onChange(e.editor.getHTML());
+    },
   });
-  const [isDirty, setIsDirty] = useState(false);
-
-  const { mutate, isPending } = useUpdateTaskMutation();
 
   if (!editor) {
     return null;
   }
 
-  function handleSave() {
-    mutate(
-      {
-        ...task,
-        description: editor?.getHTML(),
-      },
-      {
-        onSuccess: () => {
-          setIsDirty(false);
-        },
-      },
-    );
-  }
-
   return (
     <>
-      <div className={cn("relative w-full overflow-hidden rounded-md")}>
-        {isDirty && (
+      <div className={cn("relative w-full overflow-hidden rounded-md border")}>
+        {
           <header
             className={cn(
-              "sticky left-0 top-1 z-20 flex w-full items-center justify-between rounded border bg-background",
+              "sticky left-0 top-0 z-20 flex w-full items-center justify-between rounded border-b bg-background",
             )}
           >
             <ToolbarProvider editor={editor}>
@@ -73,27 +99,16 @@ export function TaskDescription({ task }: { task: Task }) {
               </div>
             </ToolbarProvider>
           </header>
-        )}
+        }
         <div
           onClick={() => {
             editor?.chain().focus().run();
-
-            if (!isDirty) {
-              setIsDirty(true);
-            }
           }}
           className="cursor-text bg-background"
         >
-          <EditorContent className="p-1 outline-none" editor={editor} />
+          <EditorContent className="p-2 outline-none" editor={editor} />
         </div>
       </div>
-      {isDirty && (
-        <footer>
-          <Button loading={isPending} onClick={handleSave}>
-            Save
-          </Button>
-        </footer>
-      )}
     </>
   );
 }

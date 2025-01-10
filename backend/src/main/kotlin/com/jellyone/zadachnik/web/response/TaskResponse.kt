@@ -10,6 +10,7 @@ data class TaskResponse(
     val description: String?,
     val assignee: UserResponse?,
     val status: String,
+    val product: ProductResponse,
 )
 
 fun Task.toResponse() = TaskResponse(
@@ -18,5 +19,6 @@ fun Task.toResponse() = TaskResponse(
     title = title,
     assignee = assignee?.toResponse(),
     status = status.name,
-    description = description
+    description = description,
+    product = product.toResponse(),
 )

@@ -196,7 +196,7 @@ function TaskComments({ task }: { task: Task }) {
   const { t } = useTranslation("task");
   const { data: comments } = useSuspenseQuery(
     getTaskCommentsQueryOptions({
-      productId: task.productId,
+      productId: task.product.id,
       taskId: task.id,
       page: 1,
       pageSize: 50,
@@ -214,7 +214,7 @@ function TaskComments({ task }: { task: Task }) {
 
     mutate(
       {
-        productId: task.productId,
+        productId: task.product.id,
         taskId: task.id,
         content: value,
       },

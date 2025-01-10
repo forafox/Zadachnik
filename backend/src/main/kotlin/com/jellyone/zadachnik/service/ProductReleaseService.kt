@@ -37,5 +37,7 @@ class ProductReleaseService(
         page: Int,
         size: Int
     ) = productReleaseRepository.findAllByProductId(productId, PageRequest.of(page, size))
+
+    fun getProductRelease(productId: Long, releaseId: Long) = productReleaseRepository.findByProductIdAndId(productId, releaseId)
 }
 

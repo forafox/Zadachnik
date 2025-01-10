@@ -21,3 +21,26 @@ export function paginatedResponseSchema<T extends z.Schema>(t: T) {
     values: z.array(t),
   });
 }
+
+export function toBackendPagination(
+  req: z.infer<typeof paginatedRequestSchema>,
+) {
+  return {
+    page: req.page - 1,
+    size: req.pageSize,
+  };
+}
+
+export function fromBackendPagination<T>(data: {
+  content: T[];
+  number: number;
+  totalElements: number;
+  size: number;
+}): { values: T[]; page: number; pageSize: number; total: number } {
+  return {
+    values: data.content,
+    page: data.number + 1,
+    total: data.totalElements,
+    pageSize: data.size,
+  };
+}
