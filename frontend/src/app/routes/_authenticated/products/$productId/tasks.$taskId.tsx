@@ -17,7 +17,7 @@ import { SelectAssignee } from "@/entities/task";
 import { TaskDescription } from "@/entities/task";
 import { SelectTaskStatus } from "@/entities/task";
 import { TaskChanges } from "@/entities/task";
-import { User, UserAvatar} from "@/entities/user";
+import { User, UserAvatar } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
 import {

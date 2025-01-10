@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
 import React, { forwardRef } from "react";
+import { useTranslation } from "react-i18next";
 import z from "zod";
 import {
   getTasksQueryOptions,
@@ -13,7 +14,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/shared/components/ui/command.tsx";
@@ -44,6 +44,7 @@ export const SelectTasks = forwardRef<HTMLButtonElement, Props>(
         onChange([...value, task]);
       }
     }
+    const { t } = useTranslation("task");
 
     return (
       <Popover open={open} onOpenChange={setOpen} modal={modal}>
@@ -68,9 +69,17 @@ export const SelectTasks = forwardRef<HTMLButtonElement, Props>(
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
           <Command>
-            <CommandInput placeholder="Search framework..." />
+            {/* TODO: fix command input */}
+            {/*<CommandInput*/}
+            {/*  value={search}*/}
+            {/*  onValueChange={setSearch}*/}
+            {/*  placeholder={t("actions.search.label")}*/}
+            {/*  aria-modal={modal}*/}
+            {/*/>*/}
             <CommandList>
-              <CommandEmpty>No framework found.</CommandEmpty>
+              <CommandEmpty>
+                {t("actions.search.feedback.notFound.label")}
+              </CommandEmpty>
               <CommandGroup>
                 {data?.values.map((task) => {
                   const isSelected = value.some((it) => it.id === task.id);

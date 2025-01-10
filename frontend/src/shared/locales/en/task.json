@@ -104,6 +104,14 @@
     "create": {
       "title": "Create a Task",
       "label": "Create"
+    },
+    "search": {
+      "label": "Search tasks",
+      "feedback": {
+        "notFound": {
+          "label": "No tasks found \uD83D\uDE22"
+        }
+      }
     }
   }
 }
