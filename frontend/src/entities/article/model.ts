@@ -6,3 +6,4 @@ export const articleSchema = z.object({
   content: z.string(),
   author: userSchema,
 });
+export type Article = z.infer<typeof articleSchema>;
