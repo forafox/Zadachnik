@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Pencil, SaveIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CommentItem } from "@/entities/comment";
 import { getProductByIdQueryOptions, ProductLink } from "@/entities/product";
 import {
   getTaskByIdQueryOptions,
@@ -17,7 +18,7 @@ import { SelectAssignee } from "@/entities/task";
 import { TaskDescription } from "@/entities/task";
 import { SelectTaskStatus } from "@/entities/task";
 import { TaskChanges } from "@/entities/task";
-import { User, UserAvatar } from "@/entities/user";
+import { User } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
 import {
@@ -90,6 +91,7 @@ function RouteComponent() {
       },
     );
   };
+
   return (
     <Card className="mx-auto">
       <SetSidebarBreadcrumbs>
@@ -238,18 +240,7 @@ function TaskComments({ task }: { task: Task }) {
           </p>
         )}
         {comments.values.map((comment) => (
-          <Card>
-            <CardHeader className="p-4 pb-0">
-              <CardTitle className="flex flex-row items-center space-x-2 font-normal">
-                <UserAvatar
-                  user={comment.author}
-                  className="size-8 text-sm font-light"
-                />
-                <span>{comment.author.fullName}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 pt-2">{comment.content}</CardContent>
-          </Card>
+          <CommentItem comment={comment} key={comment.id} />
         ))}
       </div>
       <form

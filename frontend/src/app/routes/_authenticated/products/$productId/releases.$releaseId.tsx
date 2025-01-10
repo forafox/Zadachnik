@@ -2,6 +2,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { addDays } from "date-fns";
 import { useTranslation } from "react-i18next";
+import { ArticleContent } from "@/entities/article";
+import { ArticleComments } from "@/entities/article";
 import { getReleaseByIdQueryOptions } from "@/entities/release";
 import { useReleaseBreadcrumbs } from "@/entities/release";
 import { TaskStatusBadge, TaskTypeBadge } from "@/entities/task";
@@ -37,7 +39,7 @@ function RouteComponent() {
       <CardContent className="space-y-4 [&>div]:space-y-2">
         <div>
           <h3 className="font-medium">{t("items.releaseNotes.label")}</h3>
-          <div>@TODO: article editor component</div>
+          <ArticleContent article={release.releaseNotes} />
         </div>
         <div>
           <h3 className="font-medium">{t("items.tasks.label")}</h3>
@@ -70,6 +72,7 @@ function RouteComponent() {
             />
           </span>
         </div>
+        <ArticleComments articleId={release.releaseNotes.id} />
       </CardContent>
     </Card>
   );

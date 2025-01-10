@@ -19,7 +19,9 @@ import { cn } from "@/shared/lib/utils.ts";
 type Props = {
   value: string;
   onChange: (value: string) => void;
+  showHeader?: boolean;
   editable?: boolean;
+  setDirty?: () => void;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -59,7 +61,13 @@ export const extensions = [
   }),
 ];
 
-export function RichTextEditor({ value, onChange, editable = true }: Props) {
+export function RichTextEditor({
+  value,
+  onChange,
+  editable = true,
+  showHeader = true,
+  setDirty,
+}: Props) {
   const editor = useEditor({
     extensions: extensions as Extension[],
     content: value,
@@ -77,7 +85,7 @@ export function RichTextEditor({ value, onChange, editable = true }: Props) {
   return (
     <>
       <div className={cn("relative w-full overflow-hidden rounded-md border")}>
-        {editable && (
+        {editable && showHeader && (
           <header
             className={cn(
               "sticky left-0 top-0 z-20 flex w-full items-center justify-between rounded border-b bg-background",
@@ -103,7 +111,13 @@ export function RichTextEditor({ value, onChange, editable = true }: Props) {
         )}
         <div
           onClick={() => {
-            editor?.chain().focus().run();
+            if (editable) {
+              editor?.chain().focus().run();
+            }
+
+            if (editable && setDirty) {
+              setDirty();
+            }
           }}
           className="cursor-text bg-background"
         >

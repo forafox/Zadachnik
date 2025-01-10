@@ -1,10 +1,7 @@
 import { queryOptions, useMutation } from "@tanstack/react-query";
 import z from "zod";
-import {
-  taskCommentSchema,
-  taskSchema,
-  taskStatus,
-} from "@/entities/task/model.ts";
+import { commentSchema } from "@/entities/comment";
+import { taskSchema, taskStatus } from "@/entities/task/model.ts";
 import { api } from "@/shared/api";
 import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
 import {
@@ -191,13 +188,13 @@ export function useCreateTaskCommentMutation() {
         values.taskId,
         { content: values.content },
       );
-      return taskCommentSchema.parse(data);
+      return commentSchema.parse(data);
     },
   });
 }
 
 export const getTaskCommentsQueryOptions = generateQueryOptions(
-  paginatedResponseSchema(taskCommentSchema),
+  paginatedResponseSchema(commentSchema),
   paginatedRequestSchema.extend({ productId: z.number(), taskId: z.number() }),
   async ({ productId, taskId, page, pageSize }) => {
     const { data } = await api.api.getCommentsByTaskId(productId, taskId, {
