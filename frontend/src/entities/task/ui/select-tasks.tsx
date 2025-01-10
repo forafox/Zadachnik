@@ -52,16 +52,18 @@ export const SelectTasks = forwardRef<HTMLButtonElement, Props>(
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between"
+            className="w-full justify-between px-3 py-2"
             ref={ref}
           >
-            {value.length == 0 && <span></span>}
-            {value.map((it) => (
-              <TaskTypeBadge key={it.id} type={it.type}>
-                {it.title}
-              </TaskTypeBadge>
-            ))}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <div className="flex flex-row gap-2">
+              {value.length == 0 && <span></span>}
+              {value.map((it) => (
+                <TaskTypeBadge key={it.id} type={it.type}>
+                  {it.title}
+                </TaskTypeBadge>
+              ))}
+            </div>
+            <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
