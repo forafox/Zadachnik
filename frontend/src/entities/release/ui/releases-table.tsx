@@ -32,14 +32,15 @@ const columnDef: Array<ColumnDef<Release>> = [
     },
   },
   {
-    accessorKey: "taks",
+    accessorKey: "tasks",
     header: () => <RenderTranslation str="items.tasks.label" />,
     cell: ({ row }) => {
       const { tasks } = row.original;
       return (
-        <>
+        <div className="flex flex-row flex-wrap gap-2">
           {tasks.map((task) => (
             <Link
+              key={task.id}
               to="/products/$productId/tasks/$taskId"
               params={{
                 productId: String(task.product.id),
@@ -49,7 +50,7 @@ const columnDef: Array<ColumnDef<Release>> = [
               <TaskTypeBadge type={task.type}>{task.title}</TaskTypeBadge>
             </Link>
           ))}
-        </>
+        </div>
       );
     },
   },

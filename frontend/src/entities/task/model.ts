@@ -83,14 +83,12 @@ export type TaskChangeEntry = z.infer<typeof taskChangeSchema>;
 export const getTaskHistoryQueryOptions = generateQueryOptions(
   paginatedResponseSchema(taskChangeSchema),
   paginatedRequestSchema.extend({ productId: z.number(), taskId: z.number() }),
-  // @ts-expect-error bad typing on backend
   async ({ productId, taskId, ...req }) => {
     const { data } = await api.api.getTaskChanges(
       taskId,
       productId,
       toBackendPagination(req),
     );
-    // @ts-expect-error bad typing on backend
     return fromBackendPagination(data);
   },
   ({ productId, taskId, ...req }) => [

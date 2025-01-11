@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import { EditProductDialogContent } from "@/widgets/edit-product-dialog";
 import { getPrincipalQueryOptions } from "@/entities/principal";
 import { getProductByIdQueryOptions } from "@/entities/product";
+import { ProductInvitations } from "@/entities/product";
+import { ProductParticipants } from "@/entities/product";
 import { UserHoverCard } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
@@ -100,15 +102,8 @@ function RouteComponent() {
         </CardContent>
         <Separator orientation="horizontal" />
         <CardContent className="py-4">
-          <div>
-            <h6>{t("items.participants.label")}</h6>
-            <ul>
-              <li>TBD</li>
-              <li>TBD</li>
-              <li>TBD</li>
-              <li>TBD</li>
-            </ul>
-          </div>
+          <ProductParticipants product={product} />
+          <ProductInvitations product={product} />
         </CardContent>
       </Card>
     </div>

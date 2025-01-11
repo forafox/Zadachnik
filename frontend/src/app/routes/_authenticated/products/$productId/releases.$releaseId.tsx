@@ -1,13 +1,12 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { addDays } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { ArticleContent } from "@/entities/article";
 import { ArticleComments } from "@/entities/article";
 import { getReleaseByIdQueryOptions } from "@/entities/release";
 import { useReleaseBreadcrumbs } from "@/entities/release";
-import { TaskStatusBadge, TaskTypeBadge } from "@/entities/task";
-import { UserHoverAvatar } from "@/entities/user";
+import { TaskTypeBadge } from "@/entities/task";
 import {
   Card,
   CardContent,
@@ -43,21 +42,23 @@ function RouteComponent() {
         </div>
         <div>
           <h3 className="font-medium">{t("items.tasks.label")}</h3>
-          <ul>
+          <ul className="list-disc space-y-2 pl-6">
             {release.tasks.map((task) => (
-              <li
-                key={task.id}
-                className="flex flex-row items-center space-x-2"
-              >
-                <TaskTypeBadge type={task.type} />{" "}
-                <TaskStatusBadge status={task.status} />
-                {task.assignee && (
-                  <UserHoverAvatar
-                    className="size-6 text-xs font-light"
-                    user={task.assignee}
-                  />
-                )}
-                <span>{task.title}</span>
+              <li key={task.id}>
+                <div className="flex flex-row items-center">
+                  <Link
+                    to="/products/$productId/tasks/$taskId"
+                    params={{
+                      productId: String(task.product.id),
+                      taskId: String(task.id),
+                    }}
+                  >
+                    <TaskTypeBadge type={task.type}>
+                      [{task.product.ticker}-{task.id}]
+                    </TaskTypeBadge>
+                  </Link>
+                  <span className="ml-2">{task.title}</span>
+                </div>
               </li>
             ))}
           </ul>

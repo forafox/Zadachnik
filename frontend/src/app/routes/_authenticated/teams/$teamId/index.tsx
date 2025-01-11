@@ -6,6 +6,7 @@ import {
   useTeamsBreadcrumbs,
 } from "@/entities/team";
 import { TeamPendingInvitations } from "@/entities/team";
+import { TeamProductsInvitations } from "@/entities/team";
 import { UserHoverCard } from "@/entities/user";
 import {
   Card,
@@ -44,6 +45,7 @@ function RouteComponent() {
       <CardContent className="space-y-6 px-0 py-4 [&>section]:px-6">
         <TeamParticipants team={team} />
         <TeamPendingInvitations team={team} />
+        <TeamProductsInvitations team={team} />
       </CardContent>
     </Card>
   );

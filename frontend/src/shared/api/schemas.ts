@@ -1,4 +1,5 @@
 import z from "zod";
+import { Page } from "@/shared/api.gen.ts";
 
 const DEFAULT_PAGE_SIZE = 50;
 const DEFAULT_PAGE = 1;
@@ -31,16 +32,16 @@ export function toBackendPagination(
   };
 }
 
-export function fromBackendPagination<T>(data: {
-  content: T[];
-  number: number;
-  totalElements: number;
-  size: number;
-}): { values: T[]; page: number; pageSize: number; total: number } {
+export function fromBackendPagination<T>(data: Page): {
+  values: T[];
+  page: number;
+  pageSize: number;
+  total: number;
+} {
   return {
-    values: data.content,
-    page: data.number + 1,
-    total: data.totalElements,
-    pageSize: data.size,
+    values: (data.content ?? []) as Array<T>,
+    page: (data.number ?? 0) + 1,
+    total: data.totalElements ?? 0,
+    pageSize: data.size ?? 0,
   };
 }
