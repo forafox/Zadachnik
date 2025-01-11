@@ -132,7 +132,7 @@ class ProductsInvitationsControllerTest {
     fun getAllTeamProductInvitationsShouldReturnOk() {
         val teamId = 1L
         val productId = 1L
-       val response = RestAssured.given()
+        val response = RestAssured.given()
             .auth().oauth2(jwtToken)
             .queryParam("page", 0)
             .queryParam("size", 10)
@@ -152,6 +152,29 @@ class ProductsInvitationsControllerTest {
 
     @Order(5)
     @Test
+    fun getAllProductInvitationByProductIdShouldReturnOk() {
+        val productId = 1L
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .queryParam("page", 0)
+            .queryParam("size", 10)
+            .`when`()
+            .get("/api/products/$productId/product-invitations")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .jsonPath()
+
+        val content: List<Map<String, Any>> = response.getList("content")
+
+        assert(content.isNotEmpty()) { "Content should not be empty" }
+        assert(content[0]["id"] != null) { "First invitation should have an ID" }
+
+    }
+
+    @Order(6)
+    @Test
     fun getProductInvitationNotFoundShouldReturnNotFound() {
         val teamId = 1L
         val productId = 9999
@@ -164,7 +187,7 @@ class ProductsInvitationsControllerTest {
             .statusCode(HttpStatus.OK.value())
     }
 
-    @Order(6)
+    @Order(7)
     @Test
     fun getProductTeamsShouldReturnOk() {
         val productId = 1L
