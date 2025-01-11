@@ -1,5 +1,6 @@
 package com.jellyone.zadachnik.controller
 
+import com.jellyone.zadachnik.domain.TeamMeeting
 import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.CommentService
 import com.jellyone.zadachnik.service.TeamMeetingService
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import lombok.RequiredArgsConstructor
+import org.springframework.data.domain.Page
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -38,6 +40,7 @@ class TeamMeetingController(
     private val teamMeetingService: TeamMeetingService,
     private val commentService: CommentService
 ) {
+
     @Operation(
         summary = "Create team meeting",
         description = "Create team meeting",
@@ -54,18 +57,30 @@ class TeamMeetingController(
             )
         ]
     )
-    @PostMapping("{id}/meetings")
+    @PostMapping("{teamId}/meetings")
     fun createTeamMeeting(
-        @PathVariable id: Long,
+        @PathVariable teamId: Long,
         @RequestBody teamMeeting: CreateTeamMeetingRequest
     ): TeamMeetingResponse {
         return teamMeetingService.createTeamMeeting(
             type = teamMeeting.type,
             agenda = teamMeeting.agenda,
-            teamId = id,
+            teamId = teamId,
             date = teamMeeting.date
         ).toResponse()
     }
+
+    @GetMapping("{teamId}/meetings")
+    fun getTeamMeetings(
+        @PathVariable teamId: Long,
+        @RequestParam(required = false, defaultValue = "0") page: Int,
+        @RequestParam(required = false, defaultValue = "10") size: Int
+    ) = teamMeetingService.getTeamMeetings(
+            teamId = teamId,
+            page,
+            size
+        ).map { it.toResponse() }
+
 
     @PostMapping("{teamId}/meetings/{meetingId}/minutes")
     fun createArticle(
