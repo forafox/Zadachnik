@@ -68,7 +68,7 @@ class ProductsInvitationsController(
     }
 
     @Operation(
-        summary = "Возвращает все приглашения от данной команды",
+        summary = "Возвращает все приглашения для данной команды",
     )
     @GetMapping
     fun getAllTeamProductInvitations(
@@ -76,7 +76,7 @@ class ProductsInvitationsController(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
         @RequestParam(required = false) status: ProductTeamStatus?
-    ) = productsInvitationsService.getAllTeamProductInvitations(
+    ) = productsInvitationsService.getAllTeamProductInvitationsByTeamId(
         teamId = teamId,
         page = page,
         size = size,
