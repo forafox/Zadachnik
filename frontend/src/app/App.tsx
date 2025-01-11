@@ -14,6 +14,7 @@ import release from "@/shared/locales/en/release.json";
 import sprint from "@/shared/locales/en/sprint.json";
 import task from "@/shared/locales/en/task.json";
 import team from "@/shared/locales/en/team.json";
+import meeting from "@/shared/locales/en/meeting.json";
 import { routeTree } from "@/routeTree.gen";
 
 const queryClient = new QueryClient({
@@ -49,6 +50,7 @@ export const resources = {
     sprint,
     task,
     release,
+    meeting,
   },
 } as const;
 

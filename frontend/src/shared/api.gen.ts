@@ -168,13 +168,6 @@ export interface ErrorResponse {
     lastModified?: number;
     /** @format int64 */
     date?: number;
-    accessControlRequestMethod?: HttpMethod;
-    accessControlAllowOrigin?: string;
-    accessControlAllowMethods?: Array<HttpMethod>;
-    accessControlAllowHeaders?: Array<string>;
-    accessControlExposeHeaders?: Array<string>;
-    accessControlAllowCredentials?: boolean;
-    accessControlRequestHeaders?: Array<string>;
     acceptPatch?: Array<MediaType>;
     acceptLanguage?: Array<{
       range?: string;
@@ -228,12 +221,19 @@ export interface ErrorResponse {
     ifNoneMatch?: Array<string>;
     /** @format int64 */
     ifUnmodifiedSince?: number;
+    cacheControl?: string;
+    range?: Array<HttpRange>;
     /** @uniqueItems true */
     allow?: Array<HttpMethod>;
-    etag?: string;
-    range?: Array<HttpRange>;
     origin?: string;
-    cacheControl?: string;
+    accessControlAllowOrigin?: string;
+    accessControlAllowMethods?: Array<HttpMethod>;
+    accessControlAllowHeaders?: Array<string>;
+    accessControlExposeHeaders?: Array<string>;
+    accessControlAllowCredentials?: boolean;
+    accessControlRequestMethod?: HttpMethod;
+    accessControlRequestHeaders?: Array<string>;
+    etag?: string;
     accept?: Array<MediaType>;
     /** @format int64 */
     expires?: number;
@@ -243,12 +243,12 @@ export interface ErrorResponse {
     vary?: Array<string>;
     [key: string]: any;
   };
-  body?: ProblemDetail;
   detailMessageArguments?: Array<object>;
   typeMessageCode?: string;
   detailMessageCode?: string;
   titleMessageCode?: string;
   statusCode?: HttpStatusCode;
+  body?: ProblemDetail;
 }
 
 export type HttpMethod = object;
@@ -270,11 +270,11 @@ export interface MediaType {
   parameters?: Record<string, string>;
   /** @format double */
   qualityValue?: number;
-  concrete?: boolean;
-  charset?: string;
   wildcardType?: boolean;
   wildcardSubtype?: boolean;
   subtypeSuffix?: string;
+  charset?: string;
+  concrete?: boolean;
 }
 
 export interface ProblemDetail {
@@ -332,14 +332,6 @@ export interface CreateSprintRequest {
   reviewDateTime: string;
 }
 
-export interface CreateArticleRequest {
-  content: string;
-}
-
-export interface CreateCommentRequest {
-  content: string;
-}
-
 export interface TeamMeetingResponse {
   /** @format int64 */
   id: number;
@@ -355,6 +347,14 @@ export interface CreateTeamMeetingRequest {
   agenda: string;
   /** @format date-time */
   date: string;
+}
+
+export interface CreateArticleRequest {
+  content: string;
+}
+
+export interface CreateCommentRequest {
+  content: string;
 }
 
 export interface CreateProductRequest {
@@ -415,9 +415,9 @@ export interface Page {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -425,12 +425,12 @@ export interface PageableObject {
   /** @format int64 */
   offset?: number;
   sort?: Array<SortObject>;
-  unpaged?: boolean;
-  paged?: boolean;
   /** @format int32 */
   pageNumber?: number;
   /** @format int32 */
   pageSize?: number;
+  paged?: boolean;
+  unpaged?: boolean;
 }
 
 export interface SortObject {
@@ -454,9 +454,9 @@ export interface PageUserResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -498,9 +498,9 @@ export interface PageTeamResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -517,9 +517,9 @@ export interface PageProductResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -536,9 +536,9 @@ export interface PageTaskChangeResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -1203,6 +1203,62 @@ export class Api<
      * No description
      *
      * @tags Teams API
+     * @name GetTeamMeetings
+     * @request GET:/api/teams/{teamId}/meetings
+     * @secure
+     */
+    getTeamMeetings: (
+      teamId: number,
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        page?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        size?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/meetings`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description Create team meeting
+     *
+     * @tags Teams API
+     * @name CreateTeamMeeting
+     * @summary Create team meeting
+     * @request POST:/api/teams/{teamId}/meetings
+     * @secure
+     */
+    createTeamMeeting: (
+      teamId: number,
+      data: CreateTeamMeetingRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<TeamMeetingResponse, ErrorMessage>({
+        path: `/api/teams/${teamId}/meetings`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Teams API
      * @name CreateArticle
      * @request POST:/api/teams/{teamId}/meetings/{meetingId}/minutes
      * @secure
@@ -1271,30 +1327,6 @@ export class Api<
         body: data,
         secure: true,
         type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description Create team meeting
-     *
-     * @tags Teams API
-     * @name CreateTeamMeeting
-     * @summary Create team meeting
-     * @request POST:/api/teams/{id}/meetings
-     * @secure
-     */
-    createTeamMeeting: (
-      id: number,
-      data: CreateTeamMeetingRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<TeamMeetingResponse, ErrorMessage>({
-        path: `/api/teams/${id}/meetings`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
         ...params,
       }),
 
