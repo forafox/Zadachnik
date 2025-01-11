@@ -26,4 +26,10 @@ interface UserTeamRelationRepository : JpaRepository<UserTeamRelation, Long> {
         @Param("teamId") teamId: Long,
         pageable: Pageable
     ): Page<User>
+
+    fun findAllByTeamIdAndStatus(teamId: Long, status: UserTeamStatus, pageable: Pageable): Page<UserTeamRelation>
+
+    fun findAllByUserIdAndStatus(userId: Long, status: UserTeamStatus, pageable: Pageable): Page<UserTeamRelation>
+
+    fun findAllByUserId(userId: Long, pageable: Pageable): Page<UserTeamRelation>
 }

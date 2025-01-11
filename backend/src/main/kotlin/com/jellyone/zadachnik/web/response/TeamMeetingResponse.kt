@@ -9,7 +9,6 @@ data class TeamMeetingResponse(
     val type: TeamMeetingType,
     val agenda: String,
     val team: TeamResponse,
-    val users: Set<UserResponse>,
     val date: LocalDateTime,
 )
 
@@ -18,6 +17,5 @@ fun TeamMeeting.toResponse() = TeamMeetingResponse(
     type = type,
     agenda = agenda,
     team = team.toResponse(),
-    users = users.map { it.toResponse() }.toSet(),
     date = date,
 )

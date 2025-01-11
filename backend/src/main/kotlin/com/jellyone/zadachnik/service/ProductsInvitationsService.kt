@@ -3,6 +3,7 @@ package com.jellyone.zadachnik.service
 import com.jellyone.zadachnik.domain.ProductTeamRelation
 import com.jellyone.zadachnik.domain.ProductTeamStatus
 import com.jellyone.zadachnik.repository.ProductTeamRelationRepository
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
@@ -64,4 +65,32 @@ class ProductsInvitationsService(
         page: Int,
         size: Int
     ) = productTeamRelationRepository.findAllTeamsByProductId(productId, PageRequest.of(page, size))
+
+
+    fun getAllTeamProductInvitationsByTeamId(
+        teamId: Long,
+        page: Int,
+        size: Int,
+        status: ProductTeamStatus?
+    ): Page<ProductTeamRelation> {
+        return if (status != null) {
+            productTeamRelationRepository.findAllByTeamIdAndStatus(teamId, status, PageRequest.of(page, size))
+        } else {
+            productTeamRelationRepository.findAllByTeamId(teamId, PageRequest.of(page, size))
+        }
+    }
+
+    fun getAllProductInvitationByProductId(
+        productId: Long,
+        page: Int,
+        size: Int,
+        status: ProductTeamStatus?
+    ): Page<ProductTeamRelation> {
+        return if (status != null) {
+            productTeamRelationRepository.findAllByProductIdAndStatus(productId, status, PageRequest.of(page, size))
+        } else {
+            productTeamRelationRepository.findAllByProductId(productId, PageRequest.of(page, size))
+        }
+    }
+
 }

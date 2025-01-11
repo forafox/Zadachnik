@@ -23,12 +23,4 @@ data class TeamMeeting(
     @ManyToOne
     @JoinColumn(name = "team_id", referencedColumnName = "id")
     val team: Team,
-
-    @ManyToMany
-    @JoinTable(
-        name = "team_meeting_user",
-        joinColumns = [JoinColumn(name = "team_meeting_id", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")]
-    )
-    val users: Set<User> = emptySet()
 )

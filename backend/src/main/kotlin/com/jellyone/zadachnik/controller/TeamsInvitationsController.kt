@@ -1,9 +1,11 @@
 package com.jellyone.zadachnik.controller
 
+import com.jellyone.zadachnik.domain.UserTeamStatus
 import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.TeamsInvitationsService
 import com.jellyone.zadachnik.web.request.UpdateTeamInvitationRequest
 import com.jellyone.zadachnik.web.response.toResponse
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -50,16 +52,20 @@ class TeamsInvitationsController(
         status = request.status
     ).toResponse()
 
-
+    @Operation(
+        summary = "Возвращает все приглашения от данной команды",
+    )
     @GetMapping("")
-    fun getTeamInvitation(
+    fun getAllTeamInvitationByTeamId(
         @PathVariable("teamId") teamId: Long,
         @RequestParam(defaultValue = "0") page: Int,
-        @RequestParam(defaultValue = "10") size: Int
+        @RequestParam(defaultValue = "10") size: Int,
+        @RequestParam(required = false) status: UserTeamStatus?
     ) = teamsInvitationsService.getTeamInvitation(
         teamId = teamId,
         page = page,
-        size = size
+        size = size,
+        status = status
     ).map { teamTeamRelation ->
         teamTeamRelation.toResponse()
     }
