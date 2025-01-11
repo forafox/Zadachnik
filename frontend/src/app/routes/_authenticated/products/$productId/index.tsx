@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import { EditProductDialogContent } from "@/widgets/edit-product-dialog";
 import { getPrincipalQueryOptions } from "@/entities/principal";
 import { getProductByIdQueryOptions } from "@/entities/product";
+import { ProductInvitations } from "@/entities/product";
+import { ProductParticipants } from "@/entities/product";
 import { UserHoverCard } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
@@ -27,8 +29,6 @@ import {
 } from "@/shared/components/ui/card.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
 import { useDialog } from "@/shared/hooks/use-dialog.tsx";
-import { ProductInvitations } from "@/entities/product/ui/product-invitations.tsx";
-import { ProductParticipants } from "@/entities/product/ui/product-participants.tsx";
 
 export const Route = createFileRoute("/_authenticated/products/$productId/")({
   component: RouteComponent,

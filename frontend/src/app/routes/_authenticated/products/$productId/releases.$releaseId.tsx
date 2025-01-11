@@ -6,8 +6,7 @@ import { ArticleContent } from "@/entities/article";
 import { ArticleComments } from "@/entities/article";
 import { getReleaseByIdQueryOptions } from "@/entities/release";
 import { useReleaseBreadcrumbs } from "@/entities/release";
-import { TaskStatusBadge, TaskTypeBadge } from "@/entities/task";
-import { UserHoverAvatar } from "@/entities/user";
+import { TaskTypeBadge } from "@/entities/task";
 import {
   Card,
   CardContent,

@@ -1,10 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
-import {
-  invitationStatus,
-  teamInvitationSchema,
-  teamSchema,
-} from "@/entities/team";
+import { invitationStatus, teamSchema } from "@/entities/team";
 import { api } from "@/shared/api";
 import { generateMutation } from "@/shared/api/generate-mutation.tsx";
 import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";

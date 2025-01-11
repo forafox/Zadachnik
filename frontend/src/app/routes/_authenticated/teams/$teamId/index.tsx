@@ -6,6 +6,7 @@ import {
   useTeamsBreadcrumbs,
 } from "@/entities/team";
 import { TeamPendingInvitations } from "@/entities/team";
+import { TeamProductsInvitations } from "@/entities/team";
 import { UserHoverCard } from "@/entities/user";
 import {
   Card,
@@ -14,7 +15,6 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
-import { TeamProductsInvitations } from "@/entities/team/ui/product-invitations.tsx";
 
 export const Route = createFileRoute("/_authenticated/teams/$teamId/")({
   component: RouteComponent,
