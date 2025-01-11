@@ -1,9 +1,11 @@
 package com.jellyone.zadachnik.controller
 
+import com.jellyone.zadachnik.domain.ProductTeamStatus
 import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.ProductsInvitationsService
 import com.jellyone.zadachnik.web.request.UpdateProductInvitationRequest
 import com.jellyone.zadachnik.web.response.toResponse
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -61,6 +63,24 @@ class ProductsInvitationsController(
         productId = productId,
         page = page,
         size = size
+    ).map { productTeamRelation ->
+        productTeamRelation.toResponse()
+    }
+
+    @Operation(
+        summary = "Возвращает все приглашения от данной команды",
+    )
+    @GetMapping
+    fun getAllTeamProductInvitations(
+        @PathVariable("teamId") teamId: Long,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int,
+        @RequestParam(required = false) status: ProductTeamStatus?
+    ) = productsInvitationsService.getAllTeamProductInvitations(
+        teamId = teamId,
+        page = page,
+        size = size,
+        status = status
     ).map { productTeamRelation ->
         productTeamRelation.toResponse()
     }
