@@ -4,9 +4,17 @@ import { UserHoverCard } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 
 export function TeamPendingInvitations({ team }: { team: Team }) {
-  const { data: invitations} = useSuspenseQuery(
-    getTeamInvitationsQueryOptions({ ...defaultPagination, teamId: team.id, status: "PENDING"}),
+  const { data: invitations } = useSuspenseQuery(
+    getTeamInvitationsQueryOptions({
+      ...defaultPagination,
+      teamId: team.id,
+      status: "PENDING",
+    }),
   );
+
+  if (invitations.values.length == 0) {
+    return null;
+  }
 
   return (
     <section>
