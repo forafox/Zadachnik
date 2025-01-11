@@ -1,6 +1,7 @@
 package com.jellyone.zadachnik.controller
 
 import com.jellyone.zadachnik.exception.ErrorMessage
+import com.jellyone.zadachnik.service.CommentService
 import com.jellyone.zadachnik.service.TaskService
 import com.jellyone.zadachnik.service.TeamService
 import com.jellyone.zadachnik.web.request.CreateTeamRequest
@@ -36,7 +37,8 @@ import java.security.Principal
 )
 class TeamController(
     private val teamService: TeamService,
-    private val taskService: TaskService
+    private val taskService: TaskService,
+    private val commentService: CommentService
 ) {
     @PostMapping
     @Operation(
@@ -155,5 +157,14 @@ class TeamController(
         @PathVariable teamId: Long
     ) = taskService.getTasksByTeamId(teamId).map { task ->
         task.toResponse()
+    }
+
+    @GetMapping("/{teamId}/minutes")
+    fun getMinutesByTeamId(
+        @PathVariable teamId: Long,
+        @RequestParam(required = false, defaultValue = "0") page: Int,
+        @RequestParam(required = false, defaultValue = "10") size: Int
+    ) = commentService.getCommentsByTeamId(teamId, page, size).map { comment ->
+        comment.toResponse()
     }
 }
