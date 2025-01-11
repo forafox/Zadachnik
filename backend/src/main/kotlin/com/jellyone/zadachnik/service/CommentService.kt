@@ -43,4 +43,8 @@ class CommentService(
         return commentRepository.findAllByArticleId(articleId, PageRequest.of(page, size))
     }
 
+    fun getCommentsByTeamId(teamId: Long, page: Int, size: Int): Page<Comment> {
+        return commentRepository.findAllByTeamId(teamId, PageRequest.of(page, size))
+    }
+
 }
