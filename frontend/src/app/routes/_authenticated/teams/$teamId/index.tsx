@@ -5,7 +5,7 @@ import {
   TeamParticipants,
   useTeamsBreadcrumbs,
 } from "@/entities/team";
-import { TeamPendingInvitations } from "@/entities/team/ui/pending-invitations.tsx";
+import { TeamPendingInvitations } from "@/entities/team";
 import { UserHoverCard } from "@/entities/user";
 import {
   Card,

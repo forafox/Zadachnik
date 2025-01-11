@@ -123,8 +123,8 @@ export interface ContentDisposition {
    * @format date-time
    */
   readDate?: string;
-  inline?: boolean;
   attachment?: boolean;
+  inline?: boolean;
   formData?: boolean;
 }
 
@@ -168,39 +168,6 @@ export interface ErrorResponse {
     lastModified?: number;
     /** @format int64 */
     date?: number;
-    accessControlAllowOrigin?: string;
-    accessControlAllowMethods?: Array<HttpMethod>;
-    accessControlAllowHeaders?: Array<string>;
-    accessControlExposeHeaders?: Array<string>;
-    accessControlAllowCredentials?: boolean;
-    accessControlRequestMethod?: HttpMethod;
-    accessControlRequestHeaders?: Array<string>;
-    contentLanguage?: {
-      language?: string;
-      displayName?: string;
-      country?: string;
-      variant?: string;
-      script?: string;
-      /** @uniqueItems true */
-      unicodeLocaleAttributes?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleKeys?: Array<string>;
-      displayLanguage?: string;
-      displayScript?: string;
-      displayCountry?: string;
-      displayVariant?: string;
-      /** @uniqueItems true */
-      extensionKeys?: Array<string>;
-      iso3Language?: string;
-      iso3Country?: string;
-    };
-    cacheControl?: string;
-    acceptCharset?: Array<string>;
-    contentDisposition?: ContentDisposition;
-    /** @uniqueItems true */
-    allow?: Array<HttpMethod>;
-    range?: Array<HttpRange>;
-    origin?: string;
     /** @format int64 */
     accessControlMaxAge?: number;
     acceptPatch?: Array<MediaType>;
@@ -229,10 +196,43 @@ export interface ErrorResponse {
       iso3Language?: string;
       iso3Country?: string;
     }>;
+    acceptCharset?: Array<string>;
     bearerAuth?: string;
+    contentDisposition?: ContentDisposition;
+    contentLanguage?: {
+      language?: string;
+      displayName?: string;
+      country?: string;
+      variant?: string;
+      script?: string;
+      /** @uniqueItems true */
+      unicodeLocaleAttributes?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleKeys?: Array<string>;
+      displayLanguage?: string;
+      displayScript?: string;
+      displayCountry?: string;
+      displayVariant?: string;
+      /** @uniqueItems true */
+      extensionKeys?: Array<string>;
+      iso3Language?: string;
+      iso3Country?: string;
+    };
     ifNoneMatch?: Array<string>;
     /** @format int64 */
     ifUnmodifiedSince?: number;
+    cacheControl?: string;
+    range?: Array<HttpRange>;
+    /** @uniqueItems true */
+    allow?: Array<HttpMethod>;
+    origin?: string;
+    accessControlAllowOrigin?: string;
+    accessControlAllowMethods?: Array<HttpMethod>;
+    accessControlAllowHeaders?: Array<string>;
+    accessControlExposeHeaders?: Array<string>;
+    accessControlAllowCredentials?: boolean;
+    accessControlRequestMethod?: HttpMethod;
+    accessControlRequestHeaders?: Array<string>;
     etag?: string;
     accept?: Array<MediaType>;
     /** @format int64 */
@@ -273,8 +273,8 @@ export interface MediaType {
   wildcardType?: boolean;
   wildcardSubtype?: boolean;
   subtypeSuffix?: string;
-  concrete?: boolean;
   charset?: string;
+  concrete?: boolean;
 }
 
 export interface ProblemDetail {
@@ -415,9 +415,9 @@ export interface Page {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -429,8 +429,8 @@ export interface PageableObject {
   pageNumber?: number;
   /** @format int32 */
   pageSize?: number;
-  unpaged?: boolean;
   paged?: boolean;
+  unpaged?: boolean;
 }
 
 export interface SortObject {
@@ -454,9 +454,9 @@ export interface PageUserResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -498,9 +498,9 @@ export interface PageTeamResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -517,9 +517,9 @@ export interface PageProductResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -536,9 +536,9 @@ export interface PageTaskChangeResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -564,9 +564,9 @@ export interface PageUserTeamRelation {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -589,10 +589,10 @@ export interface User {
   fullName: string;
   role: "USER" | "ADMIN";
   isEnabled: boolean;
-  authorities: Array<SimpleGrantedAuthority>;
   isAccountNonExpired: boolean;
   isAccountNonLocked: boolean;
   isCredentialsNonExpired: boolean;
+  authorities: Array<SimpleGrantedAuthority>;
 }
 
 export interface UserTeamRelation {
@@ -603,19 +603,12 @@ export interface UserTeamRelation {
   status: "PENDING" | "ACCEPTED" | "REJECTED";
 }
 
-import type {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  HeadersDefaults,
-  ResponseType,
-} from "axios";
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface FullRequestParams
-  extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
+export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -630,13 +623,9 @@ export interface FullRequestParams
   body?: unknown;
 }
 
-export type RequestParams = Omit<
-  FullRequestParams,
-  "body" | "method" | "query" | "path"
->;
+export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
 
-export interface ApiConfig<SecurityDataType = unknown>
-  extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
+export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
@@ -658,16 +647,8 @@ export class HttpClient<SecurityDataType = unknown> {
   private secure?: boolean;
   private format?: ResponseType;
 
-  constructor({
-    securityWorker,
-    secure,
-    format,
-    ...axiosConfig
-  }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({
-      ...axiosConfig,
-      baseURL: axiosConfig.baseURL || "http://localhost:8080",
-    });
+  constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
+    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "http://localhost:8080" });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -677,10 +658,7 @@ export class HttpClient<SecurityDataType = unknown> {
     this.securityData = data;
   };
 
-  protected mergeRequestParams(
-    params1: AxiosRequestConfig,
-    params2?: AxiosRequestConfig,
-  ): AxiosRequestConfig {
+  protected mergeRequestParams(params1: AxiosRequestConfig, params2?: AxiosRequestConfig): AxiosRequestConfig {
     const method = params1.method || (params2 && params2.method);
 
     return {
@@ -688,11 +666,7 @@ export class HttpClient<SecurityDataType = unknown> {
       ...params1,
       ...(params2 || {}),
       headers: {
-        ...((method &&
-          this.instance.defaults.headers[
-            method.toLowerCase() as keyof HeadersDefaults
-          ]) ||
-          {}),
+        ...((method && this.instance.defaults.headers[method.toLowerCase() as keyof HeadersDefaults]) || {}),
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
@@ -713,15 +687,11 @@ export class HttpClient<SecurityDataType = unknown> {
     }
     return Object.keys(input || {}).reduce((formData, key) => {
       const property = input[key];
-      const propertyContent: any[] =
-        property instanceof Array ? property : [property];
+      const propertyContent: any[] = property instanceof Array ? property : [property];
 
       for (const formItem of propertyContent) {
         const isFileType = formItem instanceof Blob || formItem instanceof File;
-        formData.append(
-          key,
-          isFileType ? formItem : this.stringifyFormItem(formItem),
-        );
+        formData.append(key, isFileType ? formItem : this.stringifyFormItem(formItem));
       }
 
       return formData;
@@ -745,21 +715,11 @@ export class HttpClient<SecurityDataType = unknown> {
     const requestParams = this.mergeRequestParams(params, secureParams);
     const responseFormat = format || this.format || undefined;
 
-    if (
-      type === ContentType.FormData &&
-      body &&
-      body !== null &&
-      typeof body === "object"
-    ) {
+    if (type === ContentType.FormData && body && body !== null && typeof body === "object") {
       body = this.createFormData(body as Record<string, unknown>);
     }
 
-    if (
-      type === ContentType.Text &&
-      body &&
-      body !== null &&
-      typeof body !== "string"
-    ) {
+    if (type === ContentType.Text && body && body !== null && typeof body !== "string") {
       body = JSON.stringify(body);
     }
 
@@ -784,9 +744,7 @@ export class HttpClient<SecurityDataType = unknown> {
  *
  * Sample API
  */
-export class Api<
-  SecurityDataType extends unknown,
-> extends HttpClient<SecurityDataType> {
+export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
     /**
      * No description
@@ -796,11 +754,7 @@ export class Api<
      * @request GET:/api/teams/{teamId}/sprints/{sprintId}
      * @secure
      */
-    getSprintsByTeamIdAndSprintId: (
-      teamId: number,
-      sprintId: number,
-      params: RequestParams = {},
-    ) =>
+    getSprintsByTeamIdAndSprintId: (teamId: number, sprintId: number, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/teams/${teamId}/sprints/${sprintId}`,
         method: "GET",
@@ -918,11 +872,7 @@ export class Api<
      * @request POST:/api/teams/{teamId}/product-invitations/{productId}
      * @secure
      */
-    createProductInvitation: (
-      teamId: number,
-      productId: number,
-      params: RequestParams = {},
-    ) =>
+    createProductInvitation: (teamId: number, productId: number, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/teams/${teamId}/product-invitations/${productId}`,
         method: "POST",
@@ -961,11 +911,7 @@ export class Api<
      * @request POST:/api/teams/{teamId}/developer-invitations/{userId}
      * @secure
      */
-    createTeamInvitation: (
-      teamId: number,
-      userId: number,
-      params: RequestParams = {},
-    ) =>
+    createTeamInvitation: (teamId: number, userId: number, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/teams/${teamId}/developer-invitations/${userId}`,
         method: "POST",
@@ -1000,11 +946,7 @@ export class Api<
      * @request PUT:/api/teams/{id}
      * @secure
      */
-    updateTeamById: (
-      id: number,
-      data: UpdateTeamRequest,
-      params: RequestParams = {},
-    ) =>
+    updateTeamById: (id: number, data: UpdateTeamRequest, params: RequestParams = {}) =>
       this.request<TeamResponse, ErrorMessage | TeamResponse>({
         path: `/api/teams/${id}`,
         method: "PUT",
@@ -1024,11 +966,7 @@ export class Api<
      * @request GET:/api/products/{productId}/tasks/{taskId}
      * @secure
      */
-    getTaskById: (
-      taskId: number,
-      productId: number,
-      params: RequestParams = {},
-    ) =>
+    getTaskById: (taskId: number, productId: number, params: RequestParams = {}) =>
       this.request<TaskResponse, ErrorMessage | TaskResponse>({
         path: `/api/products/${productId}/tasks/${taskId}`,
         method: "GET",
@@ -1046,12 +984,7 @@ export class Api<
      * @request PUT:/api/products/{productId}/tasks/{taskId}
      * @secure
      */
-    updateTaskById: (
-      taskId: number,
-      productId: number,
-      data: CreateTaskRequest,
-      params: RequestParams = {},
-    ) =>
+    updateTaskById: (taskId: number, productId: number, data: CreateTaskRequest, params: RequestParams = {}) =>
       this.request<TaskResponse, ErrorMessage | TaskResponse>({
         path: `/api/products/${productId}/tasks/${taskId}`,
         method: "PUT",
@@ -1089,11 +1022,7 @@ export class Api<
      * @request PUT:/api/products/{id}
      * @secure
      */
-    updateProductById: (
-      id: number,
-      data: UpdateProductRequest,
-      params: RequestParams = {},
-    ) =>
+    updateProductById: (id: number, data: UpdateProductRequest, params: RequestParams = {}) =>
       this.request<ProductResponse, ErrorMessage | ErrorResponse>({
         path: `/api/products/${id}`,
         method: "PUT",
@@ -1128,11 +1057,7 @@ export class Api<
      * @request PUT:/api/articles/{id}
      * @secure
      */
-    updateArticle: (
-      id: number,
-      data: UpdateArticleRequest,
-      params: RequestParams = {},
-    ) =>
+    updateArticle: (id: number, data: UpdateArticleRequest, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/articles/${id}`,
         method: "PUT",
@@ -1236,11 +1161,7 @@ export class Api<
      * @request POST:/api/teams/{teamId}/sprints
      * @secure
      */
-    createSprint: (
-      teamId: number,
-      data: CreateSprintRequest,
-      params: RequestParams = {},
-    ) =>
+    createSprint: (teamId: number, data: CreateSprintRequest, params: RequestParams = {}) =>
       this.request<SprintResponse, ErrorMessage>({
         path: `/api/teams/${teamId}/sprints`,
         method: "POST",
@@ -1292,11 +1213,7 @@ export class Api<
      * @request POST:/api/teams/{teamId}/meetings
      * @secure
      */
-    createTeamMeeting: (
-      teamId: number,
-      data: CreateTeamMeetingRequest,
-      params: RequestParams = {},
-    ) =>
+    createTeamMeeting: (teamId: number, data: CreateTeamMeetingRequest, params: RequestParams = {}) =>
       this.request<TeamMeetingResponse, ErrorMessage>({
         path: `/api/teams/${teamId}/meetings`,
         method: "POST",
@@ -1315,12 +1232,7 @@ export class Api<
      * @request POST:/api/teams/{teamId}/meetings/{meetingId}/minutes
      * @secure
      */
-    createArticle: (
-      meetingId: number,
-      teamId: number,
-      data: CreateArticleRequest,
-      params: RequestParams = {},
-    ) =>
+    createArticle: (meetingId: number, teamId: number, data: CreateArticleRequest, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/teams/${teamId}/meetings/${meetingId}/minutes`,
         method: "POST",
@@ -1480,11 +1392,7 @@ export class Api<
      * @request POST:/api/products/{productId}/tasks
      * @secure
      */
-    createTask: (
-      productId: number,
-      data: CreateTaskRequest,
-      params: RequestParams = {},
-    ) =>
+    createTask: (productId: number, data: CreateTaskRequest, params: RequestParams = {}) =>
       this.request<TaskResponse, ErrorMessage>({
         path: `/api/products/${productId}/tasks`,
         method: "POST",
@@ -1530,12 +1438,7 @@ export class Api<
      * @request POST:/api/products/{productId}/tasks/{taskId}/comments
      * @secure
      */
-    createComment1: (
-      productId: number,
-      taskId: number,
-      data: CreateCommentRequest,
-      params: RequestParams = {},
-    ) =>
+    createComment1: (productId: number, taskId: number, data: CreateCommentRequest, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/products/${productId}/tasks/${taskId}/comments`,
         method: "POST",
@@ -1585,11 +1488,7 @@ export class Api<
      * @request POST:/api/products/{productId}/releases
      * @secure
      */
-    createProductRelease: (
-      productId: number,
-      data: CreateProductReleaseRequest,
-      params: RequestParams = {},
-    ) =>
+    createProductRelease: (productId: number, data: CreateProductReleaseRequest, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/products/${productId}/releases`,
         method: "POST",
@@ -1687,11 +1586,7 @@ export class Api<
      * @request POST:/api/articles/{articleId}/comments
      * @secure
      */
-    createArticleComment: (
-      articleId: number,
-      data: CreateCommentRequest,
-      params: RequestParams = {},
-    ) =>
+    createArticleComment: (articleId: number, data: CreateCommentRequest, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/articles/${articleId}/comments`,
         method: "POST",
@@ -1877,6 +1772,38 @@ export class Api<
     /**
      * No description
      *
+     * @tags Teams API
+     * @name GetMinutesByTeamId
+     * @request GET:/api/teams/{teamId}/minutes
+     * @secure
+     */
+    getMinutesByTeamId: (
+      teamId: number,
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        page?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        size?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/minutes`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Teams Invitations API
      * @name GetAllTeamInvitationByTeamId
      * @summary Возвращает все приглашения от данной команды
@@ -1902,6 +1829,38 @@ export class Api<
     ) =>
       this.request<any, ErrorMessage>({
         path: `/api/teams/${teamId}/developer-invitations`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Sprints API
+     * @name GetSprintsByProductId
+     * @request GET:/api/teams/products/{productId}/sprints
+     * @secure
+     */
+    getSprintsByProductId: (
+      productId: number,
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageNumber?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/products/${productId}/sprints`,
         method: "GET",
         query: query,
         secure: true,
@@ -1983,11 +1942,7 @@ export class Api<
      * @request GET:/api/products/{productId}/releases/{releaseId}
      * @secure
      */
-    getProductReleaseById: (
-      productId: number,
-      releaseId: number,
-      params: RequestParams = {},
-    ) =>
+    getProductReleaseById: (productId: number, releaseId: number, params: RequestParams = {}) =>
       this.request<any, ErrorMessage>({
         path: `/api/products/${productId}/releases/${releaseId}`,
         method: "GET",

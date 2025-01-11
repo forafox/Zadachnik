@@ -1,5 +1,5 @@
 import z from "zod";
-import { articleSchema } from "@/entities/article/model.ts";
+import { articleSchema } from "@/entities/article";
 import { commentSchema } from "@/entities/comment";
 import { api } from "@/shared/api";
 import { generateMutation } from "@/shared/api/generate-mutation.tsx";

@@ -133,4 +133,13 @@ class SprintController(
     ) = sprintService.getSprintsByTeamId(teamId, pageNumber, pageSize).map { sprint ->
         sprint.toResponse()
     }
+
+    @GetMapping("/products/{productId}/sprints")
+    fun getSprintsByProductId(
+        @PathVariable("productId") productId: Long,
+        @RequestParam(defaultValue = "0") pageNumber: Int,
+        @RequestParam(defaultValue = "10") pageSize: Int
+    ) = sprintService.getSprintsByProductId(productId, pageNumber, pageSize).map { sprint ->
+        sprint.toResponse()
+    }
 }

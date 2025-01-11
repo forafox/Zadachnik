@@ -6,6 +6,7 @@ import com.jellyone.zadachnik.domain.enums.TeamMeetingType
 import com.jellyone.zadachnik.exception.ResourceNotFoundException
 import com.jellyone.zadachnik.repository.ArticleRepository
 import com.jellyone.zadachnik.repository.TeamMeetingRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -32,6 +33,8 @@ class TeamMeetingService(
             )
         )
     }
+
+    fun getTeamMeetings(teamId: Long, page: Int, size: Int) = teamMeetingRepository.findAllById(teamId, PageRequest.of(page, size))
 
     fun updateTeamMeetingById(
         id: Long,
