@@ -8,6 +8,7 @@ import { initReactI18next } from "react-i18next";
 import auth from "@/shared/locales/en/auth.json";
 import common from "@/shared/locales/en/common.json";
 import landing from "@/shared/locales/en/landing.json";
+import meeting from "@/shared/locales/en/meeting.json";
 import principal from "@/shared/locales/en/principal.json";
 import product from "@/shared/locales/en/product.json";
 import release from "@/shared/locales/en/release.json";
@@ -49,6 +50,7 @@ export const resources = {
     sprint,
     task,
     release,
+    meeting,
   },
 } as const;
 

@@ -1,6 +1,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+  getTeamMeetingsQueryOptions,
+  useMeetingsTable,
+} from "@/entities/meeting";
 import { getTeamQueryOptions, useTeamsBreadcrumbs } from "@/entities/team";
+import { DataTable } from "@/shared/components/data-table.tsx";
 
 export const Route = createFileRoute("/_authenticated/teams/$teamId/meetings")({
   component: RouteComponent,
@@ -13,8 +18,19 @@ export const Route = createFileRoute("/_authenticated/teams/$teamId/meetings")({
 
 function RouteComponent() {
   const teamId = parseInt(Route.useParams().teamId);
-  const { data } = useSuspenseQuery(getTeamQueryOptions(teamId));
-  useTeamsBreadcrumbs(data, "meetings");
+  const { data: team } = useSuspenseQuery(getTeamQueryOptions(teamId));
+  useTeamsBreadcrumbs(team, "meetings");
+  const { data: meetings } = useSuspenseQuery(
+    getTeamMeetingsQueryOptions({ teamId, page: 1, pageSize: 50 }),
+  );
+  const table = useMeetingsTable(meetings.values);
 
-  return "Hello /_authenticated/teams/$teamId/meetings!";
+  return (
+    <div>
+      <header></header>
+      <main>
+        <DataTable table={table} />
+      </main>
+    </div>
+  );
 }

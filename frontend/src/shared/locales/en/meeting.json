@@ -1,0 +1,15 @@
+{
+  "items": {
+    "date": {
+      "label": "Date"
+    },
+    "type": {
+      "label": "Meeting Type",
+      "items": {
+        "planning": {
+          "label": "Sprint Planning"
+        }
+      }
+    }
+  }
+}
