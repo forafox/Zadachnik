@@ -28,4 +28,8 @@ interface ProductTeamRelationRepository : JpaRepository<ProductTeamRelation, Lon
         """
     )
     fun findAllTeamsByProductId(productId: Long, pageable: Pageable): Page<Team>
+
+    fun findAllByTeamId(teamId: Long, pageable: Pageable): Page<ProductTeamRelation>
+
+    fun findAllByTeamIdAndStatus(teamId: Long, status: ProductTeamStatus, pageable: Pageable): Page<ProductTeamRelation>
 }
