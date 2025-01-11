@@ -37,7 +37,7 @@ const columnDef: Array<ColumnDef<Release>> = [
     cell: ({ row }) => {
       const { tasks } = row.original;
       return (
-        <>
+        <div className="flex flex-row flex-wrap gap-2">
           {tasks.map((task) => (
             <Link
               key={task.id}
@@ -50,7 +50,7 @@ const columnDef: Array<ColumnDef<Release>> = [
               <TaskTypeBadge type={task.type}>{task.title}</TaskTypeBadge>
             </Link>
           ))}
-        </>
+        </div>
       );
     },
   },
