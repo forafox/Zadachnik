@@ -152,6 +152,29 @@ class TeamsInvitationsControllerTest {
         assert(content.isNotEmpty()) { "Content should not be empty" }
     }
 
+    @Order(6)
+    @Test
+    fun getAllTeamInvitationsForUser() {
+        val teamId = 1L
+        val userId = 1L
+        RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .queryParam("page", 0)
+            .queryParam("size", 10)
+            .`when`()
+            .get("/api/me/team-invitations")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .jsonPath()
+            .let { response ->
+                val content: List<Map<String, Any>> = response.getList("content")
+                assert(content.isNotEmpty()) { "Content should not be empty" }
+                assert(content[0]["id"] != null) { "First invitation should have an ID" }
+            }
+    }
+
     private fun registerTestUser() {
         val signUpRequest = SignUpRequest(username = "testuser", fullName = "Test User", password = "password")
         RestAssured.given()
