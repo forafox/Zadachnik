@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Repeat, UserCog } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
+  getTeamParticipantsQueryOptions,
   getTeamQueryOptions,
   TeamLink,
   useTeamsBreadcrumbs,
@@ -52,25 +53,29 @@ function RouteComponent() {
       </CardContent>
       <Separator orientation="horizontal" />
       <CardContent className="space-y-6 px-0 py-4 [&>section]:px-6">
-        <section>
-          <header className="flex items-center">
-            <h4 className="my-auto">{t("items.participants.label")}</h4>
-          </header>
-          <main>
-            <ul>
-              <li>TBD</li>
-              <li>TBD</li>
-              <li>TBD</li>
-              <li>TBD</li>
-            </ul>
-          </main>
-          <footer>
-            <Button variant="outline">
-              <UserCog /> {t("actions.manage.label")}
-            </Button>
-          </footer>
-        </section>
+        <TeamParticipants teamId={teamId} />
       </CardContent>
     </Card>
+  );
+}
+
+function TeamParticipants({ teamId }: { teamId: number }) {
+  const { data: participants } = useSuspenseQuery(
+    getTeamParticipantsQueryOptions({ teamId, page: 1, pageSize: 50 }),
+  );
+
+  return (
+    <section>
+      <header>
+        <h4>Participants</h4>
+      </header>
+      <main>
+        <ul>
+          {participants.values.map((user) => (
+            <UserHoverCard user={user} />
+          ))}
+        </ul>
+      </main>
+    </section>
   );
 }

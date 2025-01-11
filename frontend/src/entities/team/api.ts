@@ -1,9 +1,12 @@
 import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 import { api } from "@/shared/api";
+import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
 import {
+  fromBackendPagination,
   paginatedRequestSchema,
   paginatedResponseSchema,
+  toBackendPagination,
 } from "@/shared/api/schemas";
 import { userSchema } from "../user";
 
@@ -48,3 +51,17 @@ export const getTeamQueryOptions = (id: number) => {
     },
   });
 };
+
+export const getTeamParticipantsQueryOptions = generateQueryOptions(
+  paginatedResponseSchema(userSchema),
+  paginatedRequestSchema.extend({ teamId: z.number() }),
+  async ({ teamId, ...req }) => {
+    const { data } = await api.api.getUsersOfTeams(
+      teamId,
+      toBackendPagination(req),
+    );
+    // @ts-expect-error bad backend typing
+    return fromBackendPagination(data);
+  },
+  ({ teamId, ...req }) => ["teams", teamId, "participants", req],
+);
