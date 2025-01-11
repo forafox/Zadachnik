@@ -8,13 +8,13 @@ import { initReactI18next } from "react-i18next";
 import auth from "@/shared/locales/en/auth.json";
 import common from "@/shared/locales/en/common.json";
 import landing from "@/shared/locales/en/landing.json";
+import meeting from "@/shared/locales/en/meeting.json";
 import principal from "@/shared/locales/en/principal.json";
 import product from "@/shared/locales/en/product.json";
 import release from "@/shared/locales/en/release.json";
 import sprint from "@/shared/locales/en/sprint.json";
 import task from "@/shared/locales/en/task.json";
 import team from "@/shared/locales/en/team.json";
-import meeting from "@/shared/locales/en/meeting.json";
 import { routeTree } from "@/routeTree.gen";
 
 const queryClient = new QueryClient({
