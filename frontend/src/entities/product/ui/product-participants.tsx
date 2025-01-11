@@ -9,7 +9,7 @@ import {
   useInviteTeamToProductMutation,
 } from "@/entities/product";
 import { Team } from "@/entities/team";
-import { SelectTeam } from "@/entities/team/ui/select-team.tsx";
+import { SelectTeam } from "@/entities/team";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
