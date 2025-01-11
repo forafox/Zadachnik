@@ -21,3 +21,4 @@ export const getTeamMeetingsQueryOptions = generateQueryOptions(
   },
   ({ teamId, ...req }) => ["teams", teamId, "meetings", req],
 );
+
