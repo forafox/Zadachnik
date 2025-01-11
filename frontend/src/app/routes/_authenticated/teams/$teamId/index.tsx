@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
+import { TeamProductsInvitations } from "@/entities/team/ui/product-invitations.tsx";
 
 export const Route = createFileRoute("/_authenticated/teams/$teamId/")({
   component: RouteComponent,
@@ -44,6 +45,7 @@ function RouteComponent() {
       <CardContent className="space-y-6 px-0 py-4 [&>section]:px-6">
         <TeamParticipants team={team} />
         <TeamPendingInvitations team={team} />
+        <TeamProductsInvitations team={team} />
       </CardContent>
     </Card>
   );
