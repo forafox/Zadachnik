@@ -1,15 +1,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { Repeat, UserCog } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import {
-  getTeamParticipantsQueryOptions,
   getTeamQueryOptions,
-  TeamLink,
+  TeamParticipants,
   useTeamsBreadcrumbs,
 } from "@/entities/team";
 import { UserHoverCard } from "@/entities/user";
-import { Button } from "@/shared/components/ui/button.tsx";
 import {
   Card,
   CardContent,
@@ -17,6 +13,7 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
+import { TeamPendingInvitations } from "@/entities/team/ui/pending-invitations.tsx";
 
 export const Route = createFileRoute("/_authenticated/teams/$teamId/")({
   component: RouteComponent,
@@ -30,7 +27,6 @@ export const Route = createFileRoute("/_authenticated/teams/$teamId/")({
 function RouteComponent() {
   const teamId = parseInt(Route.useParams().teamId);
   const { data: team } = useSuspenseQuery(getTeamQueryOptions(teamId));
-  const { t } = useTranslation("team");
   useTeamsBreadcrumbs(team);
 
   return (
@@ -43,39 +39,12 @@ function RouteComponent() {
       <Separator orientation="horizontal" />
       <CardContent className="flex items-center gap-4 py-4">
         <UserHoverCard user={team.scrumMaster} />
-        <Button variant="link" asChild>
-          <TeamLink
-            before={<Repeat className="" />}
-            team={team}
-            section="sprints"
-          />
-        </Button>
       </CardContent>
       <Separator orientation="horizontal" />
       <CardContent className="space-y-6 px-0 py-4 [&>section]:px-6">
-        <TeamParticipants teamId={teamId} />
+        <TeamParticipants team={team} />
+        <TeamPendingInvitations team={team} />
       </CardContent>
     </Card>
-  );
-}
-
-function TeamParticipants({ teamId }: { teamId: number }) {
-  const { data: participants } = useSuspenseQuery(
-    getTeamParticipantsQueryOptions({ teamId, page: 1, pageSize: 50 }),
-  );
-
-  return (
-    <section>
-      <header>
-        <h4>Participants</h4>
-      </header>
-      <main>
-        <ul>
-          {participants.values.map((user) => (
-            <UserHoverCard user={user} />
-          ))}
-        </ul>
-      </main>
-    </section>
   );
 }

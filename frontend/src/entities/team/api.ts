@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 import { api } from "@/shared/api";
+import { generateMutation } from "@/shared/api/generate-mutation.tsx";
 import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
 import {
   fromBackendPagination,
@@ -64,4 +65,40 @@ export const getTeamParticipantsQueryOptions = generateQueryOptions(
     return fromBackendPagination(data);
   },
   ({ teamId, ...req }) => ["teams", teamId, "participants", req],
+);
+
+const teamInvitationStatus = z.enum(["PENDING", "ACCEPTED", "REJECTED"]);
+
+const teamInvitationSchema = z.object({
+  id: z.number(),
+  team: teamSchema,
+  user: userSchema,
+  status: teamInvitationStatus,
+});
+
+export const getTeamInvitationsQueryOptions = generateQueryOptions(
+  paginatedResponseSchema(teamInvitationSchema),
+  paginatedRequestSchema.extend({
+    teamId: z.number(),
+    status: teamInvitationStatus.optional(),
+  }),
+  async ({ teamId, status, ...req }) => {
+    const { data } = await api.api.getAllTeamInvitationByTeamId(teamId, {
+      ...toBackendPagination(req),
+      status,
+    });
+
+    return fromBackendPagination(data);
+  },
+  ({ teamId, ...req }) => ["teams", teamId, "invitations", req],
+);
+
+export const useInviteDeveloperMutation = generateMutation(
+  z.object({ teamId: z.number(), userId: z.number() }),
+  z.void(),
+  async ({ teamId, userId }) => {
+    await api.api.createTeamInvitation(teamId, userId);
+
+    return;
+  },
 );
