@@ -21,6 +21,7 @@ class SprintService(
     private val taskService: TaskService,
     private val userService: UserService,
     private val teamService: TeamService,
+    private val productService: ProductService,
     private val meetingService: TeamMeetingService
 ) {
     fun createSprint(teamId: Long, sprintModel: SprintModel): Sprint {
@@ -114,6 +115,10 @@ class SprintService(
     fun getSprintsByTeamId(teamId: Long, page: Int, pageSize: Int): Page<Sprint> {
         val pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "startAt"))
         return sprintRepository.findAllByTeamId(teamId, pageable)
+    }
+
+    fun getSprintsByProductId(productId: Long, page: Int, pageSize: Int): Page<Sprint> {
+        return sprintRepository.findAllByProductId(productId, PageRequest.of(page, pageSize))
     }
 
     private fun createPlanningMeeting(team: Team, sprint: SprintModel) = meetingService.createTeamMeeting(
