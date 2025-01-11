@@ -67,20 +67,21 @@ export const getTeamParticipantsQueryOptions = generateQueryOptions(
   ({ teamId, ...req }) => ["teams", teamId, "participants", req],
 );
 
-const teamInvitationStatus = z.enum(["PENDING", "ACCEPTED", "REJECTED"]);
+export const invitationStatus = z.enum(["PENDING", "ACCEPTED", "REJECTED"]);
 
-const teamInvitationSchema = z.object({
+export const teamInvitationSchema = z.object({
   id: z.number(),
   team: teamSchema,
   user: userSchema,
-  status: teamInvitationStatus,
+  status: invitationStatus,
 });
+export type TeamInvitation = z.infer<typeof teamInvitationSchema>;
 
 export const getTeamInvitationsQueryOptions = generateQueryOptions(
   paginatedResponseSchema(teamInvitationSchema),
   paginatedRequestSchema.extend({
     teamId: z.number(),
-    status: teamInvitationStatus.optional(),
+    status: invitationStatus.optional(),
   }),
   async ({ teamId, status, ...req }) => {
     const { data } = await api.api.getAllTeamInvitationByTeamId(teamId, {
