@@ -80,4 +80,17 @@ class ProductsInvitationsService(
         }
     }
 
+    fun getAllProductInvitationByProductId(
+        productId: Long,
+        page: Int,
+        size: Int,
+        status: ProductTeamStatus?
+    ): Page<ProductTeamRelation> {
+        return if (status != null) {
+            productTeamRelationRepository.findAllByProductIdAndStatus(productId, status, PageRequest.of(page, size))
+        } else {
+            productTeamRelationRepository.findAllByProductId(productId, PageRequest.of(page, size))
+        }
+    }
+
 }

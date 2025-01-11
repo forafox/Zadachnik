@@ -1,5 +1,6 @@
 package com.jellyone.zadachnik.controller
 
+import com.jellyone.zadachnik.domain.ProductTeamStatus
 import com.jellyone.zadachnik.domain.enums.TaskStatus
 import com.jellyone.zadachnik.exception.ErrorMessage
 import com.jellyone.zadachnik.service.ProductService
@@ -199,5 +200,23 @@ class ProductController(
         @RequestParam(required = false, defaultValue = "10") size: Int
     ) = productInvitationsService.getProductTeams(productId, page, size).map { team ->
         team.toResponse()
+    }
+
+    @Operation(
+        summary = "Возвращает все приглашения от данного продукта"
+    )
+    @GetMapping("/{productId}/product-invitations")
+    fun getAllProductInvitationsByProductId(
+        @PathVariable("productId") productId: Long,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int,
+        @RequestParam(required = false) status: ProductTeamStatus?
+    ) = productInvitationsService.getAllProductInvitationByProductId(
+        productId = productId,
+        page = page,
+        size = size,
+        status = status
+    ).map { productTeamRelation ->
+        productTeamRelation.toResponse()
     }
 }
