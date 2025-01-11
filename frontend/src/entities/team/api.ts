@@ -27,7 +27,7 @@ export const getPrincipalTeamsQueryOptions = (
 ) => {
   const query = getTeamsRequestSchema.parse(queryRaw);
   return queryOptions({
-    queryKey: ["teams", "list", query],
+    queryKey: ["teams", "list_principal", query],
     queryFn: async () => {
       const { data } = await api.api.getTeamsOfCurrentUser({
         size: query.pageSize,
@@ -39,6 +39,19 @@ export const getPrincipalTeamsQueryOptions = (
         total: data.totalElements,
         values: data.content,
       });
+    },
+  });
+};
+
+export const getTeamsQueryOptions = (
+  queryRaw: z.infer<typeof getTeamsRequestSchema>,
+) => {
+  const query = getTeamsRequestSchema.parse(queryRaw);
+  return queryOptions({
+    queryKey: ["teams", "list", query],
+    queryFn: async () => {
+      const { data } = await api.api.getTeams(toBackendPagination(query));
+      return getTeamsResponseSchema.parse(fromBackendPagination(data));
     },
   });
 };
@@ -61,7 +74,6 @@ export const getTeamParticipantsQueryOptions = generateQueryOptions(
       teamId,
       toBackendPagination(req),
     );
-    // @ts-expect-error bad backend typing
     return fromBackendPagination(data);
   },
   ({ teamId, ...req }) => ["teams", teamId, "participants", req],
@@ -75,6 +87,7 @@ export const teamInvitationSchema = z.object({
   user: userSchema,
   status: invitationStatus,
 });
+
 export type TeamInvitation = z.infer<typeof teamInvitationSchema>;
 
 export const getTeamInvitationsQueryOptions = generateQueryOptions(
@@ -101,5 +114,33 @@ export const useInviteDeveloperMutation = generateMutation(
     await api.api.createTeamInvitation(teamId, userId);
 
     return;
+  },
+);
+
+export const getPrincipalTeamInvitations = generateQueryOptions(
+  paginatedResponseSchema(teamInvitationSchema),
+  paginatedRequestSchema,
+  async (req) => {
+    const { data } = await api.api.getAllTeamInvitationsForUser(
+      toBackendPagination(req),
+    );
+
+    return fromBackendPagination(data);
+  },
+  (req) => ["principal", "invitations", req],
+);
+
+export const useRespondToTeamInvitationMutation = generateMutation(
+  z.object({
+    teamId: z.number(),
+    userId: z.number(),
+    status: invitationStatus,
+  }),
+  teamInvitationSchema,
+  async ({ teamId, userId, status }) => {
+    const { data } = await api.api.updateTeamInvitation(teamId, userId, {
+      status,
+    });
+    return data;
   },
 );

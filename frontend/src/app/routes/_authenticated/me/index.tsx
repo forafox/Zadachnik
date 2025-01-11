@@ -2,12 +2,12 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { CheckIcon, XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { getPrincipalQueryOptions } from "@/entities/principal";
 import {
-  getPrincipalQueryOptions,
   getPrincipalTeamInvitations,
+  TeamInvitation,
   useRespondToTeamInvitationMutation,
-} from "@/entities/principal";
-import { TeamInvitation } from "@/entities/team";
+} from "@/entities/team";
 import { UserHoverCard } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { Button } from "@/shared/components/ui/button.tsx";

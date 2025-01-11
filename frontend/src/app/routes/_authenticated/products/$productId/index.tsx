@@ -27,6 +27,8 @@ import {
 } from "@/shared/components/ui/card.tsx";
 import { Separator } from "@/shared/components/ui/separator.tsx";
 import { useDialog } from "@/shared/hooks/use-dialog.tsx";
+import { ProductInvitations } from "@/entities/product/ui/product-invitations.tsx";
+import { ProductParticipants } from "@/entities/product/ui/product-participants.tsx";
 
 export const Route = createFileRoute("/_authenticated/products/$productId/")({
   component: RouteComponent,
@@ -100,15 +102,8 @@ function RouteComponent() {
         </CardContent>
         <Separator orientation="horizontal" />
         <CardContent className="py-4">
-          <div>
-            <h6>{t("items.participants.label")}</h6>
-            <ul>
-              <li>TBD</li>
-              <li>TBD</li>
-              <li>TBD</li>
-              <li>TBD</li>
-            </ul>
-          </div>
+          <ProductParticipants product={product} />
+          <ProductInvitations product={product} />
         </CardContent>
       </Card>
     </div>
