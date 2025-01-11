@@ -3,6 +3,7 @@ package com.jellyone.zadachnik.service
 import com.jellyone.zadachnik.domain.UserTeamRelation
 import com.jellyone.zadachnik.domain.UserTeamStatus
 import com.jellyone.zadachnik.repository.UserTeamRelationRepository
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
@@ -49,11 +50,13 @@ class TeamsInvitationsService(
 
     }
 
-    fun getTeamInvitation(teamId: Long, size: Int, page: Int) =
-        userTeamRelationRepository.findAllByTeamId(
-            teamId = teamId,
-            PageRequest.of(page, size)
-        )
+    fun getTeamInvitation(teamId: Long, size: Int, page: Int,status: UserTeamStatus?): Page<UserTeamRelation> {
+        return if (status != null) {
+            userTeamRelationRepository.findAllByTeamIdAndStatus(teamId, status, PageRequest.of(page, size))
+        } else {
+            userTeamRelationRepository.findAllByTeamId(teamId, PageRequest.of(page, size))
+        }
+        }
 
     fun getUsersOfTeams(teamId: Long, page: Int, size: Int) =
         userTeamRelationRepository.findAllUsersOfTeams(

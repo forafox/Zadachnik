@@ -67,7 +67,7 @@ class ProductsInvitationsService(
     ) = productTeamRelationRepository.findAllTeamsByProductId(productId, PageRequest.of(page, size))
 
 
-    fun getAllTeamProductInvitations(
+    fun getAllTeamProductInvitationsByTeamId(
         teamId: Long,
         page: Int,
         size: Int,
