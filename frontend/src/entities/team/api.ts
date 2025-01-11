@@ -1,9 +1,13 @@
 import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 import { api } from "@/shared/api";
+import { generateMutation } from "@/shared/api/generate-mutation.tsx";
+import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
 import {
+  fromBackendPagination,
   paginatedRequestSchema,
   paginatedResponseSchema,
+  toBackendPagination,
 } from "@/shared/api/schemas";
 import { userSchema } from "../user";
 
@@ -48,3 +52,54 @@ export const getTeamQueryOptions = (id: number) => {
     },
   });
 };
+
+export const getTeamParticipantsQueryOptions = generateQueryOptions(
+  paginatedResponseSchema(userSchema),
+  paginatedRequestSchema.extend({ teamId: z.number() }),
+  async ({ teamId, ...req }) => {
+    const { data } = await api.api.getUsersOfTeams(
+      teamId,
+      toBackendPagination(req),
+    );
+    // @ts-expect-error bad backend typing
+    return fromBackendPagination(data);
+  },
+  ({ teamId, ...req }) => ["teams", teamId, "participants", req],
+);
+
+export const invitationStatus = z.enum(["PENDING", "ACCEPTED", "REJECTED"]);
+
+export const teamInvitationSchema = z.object({
+  id: z.number(),
+  team: teamSchema,
+  user: userSchema,
+  status: invitationStatus,
+});
+export type TeamInvitation = z.infer<typeof teamInvitationSchema>;
+
+export const getTeamInvitationsQueryOptions = generateQueryOptions(
+  paginatedResponseSchema(teamInvitationSchema),
+  paginatedRequestSchema.extend({
+    teamId: z.number(),
+    status: invitationStatus.optional(),
+  }),
+  async ({ teamId, status, ...req }) => {
+    const { data } = await api.api.getAllTeamInvitationByTeamId(teamId, {
+      ...toBackendPagination(req),
+      status,
+    });
+
+    return fromBackendPagination(data);
+  },
+  ({ teamId, ...req }) => ["teams", teamId, "invitations", req],
+);
+
+export const useInviteDeveloperMutation = generateMutation(
+  z.object({ teamId: z.number(), userId: z.number() }),
+  z.void(),
+  async ({ teamId, userId }) => {
+    await api.api.createTeamInvitation(teamId, userId);
+
+    return;
+  },
+);

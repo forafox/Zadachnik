@@ -123,8 +123,8 @@ export interface ContentDisposition {
    * @format date-time
    */
   readDate?: string;
-  inline?: boolean;
   attachment?: boolean;
+  inline?: boolean;
   formData?: boolean;
 }
 
@@ -168,39 +168,6 @@ export interface ErrorResponse {
     lastModified?: number;
     /** @format int64 */
     date?: number;
-    accessControlAllowOrigin?: string;
-    accessControlAllowMethods?: Array<HttpMethod>;
-    accessControlAllowHeaders?: Array<string>;
-    accessControlExposeHeaders?: Array<string>;
-    accessControlAllowCredentials?: boolean;
-    accessControlRequestMethod?: HttpMethod;
-    accessControlRequestHeaders?: Array<string>;
-    contentLanguage?: {
-      language?: string;
-      displayName?: string;
-      country?: string;
-      variant?: string;
-      script?: string;
-      /** @uniqueItems true */
-      unicodeLocaleAttributes?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleKeys?: Array<string>;
-      displayLanguage?: string;
-      displayScript?: string;
-      displayCountry?: string;
-      displayVariant?: string;
-      /** @uniqueItems true */
-      extensionKeys?: Array<string>;
-      iso3Language?: string;
-      iso3Country?: string;
-    };
-    cacheControl?: string;
-    acceptCharset?: Array<string>;
-    contentDisposition?: ContentDisposition;
-    /** @uniqueItems true */
-    allow?: Array<HttpMethod>;
-    range?: Array<HttpRange>;
-    origin?: string;
     /** @format int64 */
     accessControlMaxAge?: number;
     acceptPatch?: Array<MediaType>;
@@ -229,10 +196,43 @@ export interface ErrorResponse {
       iso3Language?: string;
       iso3Country?: string;
     }>;
+    acceptCharset?: Array<string>;
     bearerAuth?: string;
+    contentDisposition?: ContentDisposition;
+    contentLanguage?: {
+      language?: string;
+      displayName?: string;
+      country?: string;
+      variant?: string;
+      script?: string;
+      /** @uniqueItems true */
+      unicodeLocaleAttributes?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleKeys?: Array<string>;
+      displayLanguage?: string;
+      displayScript?: string;
+      displayCountry?: string;
+      displayVariant?: string;
+      /** @uniqueItems true */
+      extensionKeys?: Array<string>;
+      iso3Language?: string;
+      iso3Country?: string;
+    };
     ifNoneMatch?: Array<string>;
     /** @format int64 */
     ifUnmodifiedSince?: number;
+    cacheControl?: string;
+    range?: Array<HttpRange>;
+    /** @uniqueItems true */
+    allow?: Array<HttpMethod>;
+    origin?: string;
+    accessControlAllowOrigin?: string;
+    accessControlAllowMethods?: Array<HttpMethod>;
+    accessControlAllowHeaders?: Array<string>;
+    accessControlExposeHeaders?: Array<string>;
+    accessControlAllowCredentials?: boolean;
+    accessControlRequestMethod?: HttpMethod;
+    accessControlRequestHeaders?: Array<string>;
     etag?: string;
     accept?: Array<MediaType>;
     /** @format int64 */
@@ -273,8 +273,8 @@ export interface MediaType {
   wildcardType?: boolean;
   wildcardSubtype?: boolean;
   subtypeSuffix?: string;
-  concrete?: boolean;
   charset?: string;
+  concrete?: boolean;
 }
 
 export interface ProblemDetail {
@@ -415,9 +415,9 @@ export interface Page {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -429,8 +429,8 @@ export interface PageableObject {
   pageNumber?: number;
   /** @format int32 */
   pageSize?: number;
-  unpaged?: boolean;
   paged?: boolean;
+  unpaged?: boolean;
 }
 
 export interface SortObject {
@@ -454,9 +454,9 @@ export interface PageUserResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -498,9 +498,9 @@ export interface PageTeamResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -517,9 +517,9 @@ export interface PageProductResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -536,9 +536,9 @@ export interface PageTaskChangeResponse {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -564,9 +564,9 @@ export interface PageUserTeamRelation {
   /** @format int32 */
   number?: number;
   sort?: Array<SortObject>;
-  pageable?: PageableObject;
   /** @format int32 */
   numberOfElements?: number;
+  pageable?: PageableObject;
   empty?: boolean;
 }
 
@@ -589,10 +589,10 @@ export interface User {
   fullName: string;
   role: "USER" | "ADMIN";
   isEnabled: boolean;
-  authorities: Array<SimpleGrantedAuthority>;
   isAccountNonExpired: boolean;
   isAccountNonLocked: boolean;
   isCredentialsNonExpired: boolean;
+  authorities: Array<SimpleGrantedAuthority>;
 }
 
 export interface UserTeamRelation {
@@ -1772,6 +1772,38 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Teams API
+     * @name GetMinutesByTeamId
+     * @request GET:/api/teams/{teamId}/minutes
+     * @secure
+     */
+    getMinutesByTeamId: (
+      teamId: number,
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        page?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        size?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/${teamId}/minutes`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Teams Invitations API
      * @name GetAllTeamInvitationByTeamId
      * @summary Возвращает все приглашения от данной команды
@@ -1797,6 +1829,38 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<any, ErrorMessage>({
         path: `/api/teams/${teamId}/developer-invitations`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Sprints API
+     * @name GetSprintsByProductId
+     * @request GET:/api/teams/products/{productId}/sprints
+     * @secure
+     */
+    getSprintsByProductId: (
+      productId: number,
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageNumber?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, ErrorMessage>({
+        path: `/api/teams/products/${productId}/sprints`,
         method: "GET",
         query: query,
         secure: true,
