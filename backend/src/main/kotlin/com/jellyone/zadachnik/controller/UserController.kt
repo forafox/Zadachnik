@@ -1,5 +1,6 @@
 package com.jellyone.zadachnik.controller
 
+import com.jellyone.zadachnik.domain.UserTeamStatus
 import com.jellyone.zadachnik.service.ProductService
 import com.jellyone.zadachnik.service.TeamService
 import com.jellyone.zadachnik.service.TeamsInvitationsService
@@ -161,4 +162,20 @@ class UserController(
     ) = teamsInvitationsService.getUsersOfTeams(teamId, page, size).map { team ->
         team.toResponse()
     }
+
+    @GetMapping("/me/team-invitations")
+    @Operation(
+        summary = "Возвращает все приглашения данного разработчика в команды"
+    )
+    fun getAllTeamInvitationsForUser(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int,
+        @RequestParam(required = false) status: UserTeamStatus?,
+        principal: Principal
+    ) = teamsInvitationsService.getAllTeamInvitationByUsername(
+        page = page,
+        size = size,
+        status = status,
+        username = principal.name
+    )
 }

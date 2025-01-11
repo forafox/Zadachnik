@@ -63,4 +63,18 @@ class TeamsInvitationsService(
             teamId,
             PageRequest.of(page, size)
         )
+
+    fun getAllTeamInvitationByUsername(
+        page: Int,
+        size: Int,
+        status: UserTeamStatus?,
+        username: String
+    ): Page<UserTeamRelation> {
+        val userId = userService.getByUsername(username).id
+        return if (status != null) {
+            userTeamRelationRepository.findAllByUserIdAndStatus(userId, status, PageRequest.of(page, size))
+        } else {
+            userTeamRelationRepository.findAllByUserId(userId, PageRequest.of(page, size))
+        }
+    }
 }
