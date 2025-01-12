@@ -34,7 +34,7 @@ class TeamMeetingService(
         )
     }
 
-    fun getTeamMeetings(teamId: Long, page: Int, size: Int) = teamMeetingRepository.findAllById(teamId, PageRequest.of(page, size))
+    fun getTeamMeetings(teamId: Long, page: Int, size: Int) = teamMeetingRepository.findAllByTeamId(teamId, PageRequest.of(page, size))
 
     fun updateTeamMeetingById(
         id: Long,
