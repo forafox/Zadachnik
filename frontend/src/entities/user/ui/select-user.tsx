@@ -5,6 +5,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select.tsx";
@@ -12,7 +13,7 @@ import {
 type Props = {
   value: User | undefined;
   onChange: (value: User | undefined) => void;
-  filter ?: (value: User) => void;
+  filter?: (value: User) => void;
 };
 
 export const SelectUser = forwardRef<HTMLButtonElement, Props>(
@@ -24,7 +25,8 @@ export const SelectUser = forwardRef<HTMLButtonElement, Props>(
       onChange(data?.values.find((user) => user.id === id));
     }
 
-    const filteredUsers = (filter ? data?.values.filter(filter) : data?.values) ?? []
+    const filteredUsers =
+      (filter ? data?.values.filter(filter) : data?.values) ?? [];
 
     return (
       <Select
@@ -40,6 +42,9 @@ export const SelectUser = forwardRef<HTMLButtonElement, Props>(
               {user.fullName}
             </SelectItem>
           ))}
+          {filteredUsers.length == 0 && (
+            <p className="text-muted-foreground">No users found 😢</p>
+          )}
         </SelectContent>
       </Select>
     );
