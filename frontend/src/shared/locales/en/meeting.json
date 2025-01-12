@@ -8,6 +8,15 @@
       "items": {
         "planning": {
           "label": "Sprint Planning"
+        },
+        "review": {
+          "label": "Sprint Review"
+        },
+        "retrospective": {
+          "label": "Sprint Retro"
+        },
+        "daily": {
+          "label": "Team Daily"
         }
       }
     }
