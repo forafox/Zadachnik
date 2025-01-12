@@ -3,11 +3,13 @@ import { UserPlus } from "lucide-react";
 import { useState } from "react";
 import { getPrincipalQueryOptions } from "@/entities/principal";
 import {
+  getTeamInvitationsQueryOptions,
   getTeamParticipantsQueryOptions,
   Team,
   useInviteDeveloperMutation,
 } from "@/entities/team";
 import { SelectUser, User, UserHoverCard } from "@/entities/user";
+import { defaultPagination } from "@/shared/api/schemas.ts";
 import { Button } from "@/shared/components/ui/button.tsx";
 import {
   DialogContent,
@@ -68,6 +70,24 @@ function InviteDeveloperDialogContent({ teamId }: { teamId: number }) {
   const [user, setUser] = useState<User | undefined>(undefined);
   const { mutate, isPending } = useInviteDeveloperMutation();
 
+  const {
+    data: { values: participants },
+  } = useSuspenseQuery(
+    getTeamParticipantsQueryOptions({ teamId, ...defaultPagination }),
+  );
+
+  const {
+    data: { values: pending },
+  } = useSuspenseQuery(
+    getTeamInvitationsQueryOptions({
+      teamId,
+      ...defaultPagination,
+      status: "PENDING",
+    }),
+  );
+
+  const { data: principal } = useSuspenseQuery(getPrincipalQueryOptions);
+
   function handleInvite() {
     if (user) {
       mutate(
@@ -79,13 +99,21 @@ function InviteDeveloperDialogContent({ teamId }: { teamId: number }) {
     }
   }
 
+  function userFilter(user: User) {
+    return !(
+      participants.some((it) => it.id === user.id) ||
+      user.id === principal.id ||
+      pending.some((it) => it.user.id === user.id)
+    );
+  }
+
   return (
     <DialogContent>
       <DialogHeader>
         <DialogTitle>Invite a user</DialogTitle>
       </DialogHeader>
       <div>
-        <SelectUser value={user} onChange={setUser} />
+        <SelectUser value={user} onChange={setUser} filter={userFilter} />
       </div>
       <DialogFooter>
         <Button
