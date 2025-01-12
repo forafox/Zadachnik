@@ -12,16 +12,19 @@ import {
 type Props = {
   value: User | undefined;
   onChange: (value: User | undefined) => void;
+  filter ?: (value: User) => void;
 };
 
 export const SelectUser = forwardRef<HTMLButtonElement, Props>(
-  ({ value, onChange }, ref) => {
+  ({ value, onChange, filter }, ref) => {
     const { data } = useQuery(getUsersQueryOptions({ page: 1, pageSize: 50 }));
 
     function handleChange(idStr: string) {
       const id = parseInt(idStr);
       onChange(data?.values.find((user) => user.id === id));
     }
+
+    const filteredUsers = (filter ? data?.values.filter(filter) : data?.values) ?? []
 
     return (
       <Select
@@ -32,7 +35,7 @@ export const SelectUser = forwardRef<HTMLButtonElement, Props>(
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {data?.values.map((user) => (
+          {filteredUsers.map((user) => (
             <SelectItem key={user.id} value={String(user.id)}>
               {user.fullName}
             </SelectItem>
