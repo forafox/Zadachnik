@@ -1,7 +1,12 @@
 import z from "zod";
 import { teamSchema } from "@/entities/team";
 
-const meetingType = z.enum(["daily", "planning", "review", "retrospective"]);
+export const meetingType = z.enum([
+  "daily",
+  "planning",
+  "review",
+  "retrospective",
+]);
 
 export const meetingSchema = z.object({
   id: z.number(),
