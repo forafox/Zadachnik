@@ -28,7 +28,6 @@ import java.security.Principal
 class UserController(
     private val userService: UserService,
     private val productService: ProductService,
-    private val teamService: TeamService,
     private val teamsInvitationsService: TeamsInvitationsService
 ) {
 
@@ -143,7 +142,7 @@ class UserController(
         @RequestParam(required = false, defaultValue = "10") size: Int,
         principal: Principal
     ): Page<TeamResponse> {
-        val teams = teamService.getTeamsOfCurrentUser(page, size, principal.name)
+        val teams = teamsInvitationsService.getTeamsOfCurrentUser(page, size, principal.name)
         return teams.map { team ->
             TeamResponse(
                 id = team.id,

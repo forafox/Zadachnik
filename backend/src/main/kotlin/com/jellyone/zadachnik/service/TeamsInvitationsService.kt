@@ -1,5 +1,7 @@
 package com.jellyone.zadachnik.service
 
+import com.jellyone.zadachnik.domain.Team
+import com.jellyone.zadachnik.domain.User
 import com.jellyone.zadachnik.domain.UserTeamRelation
 import com.jellyone.zadachnik.domain.UserTeamStatus
 import com.jellyone.zadachnik.repository.UserTeamRelationRepository
@@ -50,13 +52,13 @@ class TeamsInvitationsService(
 
     }
 
-    fun getTeamInvitation(teamId: Long, size: Int, page: Int,status: UserTeamStatus?): Page<UserTeamRelation> {
+    fun getTeamInvitation(teamId: Long, size: Int, page: Int, status: UserTeamStatus?): Page<UserTeamRelation> {
         return if (status != null) {
             userTeamRelationRepository.findAllByTeamIdAndStatus(teamId, status, PageRequest.of(page, size))
         } else {
             userTeamRelationRepository.findAllByTeamId(teamId, PageRequest.of(page, size))
         }
-        }
+    }
 
     fun getUsersOfTeams(teamId: Long, page: Int, size: Int) =
         userTeamRelationRepository.findAllUsersOfTeams(
@@ -76,5 +78,10 @@ class TeamsInvitationsService(
         } else {
             userTeamRelationRepository.findAllByUserId(userId, PageRequest.of(page, size))
         }
+    }
+
+    fun getTeamsOfCurrentUser(page: Int, size: Int, username: String): Page<Team> {
+        val user = userService.getByUsername(username)
+        return userTeamRelationRepository.findAllTeamsOfUser(PageRequest.of(page, size), user.id)
     }
 }
