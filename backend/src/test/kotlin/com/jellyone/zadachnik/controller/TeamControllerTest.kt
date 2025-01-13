@@ -169,7 +169,6 @@ class TeamControllerTest {
             .let { response ->
                 val content: List<Map<String, Any>> = response.getList("content")
                 assert(content.isEmpty()) { "Content should be empty" }
-                assert(content[0]["id"] != null) { "First team should have an ID" }
             }
     }
 
