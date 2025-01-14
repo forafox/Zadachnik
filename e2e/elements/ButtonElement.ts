@@ -1,7 +1,7 @@
-import {GenericElement} from "./GenericElement";
+import { GenericElement } from "./GenericElement";
 
 export class ButtonElement extends GenericElement {
-    async activate() {
-        await this.locator.click()
-    }
+  async activate() {
+    await this.locator.click();
+  }
 }
