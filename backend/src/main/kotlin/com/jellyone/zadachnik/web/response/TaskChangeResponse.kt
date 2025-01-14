@@ -6,8 +6,8 @@ import java.util.*
 
 data class TaskChangeResponse(
     val field: FieldType,
-    val previousValue: Any,
-    val newValue: Any,
+    val previousValue: Any?,
+    val newValue: Any?,
     val changedBy: UserResponse,
     val changedAt: LocalDateTime
 )
