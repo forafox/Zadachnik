@@ -68,6 +68,7 @@ const taskField = z.enum([
   "description",
   "product",
   "status",
+  "assignee_username",
 ]);
 
 export const taskChangeSchema = z.object({

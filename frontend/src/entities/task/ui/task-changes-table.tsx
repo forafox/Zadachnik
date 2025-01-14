@@ -8,8 +8,6 @@ import {
   TaskChangeEntry,
   taskStatus,
   TaskStatusBadge,
-  taskType,
-  TaskTypeBadge,
 } from "@/entities/task";
 import { UserHoverCard } from "@/entities/user";
 import { getDefaultColumn } from "@/shared/components/ui/default-column.tsx";
