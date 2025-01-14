@@ -60,6 +60,26 @@ class TaskChangeService(
                 changedBy = changedBy.id
             )
         }
+
+        if ((original.assignee != null && updated.assignee != null) && original.assignee != updated.assignee) {
+            createTaskChange(
+                taskId = original.id,
+                fieldName = "assignee",
+                previousValue = original.assignee.username,
+                newValue = updated.assignee.username,
+                changedBy = changedBy.id
+            )
+        }
+
+        if (original.status != updated.status) {
+            createTaskChange(
+                taskId = original.id,
+                fieldName = "status",
+                previousValue = original.status.name,
+                newValue = updated.status.name,
+                changedBy = changedBy.id
+            )
+        }
     }
 
     fun createLogChanges(task: Task) {

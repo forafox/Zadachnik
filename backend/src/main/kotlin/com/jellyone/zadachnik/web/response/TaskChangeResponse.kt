@@ -13,7 +13,7 @@ data class TaskChangeResponse(
 )
 
 enum class FieldType {
-    ID, TYPE, TITLE, DESCRIPTION, PRODUCT
+    ID, TYPE, TITLE, DESCRIPTION, PRODUCT, STATUS, ASSIGNEE_USERNAME
 }
 
 fun TaskChange.toResponse() = TaskChangeResponse(
