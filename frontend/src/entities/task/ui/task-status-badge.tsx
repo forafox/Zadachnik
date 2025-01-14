@@ -8,7 +8,7 @@ export function TaskStatusBadge({ status }: { status: TaskStatus }) {
 
   return (
     <Badge className={cn("capitalize", colors[group])}>
-      {status.replace(new RegExp("_", "g"), " ")}
+      {status?.replace(new RegExp("_", "g"), " ")}
     </Badge>
   );
 }
