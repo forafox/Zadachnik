@@ -51,7 +51,9 @@ export function CreateTaskDialogContent({ productId, onClose }: Props) {
   return (
     <DialogContent>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit, (e) => console.error(e))}>
+        <form
+          onSubmit={form.handleSubmit(handleSubmit, (e) => console.error(e))}
+        >
           <DialogHeader>
             <DialogTitle>{t("actions.create.title")}</DialogTitle>
           </DialogHeader>
