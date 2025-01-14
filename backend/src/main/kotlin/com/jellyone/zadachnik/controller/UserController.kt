@@ -1,10 +1,7 @@
 package com.jellyone.zadachnik.controller
 
 import com.jellyone.zadachnik.domain.UserTeamStatus
-import com.jellyone.zadachnik.service.ProductService
-import com.jellyone.zadachnik.service.TeamService
-import com.jellyone.zadachnik.service.TeamsInvitationsService
-import com.jellyone.zadachnik.service.UserService
+import com.jellyone.zadachnik.service.*
 import com.jellyone.zadachnik.web.dto.GetMeResponse
 import com.jellyone.zadachnik.web.response.ProductResponse
 import com.jellyone.zadachnik.web.response.TeamResponse
@@ -27,8 +24,8 @@ import java.security.Principal
 @SecurityRequirement(name = "JWT")
 class UserController(
     private val userService: UserService,
-    private val productService: ProductService,
-    private val teamsInvitationsService: TeamsInvitationsService
+    private val teamsInvitationsService: TeamsInvitationsService,
+    private val productInvitationsService: ProductsInvitationsService
 ) {
 
     @GetMapping("/me")
@@ -113,7 +110,7 @@ class UserController(
         @RequestParam(required = false, defaultValue = "10") size: Int,
         principal: Principal
     ): Page<ProductResponse> {
-        val products = productService.getProductsOfCurrentUser(page, size, principal.name)
+        val products = productInvitationsService.getProductsOfCurrentUser(page, size, principal.name)
         return products.map { product ->
             ProductResponse(
                 id = product.id,

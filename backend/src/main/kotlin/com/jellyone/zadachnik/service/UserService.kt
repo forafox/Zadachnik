@@ -42,15 +42,15 @@ class UserService(
             .orElseThrow { ResourceNotFoundException("User not found") }
     }
 
+    fun getUsers(search: String, page: Int, size: Int): Page<User> {
+        val pageable: Pageable = PageRequest.of(page, size)
+        return userRepository.findAll(getUserSearchSpecification(search), pageable)
+    }
+
     private fun checkUserAlreadyExists(username: String) {
         if (userRepository.findByUsername(username).isPresent) {
             throw ResourceAlreadyExistsException("User already exists")
         }
-    }
-
-    fun getUsers(search: String, page: Int, size: Int): Page<User> {
-        val pageable: Pageable = PageRequest.of(page, size)
-        return userRepository.findAll(getUserSearchSpecification(search), pageable)
     }
 
     private fun getUserSearchSpecification(search: String): Specification<User> {
