@@ -8,11 +8,8 @@ import com.jellyone.zadachnik.web.response.ProductResponse
 import com.jellyone.zadachnik.web.request.UpdateProductRequest
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.MethodOrderer
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestMethodOrder
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
@@ -56,6 +53,7 @@ class ProductControllerTest {
         }
     }
 
+    @Order(1)
     @Test
     fun createProductShouldReturnOk() {
         val request = CreateProductRequest(
@@ -80,6 +78,7 @@ class ProductControllerTest {
         assertEquals("This is a test product.", response.description)
     }
 
+    @Order(2)
     @Test
     fun createProductWithSameTickerShouldReturnConflict() {
         val request = CreateProductRequest(
@@ -97,6 +96,7 @@ class ProductControllerTest {
             .statusCode(HttpStatus.CONFLICT.value())
     }
 
+    @Order(3)
     @Test
     fun getProductByIdShouldReturnOk() {
         val productId = 1
@@ -115,6 +115,7 @@ class ProductControllerTest {
         assertEquals("Test Product", response.title)
     }
 
+    @Order(4)
     @Test
     fun getProductByIdNotFoundShouldReturnNotFound() {
         val productId = 9999
@@ -126,6 +127,7 @@ class ProductControllerTest {
             .statusCode(HttpStatus.NOT_FOUND.value())
     }
 
+    @Order(5)
     @Test
     fun updateProductByIdShouldReturnOk() {
         val productId = 1L
@@ -152,6 +154,7 @@ class ProductControllerTest {
         assertEquals("Updated description.", response.description)
     }
 
+    @Order(6)
     @Test
     fun getProductsWithPaginationShouldReturnOk() {
         val response = RestAssured.given()
@@ -170,13 +173,14 @@ class ProductControllerTest {
 
         assert(content.isNotEmpty()) { "Content should not be empty" }
         assert(content[0]["id"] != null) { "First product should have an ID" }
-        assert(content[0]["ticker"] == "PROD001") { "Ticker of the first product should match the expected value" }
-        assert(content[0]["title"] == "Test Product") { "Title of the first product should match the expected value" }
+        assert(content[0]["ticker"] == "PROD001_UPDATED") { "Ticker of the first product should match the expected value" }
+        assert(content[0]["title"] == "Updated Product") { "Title of the first product should match the expected value" }
 
         val owner = content[0]["owner"] as Map<*, *>
         assert(owner["username"] == "testuser") { "Owner's username should match 'testuser'" }
     }
 
+    @Order(7)
     @Test
     fun getTasksByProductIdShouldReturnOk() {
         val productId = 1L
@@ -197,6 +201,7 @@ class ProductControllerTest {
         assert(content.isEmpty()) { "Task list should be empty" }
     }
 
+    @Order(8)
     @Test
     fun getProductsOfCurrentUserShouldReturnOk() {
         RestAssured.given()
@@ -212,10 +217,11 @@ class ProductControllerTest {
             .jsonPath()
             .let { response ->
                 val content: List<Map<String, Any>> = response.getList("content")
-                assert(content.isEmpty()) { "Content should not be empty" }
+                assert(content.isNotEmpty()) { "Content should not be empty" }
             }
     }
 
+    @Order(9)
     @Test
     fun getProductsWithoutAuthShouldReturnUnauthorized() {
         RestAssured.given()

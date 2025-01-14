@@ -168,10 +168,9 @@ class TeamControllerTest {
             .jsonPath()
             .let { response ->
                 val content: List<Map<String, Any>> = response.getList("content")
-                assert(content.isEmpty()) { "Content should be empty" }
+                assert(content.isNotEmpty()) { "Content not should be empty" }
             }
     }
-
 
     private fun registerTestUser() {
         val signUpRequest = SignUpRequest(username = "testuser", fullName = "Test User", password = "password")
