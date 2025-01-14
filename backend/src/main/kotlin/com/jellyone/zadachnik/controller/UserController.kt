@@ -85,9 +85,11 @@ class UserController(
     fun getUsers(
         @RequestParam(required = false, defaultValue = "") search: String,
         @RequestParam(required = false, defaultValue = "0") page: Int,
-        @RequestParam(required = false, defaultValue = "10") size: Int
+        @RequestParam(required = false, defaultValue = "10") size: Int,
+        @RequestParam(required = false) productId: Long?,
+        @RequestParam(required = false) teamId: Long?
     ): Page<UserResponse> {
-        val users = userService.getUsers(search, page, size)
+        val users = userService.getUsers(search, productId, teamId, page, size)
         return users.map { user ->
             UserResponse(user.id, user.username, user.fullName, user.role)
         }
