@@ -39,7 +39,7 @@ function RouteComponent() {
       </CardHeader>
       <Separator orientation="horizontal" />
       <CardContent className="flex items-center gap-4 py-4">
-        <UserHoverCard user={team.scrumMaster} />
+        <UserHoverCard user={team.scrumMaster} data-testid="scrum-master" />
       </CardContent>
       <Separator orientation="horizontal" />
       <CardContent className="space-y-6 px-0 py-4 [&>section]:px-6">

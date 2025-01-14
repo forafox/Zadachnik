@@ -39,7 +39,12 @@ export const UserHoverCard = forwardRef<HTMLButtonElement, CardProps>(
     return (
       <HoverCard>
         <HoverCardTrigger asChild>
-          <UserNameLink username={user.username} {...props} ref={ref} />
+          <UserNameLink
+            username={user.username}
+            {...props}
+            ref={ref}
+            data-value={user.username}
+          />
         </HoverCardTrigger>
         <UserHoverCardContent user={user} />
       </HoverCard>

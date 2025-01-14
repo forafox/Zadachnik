@@ -1,13 +1,13 @@
 import {Page} from "@playwright/test";
 import {TextInput} from "../elements/inputs/TextInput";
-import {GenericButton} from "../elements/GenericButton";
+import {ButtonElement} from "../elements/ButtonElement";
 import {FormElement} from "../elements/FormElement";
 
 export class SignInPage {
-    public readonly form: FormElement<{username: string, password: string}>
-b
+    public readonly task: FormElement<{username: string, password: string}>
+
     constructor(protected readonly page: Page) {
-        this.form = new FormElement(page, this.page.locator("form"), {
+        this.task = new FormElement(page, this.page.locator("form"), {
             username: (page, locator) => new TextInput(page, locator),
             password: (page, locator) => new TextInput(page, locator),
         })
