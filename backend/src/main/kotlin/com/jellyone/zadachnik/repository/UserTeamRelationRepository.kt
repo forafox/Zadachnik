@@ -36,10 +36,11 @@ interface UserTeamRelationRepository : JpaRepository<UserTeamRelation, Long> {
 
     @Query(
         """
-            SELECT utr.team 
-            FROM UserTeamRelation utr 
-            WHERE utr.user.id = :userId
-              AND utr.status = 'ACCEPTED'
+            SELECT DISTINCT t
+            FROM Team t
+            LEFT JOIN UserTeamRelation utr ON t.scrumMaster.id = utr.user.id
+            WHERE (t.scrumMaster.id = :userId)
+               OR (utr.user.id IS NOT NULL AND utr.user.id = :userId AND utr.status = 'ACCEPTED')
         """
     )
     fun findAllTeamsOfUser(
