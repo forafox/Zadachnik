@@ -41,6 +41,7 @@ import {
   TableCell,
   TableRow,
 } from "@/shared/components/ui/table.tsx";
+import { cn } from "@/shared/lib/utils.ts";
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/tasks/$taskId",
@@ -51,7 +52,6 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { t } = useTranslation("task");
   const { t: tProduct } = useTranslation("product");
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
   const { productId, taskId } = Route.useParams();
   const { data: product } = useSuspenseQuery(
     getProductByIdQueryOptions(Number(productId)),
@@ -62,7 +62,6 @@ function RouteComponent() {
       taskId: Number(taskId),
     }),
   );
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const { mutate, isPending } = useUpdateTaskMutation();
 
@@ -79,18 +78,6 @@ function RouteComponent() {
       status,
     });
   }
-
-  const handleSaveTitle = () => {
-    mutate(
-      {
-        ...task,
-        title: inputRef.current?.value ?? task.title,
-      },
-      {
-        onSuccess: () => setIsEditingTitle(false),
-      },
-    );
-  };
 
   return (
     <Card className="mx-auto">
@@ -123,35 +110,7 @@ function RouteComponent() {
         </Breadcrumb>
       </SetSidebarBreadcrumbs>
       <CardHeader className="space-y-2">
-        <CardTitle className="flex flex-row items-center gap-2 text-xl">
-          <div className="flex-1">
-            {!isEditingTitle && task.title}
-            {isEditingTitle && (
-              <Input className="h-8" ref={inputRef} defaultValue={task.title} />
-            )}
-          </div>
-          <div className="ml-auto">
-            {isEditingTitle ? (
-              <Button
-                size="icon"
-                variant="outline"
-                className="size-8"
-                onClick={handleSaveTitle}
-              >
-                <SaveIcon />
-              </Button>
-            ) : (
-              <Button
-                size="icon"
-                variant="outline"
-                className="size-8"
-                onClick={() => setIsEditingTitle(true)}
-              >
-                <Pencil />
-              </Button>
-            )}
-          </div>
-        </CardTitle>
+        <EditableTitle task={task} />
         <TaskDescription task={task} />
       </CardHeader>
       <CardContent className="space-y-8 p-4 [&>*]:space-y-4">
@@ -258,5 +217,58 @@ function TaskComments({ task }: { task: Task }) {
         </div>
       </form>
     </div>
+  );
+}
+
+function EditableTitle({ task }: { task: Task }) {
+  const { mutate, isPending } = useUpdateTaskMutation();
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleSaveTitle = () => {
+    mutate(
+      {
+        ...task,
+        title: inputRef.current?.value ?? task.title,
+      },
+      {
+        onSuccess: () => setIsEditingTitle(false),
+      },
+    );
+  };
+
+  return (
+    <CardTitle className="flex items-center justify-between space-x-2">
+      <div className="flex-1">
+        {isEditingTitle ? (
+          <Input className="h-8" ref={inputRef} defaultValue={task.title} />
+        ) : (
+          <span>{task.title}</span>
+        )}
+      </div>
+      <div className="ml-auto">
+        {isEditingTitle ? (
+          <Button
+            size="icon"
+            variant="outline"
+            className="size-8"
+            onClick={handleSaveTitle}
+            loading={isPending}
+          >
+            <SaveIcon />
+          </Button>
+        ) : (
+          <Button
+            size="icon"
+            variant="outline"
+            className="size-8"
+            onClick={() => setIsEditingTitle(true)}
+            loading={isPending}
+          >
+            <Pencil />
+          </Button>
+        )}
+      </div>
+    </CardTitle>
   );
 }
