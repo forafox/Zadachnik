@@ -10,6 +10,7 @@ import {
   paginatedRequestSchema,
   paginatedResponseSchema,
 } from "@/shared/api/schemas.ts";
+import { teamSchema } from "@/entities/team";
 
 export const sprintSchema = z.object({
   id: z.number(),
@@ -18,6 +19,7 @@ export const sprintSchema = z.object({
   planningDateTime: z.coerce.date(),
   retroDateTime: z.coerce.date(),
   reviewDateTime: z.coerce.date(),
+  team: teamSchema,
 });
 
 export type Sprint = z.infer<typeof sprintSchema>;
@@ -49,7 +51,7 @@ export const getTeamSprintsQueryOptions = (
 };
 
 export const createSprintRequestSchema = sprintSchema
-  .omit({ id: true })
+  .omit({ id: true, team: true })
   .extend({ teamId: z.number(), tasks: taskSchema.array() });
 export type CreateSprintValues = z.infer<typeof createSprintRequestSchema>;
 

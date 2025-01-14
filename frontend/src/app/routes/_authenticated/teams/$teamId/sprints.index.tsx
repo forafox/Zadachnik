@@ -15,7 +15,7 @@ import { useDialog } from "@/shared/hooks/use-dialog.tsx";
 
 const validateSearch = getTeamSprintsRequestSchema.omit({ teamId: true });
 
-export const Route = createFileRoute("/_authenticated/teams/$teamId/sprints")({
+export const Route = createFileRoute("/_authenticated/teams/$teamId/sprints/")({
   component: RouteComponent,
   validateSearch,
   loaderDeps: ({ search }) => search,
