@@ -191,6 +191,27 @@ class SprintControllerTest {
         assert(content.isEmpty()) { "Sprint list should not be empty" }
     }
 
+    @Order(7)
+    @Test
+    fun getSprintTasksWithFilterShouldReturnOk() {
+        val sprintId = 1L
+        val response = RestAssured.given()
+            .auth().oauth2(jwtToken)
+            .queryParam("pageNumber", 0)
+            .queryParam("pageSize", 10)
+            .queryParam("status", "CANCELLED")
+            .`when`()
+            .get("/api/teams/$teamId/sprints/$sprintId/tasks")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType(ContentType.JSON)
+            .extract()
+            .jsonPath()
+
+        val content: List<Map<String, Any>> = response.getList("content")
+        assert(content.isEmpty()) { "Task list should be empty" }
+    }
+
     private fun createTeam(): Long {
         val request = CreateTeamRequest(
             title = "Test Team"
