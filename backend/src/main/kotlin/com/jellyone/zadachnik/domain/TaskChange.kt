@@ -11,11 +11,11 @@ data class TaskChange(
     @EmbeddedId
     val id: TaskChangeId,
 
-    @Column(name = "previous_value", nullable = false)
-    var previousValue: String,
+    @Column(name = "previous_value")
+    var previousValue: String?,
 
-    @Column(name = "new_value", nullable = false)
-    var newValue: String,
+    @Column(name = "new_value")
+    var newValue: String?,
 
     @ManyToOne
     @JoinColumn(name = "changed_by", nullable = false)

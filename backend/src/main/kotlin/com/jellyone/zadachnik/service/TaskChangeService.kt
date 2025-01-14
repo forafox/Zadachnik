@@ -61,12 +61,12 @@ class TaskChangeService(
             )
         }
 
-        if ((original.assignee != null && updated.assignee != null) && original.assignee != updated.assignee) {
+        if (original.assignee != updated.assignee) {
             createTaskChange(
                 taskId = original.id,
                 fieldName = "assignee",
-                previousValue = original.assignee.username,
-                newValue = updated.assignee.username,
+                previousValue = original.assignee?.username,
+                newValue = updated.assignee?.username,
                 changedBy = changedBy.id
             )
         }
@@ -82,7 +82,7 @@ class TaskChangeService(
         }
     }
 
-    fun createTaskChange(taskId: Long, fieldName: String, previousValue: String, newValue: String, changedBy: Long) {
+    fun createTaskChange(taskId: Long, fieldName: String, previousValue: String?, newValue: String?, changedBy: Long) {
         taskChangeRepository.save(
             TaskChange(
                 id = TaskChangeId(taskId, fieldName, LocalDateTime.now()),
