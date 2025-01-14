@@ -1,7 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { SignInPage } from "../pages/SignInPage";
 import { authSessionFile, generateAuthTest, testUserName } from "../core/auth";
-import { Sidebar } from "../elements/Sidebar";
 import { TeamsPage } from "../pages/TeamsPage";
 import { TeamPage } from "../pages/TeamPage";
 

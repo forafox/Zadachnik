@@ -1,5 +1,4 @@
 import { GenericPage } from "./GenericPage";
-import { GenericElement } from "../elements/GenericElement";
 import { UserHoverElement } from "../elements/UserHoverElement";
 
 export class TeamPage extends GenericPage {

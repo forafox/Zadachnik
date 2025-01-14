@@ -1,11 +1,11 @@
 import { GenericElement } from "../GenericElement";
 
 export class GenericInput<T> extends GenericElement {
-  async setValue(value: T) {
+  async setValue(_: T) {
     throw new Error("setValue is not implemented");
   }
 
-  async shouldBeValue(value: T) {
+  async shouldBeValue(_: T) {
     throw new Error("shouldBeValue is not implemented");
   }
 }

@@ -1,6 +1,4 @@
 import { Page } from "@playwright/test";
-import { FormElement } from "../elements/FormElement";
-import { TextInput } from "../elements/inputs/TextInput";
 import { Sidebar } from "../elements/Sidebar";
 
 export class GenericPage {

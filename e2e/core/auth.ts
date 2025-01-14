@@ -1,6 +1,5 @@
 import {
   APIRequestContext,
-  BrowserContext,
   expect,
   test,
 } from "@playwright/test";

@@ -1,6 +1,5 @@
 import { Page } from "@playwright/test";
 import { TextInput } from "../elements/inputs/TextInput";
-import { ButtonElement } from "../elements/ButtonElement";
 import { FormElement } from "../elements/FormElement";
 
 export class SignInPage {

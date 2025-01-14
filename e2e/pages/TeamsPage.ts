@@ -1,5 +1,4 @@
 import { GenericPage } from "./GenericPage";
-import { ButtonElement } from "../elements/ButtonElement";
 import { FormElement } from "../elements/FormElement";
 import { TextInput } from "../elements/inputs/TextInput";
 
