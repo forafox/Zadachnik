@@ -1,11 +1,17 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { CirclePlus } from "lucide-react";
 import {
+  CreateMeetingDialogContent,
   getTeamMeetingsQueryOptions,
   useMeetingsTable,
 } from "@/entities/meeting";
 import { getTeamQueryOptions, useTeamsBreadcrumbs } from "@/entities/team";
+import { defaultPagination } from "@/shared/api/schemas.ts";
 import { DataTable } from "@/shared/components/data-table.tsx";
+import { Button } from "@/shared/components/ui/button.tsx";
+import { DialogTrigger } from "@/shared/components/ui/dialog.tsx";
+import { useDialog } from "@/shared/hooks/use-dialog.tsx";
 
 export const Route = createFileRoute("/_authenticated/teams/$teamId/meetings")({
   component: RouteComponent,
@@ -21,13 +27,24 @@ function RouteComponent() {
   const { data: team } = useSuspenseQuery(getTeamQueryOptions(teamId));
   useTeamsBreadcrumbs(team, "meetings");
   const { data: meetings } = useSuspenseQuery(
-    getTeamMeetingsQueryOptions({ teamId, page: 1, pageSize: 50 }),
+    getTeamMeetingsQueryOptions({ teamId, ...defaultPagination }),
   );
-  const table = useMeetingsTable(meetings.values);
+  const table = useMeetingsTable(meetings);
+  const { Dialog: CreateDialog } = useDialog();
 
   return (
-    <div>
-      <header></header>
+    <div className="space-y-4">
+      <header>
+        <CreateDialog>
+          <DialogTrigger asChild>
+            <Button>
+              <CirclePlus />
+              Create
+            </Button>
+          </DialogTrigger>
+          <CreateMeetingDialogContent team={team} />
+        </CreateDialog>
+      </header>
       <main>
         <DataTable table={table} />
       </main>
