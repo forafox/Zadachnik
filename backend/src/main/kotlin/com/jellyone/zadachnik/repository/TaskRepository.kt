@@ -1,6 +1,7 @@
 package com.jellyone.zadachnik.repository
 
 import com.jellyone.zadachnik.domain.Task
+import com.jellyone.zadachnik.domain.enums.TaskStatus
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
@@ -25,7 +26,7 @@ interface TaskRepository : JpaRepository<Task, Long>, JpaSpecificationExecutor<T
         @Param("sprintId") sprintId: Long,
         @Param("assigneeId") assigneeId: Long?,
         @Param("productId") productId: Long?,
-        @Param("status") status: String?,
+        @Param("status") status: TaskStatus?,
         pageable: Pageable
     ): Page<Task>
 

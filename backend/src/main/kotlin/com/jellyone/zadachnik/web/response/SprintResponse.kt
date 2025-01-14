@@ -10,6 +10,7 @@ data class SprintResponse(
     val planningDateTime: LocalDateTime,
     val retroDateTime: LocalDateTime,
     val reviewDateTime: LocalDateTime,
+    val team: TeamResponse,
 )
 
 fun Sprint.toResponse() = SprintResponse(
@@ -19,4 +20,5 @@ fun Sprint.toResponse() = SprintResponse(
     planningDateTime = planningMeeting.date,
     retroDateTime = retroMeeting.date,
     reviewDateTime = reviewMeeting.date,
+    team = team.toResponse(),
 )

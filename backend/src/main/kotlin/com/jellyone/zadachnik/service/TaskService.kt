@@ -82,7 +82,9 @@ class TaskService(
         status: String?,
         pageable: Pageable
     ): Page<Task> {
-        return taskRepository.findSprintTasks(sprintId, assigneeId, productId, status, pageable)
+        return taskRepository.findSprintTasks(sprintId, assigneeId, productId,
+            status?.let { TaskStatus.valueOf(it) }, pageable
+        )
     }
 
     fun getTasksByIds(ids: List<Long>): List<Task> {
