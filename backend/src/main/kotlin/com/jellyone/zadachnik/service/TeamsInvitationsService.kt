@@ -84,4 +84,9 @@ class TeamsInvitationsService(
         val user = userService.getByUsername(username)
         return userTeamRelationRepository.findAllTeamsOfUser(PageRequest.of(page, size), user.id)
     }
+
+    fun getTeamsOfUserScrumMaster(page: Int, size: Int, username: String): Page<Team> {
+        val user = userService.getByUsername(username)
+        return userTeamRelationRepository.findAllTeamsOfUser(PageRequest.of(page, size), user.id)
+    }
 }
