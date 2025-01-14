@@ -239,7 +239,6 @@ class TaskControllerTest {
         assert(content.isEmpty()) { "Content should not be empty" }
     }
 
-
     private fun registerTestUser() {
         val signUpRequest = mapOf(
             "username" to "testuser",
