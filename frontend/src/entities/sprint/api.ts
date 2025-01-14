@@ -12,7 +12,7 @@ import {
   fromBackendPagination,
   paginatedRequestSchema,
   paginatedResponseSchema,
-  toBackendPagination
+  toBackendPagination,
 } from "@/shared/api/schemas.ts";
 
 export const sprintSchema = z.object({
@@ -106,7 +106,14 @@ export const getSprintTasksQueryOptions = generateQueryOptions(
       status: status?.toUpperCase(),
       assigneeId,
     });
-    return fromBackendPagination(data)
+    return fromBackendPagination(data);
   },
-  ({teamId, sprintId, ...req}) => ["teams", teamId, "sprints", sprintId, "tasks", req],
+  ({ teamId, sprintId, ...req }) => [
+    "teams",
+    teamId,
+    "sprints",
+    sprintId,
+    "tasks",
+    req,
+  ],
 );

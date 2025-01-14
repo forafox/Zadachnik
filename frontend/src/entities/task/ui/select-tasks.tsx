@@ -36,7 +36,7 @@ export const SelectTasks = forwardRef<HTMLButtonElement, Props>(
   function SelectTasks({ value, onChange, modal = false, ...filters }, ref) {
     const [open, setOpen] = React.useState(false);
     const { data, error } = useQuery(getTasksQueryOptions(filters));
-    if(error) {
+    if (error) {
       console.error(error);
     }
 

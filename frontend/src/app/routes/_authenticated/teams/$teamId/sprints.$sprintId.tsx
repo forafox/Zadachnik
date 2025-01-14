@@ -1,12 +1,5 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import * as React from "react";
-import { SprintKanbanBoard } from "@/widgets/kanban-board/ui/sprint-board.tsx";
-import {
-  getSprintByIdQueryOptions,
-  getTeamSprintsQueryOptions,
-} from "@/entities/sprint";
-import { getTeamQueryOptions } from "@/entities/team";
+import { SprintKanbanBoard } from "@/widgets/kanban-board";
 
 export const Route = createFileRoute(
   "/_authenticated/teams/$teamId/sprints/$sprintId",
@@ -17,10 +10,10 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const teamId = parseInt(Route.useParams().teamId);
   const sprintId = parseInt(Route.useParams().teamId);
-  const { data: team } = useSuspenseQuery(getTeamQueryOptions(teamId));
-  const { data: sprint } = useSuspenseQuery(
-    getSprintByIdQueryOptions({ sprintId, teamId }),
-  );
+  // const { data: team } = useSuspenseQuery(getTeamQueryOptions(teamId));
+  // const { data: sprint } = useSuspenseQuery(
+  //   getSprintByIdQueryOptions({ sprintId, teamId }),
+  // );
 
   return (
     <div>
