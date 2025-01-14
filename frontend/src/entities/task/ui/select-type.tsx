@@ -1,3 +1,4 @@
+import React, { forwardRef } from "react";
 import { useTranslation } from "react-i18next";
 import { TaskType, taskTypes } from "@/entities/task";
 import {
@@ -13,21 +14,24 @@ type Props = {
   onChange: (value: TaskType) => void;
 };
 
-export function SelectTaskType({ value, onChange }: Props) {
+export const SelectTaskType = forwardRef<
+  React.ComponentRef<typeof SelectValue>,
+  Props
+>(function SelectTaskType({ value, onChange }, ref) {
   const { t } = useTranslation("task");
 
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger>
-        <SelectValue />
+        <SelectValue ref={ref} />
       </SelectTrigger>
       <SelectContent>
         {taskTypes.map((type) => (
-          <SelectItem value={type}>
+          <SelectItem value={type} key={type}>
             {t(`items.type.items.${type}.label`)}
           </SelectItem>
         ))}
       </SelectContent>
     </Select>
   );
-}
+});

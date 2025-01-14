@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class TeamService(
     private val teamRepository: TeamRepository,
-    private val userService: UserService,
+    private val userService: UserService
 ) {
     fun createTeam(title: String, scrumMasterUsername: String): Team {
         return teamRepository.save(
@@ -37,8 +37,4 @@ class TeamService(
 
     fun getTeams(page: Int, size: Int): Page<Team> = teamRepository.findAll(PageRequest.of(page, size))
 
-    fun getTeamsOfCurrentUser(page: Int, size: Int, username: String): Page<Team> {
-        val user = userService.getByUsername(username)
-        return teamRepository.findAllByScrumMaster(PageRequest.of(page, size), user)
-    }
 }

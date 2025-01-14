@@ -1,7 +1,7 @@
 import z from "zod";
 import { Page } from "@/shared/api.gen.ts";
 
-const DEFAULT_PAGE_SIZE = 50;
+const DEFAULT_PAGE_SIZE = 100;
 const DEFAULT_PAGE = 1;
 
 export const defaultPagination = {

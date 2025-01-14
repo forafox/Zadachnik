@@ -1,5 +1,6 @@
 package com.jellyone.zadachnik.repository
 
+import com.jellyone.zadachnik.domain.Team
 import com.jellyone.zadachnik.domain.User
 import com.jellyone.zadachnik.domain.UserTeamRelation
 import com.jellyone.zadachnik.domain.UserTeamStatus
@@ -32,4 +33,18 @@ interface UserTeamRelationRepository : JpaRepository<UserTeamRelation, Long> {
     fun findAllByUserIdAndStatus(userId: Long, status: UserTeamStatus, pageable: Pageable): Page<UserTeamRelation>
 
     fun findAllByUserId(userId: Long, pageable: Pageable): Page<UserTeamRelation>
+
+    @Query(
+        """
+            SELECT DISTINCT t
+            FROM Team t
+            LEFT JOIN UserTeamRelation utr ON t.scrumMaster.id = utr.user.id
+            WHERE (t.scrumMaster.id = :userId)
+               OR (utr.user.id IS NOT NULL AND utr.user.id = :userId AND utr.status = 'ACCEPTED')
+        """
+    )
+    fun findAllTeamsOfUser(
+        pageable: Pageable,
+        @Param("userId") userId: Long,
+    ): Page<Team>
 }

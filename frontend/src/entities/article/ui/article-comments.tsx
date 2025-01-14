@@ -38,7 +38,7 @@ export function ArticleComments({ articleId }: { articleId: number }) {
   }
 
   return (
-    <section className="space-y-6">
+    <section className="w-full space-y-6">
       <main className="space-y-2">
         <h2 className="font-bold">Comments</h2>
         <div className="space-y-2">

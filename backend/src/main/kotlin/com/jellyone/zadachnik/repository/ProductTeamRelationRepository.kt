@@ -1,5 +1,6 @@
 package com.jellyone.zadachnik.repository
 
+import com.jellyone.zadachnik.domain.Product
 import com.jellyone.zadachnik.domain.ProductTeamRelation
 import com.jellyone.zadachnik.domain.ProductTeamStatus
 import com.jellyone.zadachnik.domain.Team
@@ -35,5 +36,27 @@ interface ProductTeamRelationRepository : JpaRepository<ProductTeamRelation, Lon
 
     fun findAllByProductId(productId: Long, pageable: Pageable): Page<ProductTeamRelation>
 
-    fun findAllByProductIdAndStatus(productId: Long, status: ProductTeamStatus, pageable: Pageable): Page<ProductTeamRelation>
+    fun findAllByProductIdAndStatus(
+        productId: Long,
+        status: ProductTeamStatus,
+        pageable: Pageable
+    ): Page<ProductTeamRelation>
+
+    @Query(
+        """
+            SELECT DISTINCT p
+            FROM Product p
+            LEFT JOIN ProductTeamRelation ptr ON p.id = ptr.product.id
+            WHERE (p.owner.id = :userId)
+            OR (ptr.status = 'ACCEPTED' AND EXISTS (
+               SELECT DISTINCT utr
+               FROM UserTeamRelation utr
+               WHERE utr.user.id = :userId
+                 AND utr.team.id = ptr.team.id
+                 AND utr.status = 'ACCEPTED'
+           )
+       )
+    """
+    )
+    fun findAllProductsOfUser(pageable: Pageable, userId: Long): Page<Product>
 }

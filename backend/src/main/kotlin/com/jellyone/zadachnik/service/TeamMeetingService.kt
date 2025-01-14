@@ -6,6 +6,10 @@ import com.jellyone.zadachnik.domain.enums.TeamMeetingType
 import com.jellyone.zadachnik.exception.ResourceNotFoundException
 import com.jellyone.zadachnik.repository.ArticleRepository
 import com.jellyone.zadachnik.repository.TeamMeetingRepository
+import com.jellyone.zadachnik.web.response.ArticleInTeamMeetingResponse
+import com.jellyone.zadachnik.web.response.ArticleResponse
+import com.jellyone.zadachnik.web.response.TeamMeetingWithArticles
+import com.jellyone.zadachnik.web.response.toResponse
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -34,7 +38,31 @@ class TeamMeetingService(
         )
     }
 
-    fun getTeamMeetings(teamId: Long, page: Int, size: Int) = teamMeetingRepository.findAllById(teamId, PageRequest.of(page, size))
+    fun getTeamMeetingsWithArticles(teamId: Long, page: Int, size: Int): List<TeamMeetingWithArticles> {
+        val teamMeetingsPage = teamMeetingRepository.findAllByTeamId(teamId, PageRequest.of(page, size))
+
+        val teamMeetingIds = teamMeetingsPage.content.map { it.id }
+
+        val articlesByMeeting = articleRepository.findAllByTeamMeetingIdIn(teamMeetingIds)
+            .groupBy { it.teamMeeting?.id }
+
+        return teamMeetingsPage.content.map { teamMeeting ->
+            TeamMeetingWithArticles(
+                id = teamMeeting.id,
+                type = teamMeeting.type,
+                agenda = teamMeeting.agenda,
+                team = teamMeeting.team.toResponse(),
+                date = teamMeeting.date,
+                articles = articlesByMeeting[teamMeeting.id]?.map { article ->
+                    ArticleInTeamMeetingResponse(
+                        id = article.id,
+                        content = article.content,
+                        author = article.author.toResponse()
+                    )
+                } ?: emptyList()
+            )
+        }
+    }
 
     fun updateTeamMeetingById(
         id: Long,

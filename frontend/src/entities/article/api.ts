@@ -11,6 +11,16 @@ import {
   toBackendPagination,
 } from "@/shared/api/schemas.ts";
 
+export const getArticleQueryOptions = generateQueryOptions(
+  articleSchema,
+  z.object({ id: z.number() }),
+  async ({ id }) => {
+    const { data } = await api.api.getArticle(id);
+    return data;
+  },
+  ({ id }) => ["articles", id],
+);
+
 export const useUpdateArticleMutation = generateMutation(
   articleSchema,
   articleSchema,
