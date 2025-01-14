@@ -10,7 +10,7 @@ BACKEND_IMAGE_NAME ?= zadachnik-backend
 # They are separated so that you could update backend and frontend
 # independetly
 FRONTEND_VERSION ?= 0.18.0
-BACKEND_VERSION ?= 0.20.0
+BACKEND_VERSION ?= 0.20.2
 
 # Version of application that will be deployed to Customer server (i.e. Helios)
 VERSION ?= 0.0.1
