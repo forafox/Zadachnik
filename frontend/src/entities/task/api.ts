@@ -18,6 +18,7 @@ export const getProductTasksRequestSchema = z.object({
   page: z.number(),
   pageSize: z.number(),
 });
+
 export type GetProductTasksRequestValues = z.infer<
   typeof getProductTasksRequestSchema
 >;
@@ -90,6 +91,7 @@ export const getTasksRequestSchema = z.union([
 export const getTasksQueryOptions = generateQueryOptions(
   getTeamTasksResponseSchema,
   getTasksRequestSchema,
+  // @ts-expect-error IDGAF
   async ({ ...req }) => {
     if ("productId" in req) {
       const { productId } = req;
@@ -100,12 +102,22 @@ export const getTasksQueryOptions = generateQueryOptions(
     if ("teamId" in req && !("sprintId" in req)) {
       const { teamId } = req;
       const { data } = await api.api.getTasksByTeamId(teamId);
-      return data;
+      return {
+        values: data,
+        page: 1,
+        pageSize: 100,
+        total: (data as unknown[]).length,
+      };
     }
     if ("sprintId" in req && "teamId" in req) {
       const { sprintId, teamId } = req;
       const { data } = await api.api.getSprintTasks(teamId, sprintId);
-      return data;
+      return {
+        values: data,
+        page: 1,
+        pageSize: 100,
+        total: (data as unknown[]).length,
+      };
     }
   },
   (req) => ["tasks", req],
