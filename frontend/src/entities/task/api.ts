@@ -123,7 +123,7 @@ export const getTasksQueryOptions = generateQueryOptions(
 );
 
 export const createTaskMutationRequestSchema = taskSchema
-  .omit({ id: true })
+  .omit({ id: true, product: true })
   .extend({ productId: z.number() })
   .partial({ assignee: true });
 export type CreateTaskValues = z.infer<typeof createTaskMutationRequestSchema>;

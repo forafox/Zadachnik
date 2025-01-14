@@ -124,28 +124,38 @@ export interface ContentDisposition {
    */
   readDate?: string;
   attachment?: boolean;
-  inline?: boolean;
   formData?: boolean;
+  inline?: boolean;
 }
 
 export interface ErrorResponse {
+  body?: ProblemDetail;
+  statusCode?: HttpStatusCode;
+  detailMessageArguments?: Array<object>;
+  typeMessageCode?: string;
+  titleMessageCode?: string;
+  detailMessageCode?: string;
   headers?: {
-    connection?: Array<string>;
-    /** @format int64 */
-    ifModifiedSince?: number;
-    contentType?: MediaType;
-    /** @format int64 */
-    contentLength?: number;
+    acceptLanguage?: Array<{
+      range?: string;
+      /** @format double */
+      weight?: number;
+    }>;
+    basicAuth?: string;
+    /** @uniqueItems true */
+    allow?: Array<HttpMethod>;
+    empty?: boolean;
+    /** @format uri */
+    location?: string;
     host?: {
-      hostString?: string;
       address?: {
         hostAddress?: string;
         /** @format byte */
         address?: string;
         hostName?: string;
         linkLocalAddress?: boolean;
-        anyLocalAddress?: boolean;
         multicastAddress?: boolean;
+        anyLocalAddress?: boolean;
         loopbackAddress?: boolean;
         siteLocalAddress?: boolean;
         mcglobal?: boolean;
@@ -159,45 +169,28 @@ export interface ErrorResponse {
       port?: number;
       unresolved?: boolean;
       hostName?: string;
+      hostString?: string;
     };
-    empty?: boolean;
-    /** @format uri */
-    location?: string;
     all?: Record<string, string>;
     /** @format int64 */
     lastModified?: number;
     /** @format int64 */
     date?: number;
     /** @format int64 */
+    contentLength?: number;
+    etag?: string;
+    origin?: string;
+    accessControlAllowOrigin?: string;
+    accessControlAllowMethods?: Array<HttpMethod>;
+    accessControlAllowHeaders?: Array<string>;
+    accessControlExposeHeaders?: Array<string>;
+    accessControlAllowCredentials?: boolean;
+    /** @format int64 */
     accessControlMaxAge?: number;
-    acceptPatch?: Array<MediaType>;
-    acceptLanguage?: Array<{
-      range?: string;
-      /** @format double */
-      weight?: number;
-    }>;
-    basicAuth?: string;
-    acceptLanguageAsLocales?: Array<{
-      language?: string;
-      displayName?: string;
-      country?: string;
-      variant?: string;
-      script?: string;
-      /** @uniqueItems true */
-      unicodeLocaleAttributes?: Array<string>;
-      /** @uniqueItems true */
-      unicodeLocaleKeys?: Array<string>;
-      displayLanguage?: string;
-      displayScript?: string;
-      displayCountry?: string;
-      displayVariant?: string;
-      /** @uniqueItems true */
-      extensionKeys?: Array<string>;
-      iso3Language?: string;
-      iso3Country?: string;
-    }>;
+    accessControlRequestMethod?: HttpMethod;
+    accessControlRequestHeaders?: Array<string>;
+    range?: Array<HttpRange>;
     acceptCharset?: Array<string>;
-    bearerAuth?: string;
     contentDisposition?: ContentDisposition;
     contentLanguage?: {
       language?: string;
@@ -206,49 +199,56 @@ export interface ErrorResponse {
       variant?: string;
       script?: string;
       /** @uniqueItems true */
+      extensionKeys?: Array<string>;
+      /** @uniqueItems true */
       unicodeLocaleAttributes?: Array<string>;
       /** @uniqueItems true */
       unicodeLocaleKeys?: Array<string>;
+      iso3Language?: string;
+      iso3Country?: string;
       displayLanguage?: string;
       displayScript?: string;
       displayCountry?: string;
       displayVariant?: string;
+    };
+    cacheControl?: string;
+    accept?: Array<MediaType>;
+    acceptLanguageAsLocales?: Array<{
+      language?: string;
+      displayName?: string;
+      country?: string;
+      variant?: string;
+      script?: string;
       /** @uniqueItems true */
       extensionKeys?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleAttributes?: Array<string>;
+      /** @uniqueItems true */
+      unicodeLocaleKeys?: Array<string>;
       iso3Language?: string;
       iso3Country?: string;
-    };
-    ifNoneMatch?: Array<string>;
-    /** @format int64 */
-    ifUnmodifiedSince?: number;
-    cacheControl?: string;
-    range?: Array<HttpRange>;
-    /** @uniqueItems true */
-    allow?: Array<HttpMethod>;
-    origin?: string;
-    accessControlAllowOrigin?: string;
-    accessControlAllowMethods?: Array<HttpMethod>;
-    accessControlAllowHeaders?: Array<string>;
-    accessControlExposeHeaders?: Array<string>;
-    accessControlAllowCredentials?: boolean;
-    accessControlRequestMethod?: HttpMethod;
-    accessControlRequestHeaders?: Array<string>;
-    etag?: string;
-    accept?: Array<MediaType>;
+      displayLanguage?: string;
+      displayScript?: string;
+      displayCountry?: string;
+      displayVariant?: string;
+    }>;
+    acceptPatch?: Array<MediaType>;
+    connection?: Array<string>;
+    bearerAuth?: string;
     /** @format int64 */
     expires?: number;
     ifMatch?: Array<string>;
+    ifNoneMatch?: Array<string>;
+    /** @format int64 */
+    ifUnmodifiedSince?: number;
     pragma?: string;
     upgrade?: string;
     vary?: Array<string>;
+    contentType?: MediaType;
+    /** @format int64 */
+    ifModifiedSince?: number;
     [key: string]: any;
   };
-  detailMessageArguments?: Array<object>;
-  typeMessageCode?: string;
-  detailMessageCode?: string;
-  titleMessageCode?: string;
-  statusCode?: HttpStatusCode;
-  body?: ProblemDetail;
 }
 
 export type HttpMethod = object;
@@ -270,10 +270,10 @@ export interface MediaType {
   parameters?: Record<string, string>;
   /** @format double */
   qualityValue?: number;
+  charset?: string;
   wildcardType?: boolean;
   wildcardSubtype?: boolean;
   subtypeSuffix?: string;
-  charset?: string;
   concrete?: boolean;
 }
 
@@ -407,8 +407,6 @@ export interface Page {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
-  first?: boolean;
-  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<object>;
@@ -417,7 +415,9 @@ export interface Page {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
+  last?: boolean;
   pageable?: PageableObject;
+  first?: boolean;
   empty?: boolean;
 }
 
@@ -425,12 +425,12 @@ export interface PageableObject {
   /** @format int64 */
   offset?: number;
   sort?: Array<SortObject>;
+  unpaged?: boolean;
+  paged?: boolean;
   /** @format int32 */
   pageNumber?: number;
   /** @format int32 */
   pageSize?: number;
-  paged?: boolean;
-  unpaged?: boolean;
 }
 
 export interface SortObject {
@@ -446,8 +446,6 @@ export interface PageUserResponse {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
-  first?: boolean;
-  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<UserResponse>;
@@ -456,7 +454,9 @@ export interface PageUserResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
+  last?: boolean;
   pageable?: PageableObject;
+  first?: boolean;
   empty?: boolean;
 }
 
@@ -490,8 +490,6 @@ export interface PageTeamResponse {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
-  first?: boolean;
-  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<TeamResponse>;
@@ -500,7 +498,9 @@ export interface PageTeamResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
+  last?: boolean;
   pageable?: PageableObject;
+  first?: boolean;
   empty?: boolean;
 }
 
@@ -509,8 +509,6 @@ export interface PageProductResponse {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
-  first?: boolean;
-  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<ProductResponse>;
@@ -519,7 +517,9 @@ export interface PageProductResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
+  last?: boolean;
   pageable?: PageableObject;
+  first?: boolean;
   empty?: boolean;
 }
 
@@ -528,8 +528,6 @@ export interface PageTaskChangeResponse {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
-  first?: boolean;
-  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<TaskChangeResponse>;
@@ -538,12 +536,21 @@ export interface PageTaskChangeResponse {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
+  last?: boolean;
   pageable?: PageableObject;
+  first?: boolean;
   empty?: boolean;
 }
 
 export interface TaskChangeResponse {
-  field: "ID" | "TYPE" | "TITLE" | "DESCRIPTION" | "PRODUCT";
+  field:
+    | "ID"
+    | "TYPE"
+    | "TITLE"
+    | "DESCRIPTION"
+    | "PRODUCT"
+    | "STATUS"
+    | "ASSIGNEE_USERNAME";
   previousValue: object;
   newValue: object;
   changedBy: UserResponse;
@@ -556,8 +563,6 @@ export interface PageUserTeamRelation {
   totalElements?: number;
   /** @format int32 */
   totalPages?: number;
-  first?: boolean;
-  last?: boolean;
   /** @format int32 */
   size?: number;
   content?: Array<UserTeamRelation>;
@@ -566,7 +571,9 @@ export interface PageUserTeamRelation {
   sort?: Array<SortObject>;
   /** @format int32 */
   numberOfElements?: number;
+  last?: boolean;
   pageable?: PageableObject;
+  first?: boolean;
   empty?: boolean;
 }
 
@@ -589,10 +596,10 @@ export interface User {
   fullName: string;
   role: "USER" | "ADMIN";
   isEnabled: boolean;
+  authorities: Array<SimpleGrantedAuthority>;
   isAccountNonExpired: boolean;
   isAccountNonLocked: boolean;
   isCredentialsNonExpired: boolean;
-  authorities: Array<SimpleGrantedAuthority>;
 }
 
 export interface UserTeamRelation {
@@ -1724,6 +1731,10 @@ export class Api<
          * @default 10
          */
         size?: number;
+        /** @format int64 */
+        productId?: number;
+        /** @format int64 */
+        teamId?: number;
       },
       params: RequestParams = {},
     ) =>
