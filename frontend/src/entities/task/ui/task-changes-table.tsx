@@ -4,7 +4,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Translation } from "react-i18next";
-import { TaskChangeEntry } from "@/entities/task";
+import {
+  TaskChangeEntry,
+  taskStatus,
+  TaskStatusBadge,
+  taskType,
+  TaskTypeBadge,
+} from "@/entities/task";
 import { UserHoverCard } from "@/entities/user";
 import { getDefaultColumn } from "@/shared/components/ui/default-column.tsx";
 import { RichTextEditor } from "@/shared/components/ui/editor.tsx";
@@ -54,6 +60,10 @@ const taskChangesTable: Array<ColumnDef<TaskChangeEntry>> = [
           />
         );
       }
+      if (field == "status") {
+        const status = taskStatus.parse(row.original.previousValue);
+        return <TaskStatusBadge status={status} />;
+      }
       return previousValue;
     },
   },
@@ -70,6 +80,10 @@ const taskChangesTable: Array<ColumnDef<TaskChangeEntry>> = [
             editable={false}
           />
         );
+      }
+      if (field == "status") {
+        const status = taskStatus.parse(row.original.newValue);
+        return <TaskStatusBadge status={status} />;
       }
       return newValue;
     },
