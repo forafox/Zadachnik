@@ -1,1 +1,1 @@
-export * from "./ui/board";
+export * from "./ui/product-board.tsx";

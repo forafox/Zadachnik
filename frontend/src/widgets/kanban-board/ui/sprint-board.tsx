@@ -8,26 +8,21 @@ import {
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useQueries } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
-import { GripHorizontalIcon, LoaderCircle, TextIcon } from "lucide-react";
+import { GripHorizontalIcon, LoaderCircle } from "lucide-react";
 import { useState } from "react";
+import { TaskCard } from "@/widgets/kanban-board";
+import { getSprintTasksQueryOptions } from "@/entities/sprint";
 import {
-  getProductTasksQueryOptions,
   StatusGroup,
   statusGroups,
   Task,
   useUpdateTaskMutation,
 } from "@/entities/task";
-import { UserHoverAvatar } from "@/entities/user";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/shared/components/ui/card.tsx";
+import { Card, CardHeader } from "@/shared/components/ui/card.tsx";
 
 type Props = {
-  productId: number;
+  sprintId: number;
+  teamId: number;
 };
 
 const groups: Array<StatusGroup> = [
@@ -37,7 +32,7 @@ const groups: Array<StatusGroup> = [
   "cancelled",
 ];
 
-export function KanbanBoard({ productId }: Props) {
+export function SprintKanbanBoard({ teamId, sprintId }: Props) {
   const [activeTask, setActiveTask] = useState<Task | undefined>();
   const { mutate: updateTask } = useUpdateTaskMutation();
   const [overGroup, setOverGroup] = useState<StatusGroup | undefined>();
@@ -72,12 +67,13 @@ export function KanbanBoard({ productId }: Props) {
       <div className="flex w-full flex-row gap-2">
         {groups.map((group) => (
           <BoardColumn
-            productId={productId}
             group={group}
             key={group}
             isPending={false}
             isOverCurrent={overGroup === group}
             activeTask={activeTask}
+            teamId={teamId}
+            sprintId={sprintId}
           />
         ))}
       </div>
@@ -88,24 +84,30 @@ export function KanbanBoard({ productId }: Props) {
 
 function BoardColumn({
   group,
-  productId,
   isPending,
   isOverCurrent,
   activeTask,
+  sprintId,
+  teamId,
 }: {
   group: StatusGroup;
-  productId: number;
   isPending: boolean;
   isOverCurrent: boolean;
   activeTask: Task | undefined;
-}) {
+} & Props) {
   const { setNodeRef } = useDroppable({
     id: group,
     disabled: isPending,
   });
   const { data: tasks, pending } = useQueries({
     queries: statusGroups[group].map((status) =>
-      getProductTasksQueryOptions({ productId, status, page: 1, pageSize: 50 }),
+      getSprintTasksQueryOptions({
+        teamId,
+        sprintId,
+        status,
+        page: 1,
+        pageSize: 50,
+      }),
     ),
     combine: (results) => {
       return {
@@ -171,43 +173,5 @@ function DraggableTask({
         }
       />
     </div>
-  );
-}
-
-function TaskCard({
-  task,
-  dragSlot,
-}: {
-  task: Task;
-  dragSlot?: React.ReactNode;
-}) {
-  return (
-    <Card className="transition-all">
-      <CardHeader className="p-2">
-        <CardTitle className="flex flex-row items-center">
-          <Link
-            to="/products/$productId/tasks/$taskId"
-            params={{
-              productId: String(task.product.id),
-              taskId: String(task.id),
-            }}
-          >
-            [{task.product.ticker}-{task.id}] {task.title}
-          </Link>
-          {dragSlot ?? <GripHorizontalIcon className="ml-auto size-4" />}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex items-center gap-2 p-2">
-        {task.assignee && (
-          <UserHoverAvatar
-            className="size-6 text-xs font-light"
-            user={task.assignee}
-          />
-        )}
-        {(task.description?.trim() ?? "").length > 0 && (
-          <TextIcon className="size-4" />
-        )}
-      </CardContent>
-    </Card>
   );
 }

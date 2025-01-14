@@ -4,13 +4,16 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import z from "zod";
-import { taskSchema } from "@/entities/task";
+import { taskSchema, taskStatus } from "@/entities/task";
+import { teamSchema } from "@/entities/team";
 import { api } from "@/shared/api";
+import { generateQueryOptions } from "@/shared/api/generate-query-options.tsx";
 import {
+  fromBackendPagination,
   paginatedRequestSchema,
   paginatedResponseSchema,
+  toBackendPagination
 } from "@/shared/api/schemas.ts";
-import { teamSchema } from "@/entities/team";
 
 export const sprintSchema = z.object({
   id: z.number(),
@@ -73,3 +76,37 @@ export function useCreateSprintMutation() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["sprints"] }),
   });
 }
+
+export const getSprintByIdQueryOptions = generateQueryOptions(
+  sprintSchema,
+  z.object({ teamId: z.number(), sprintId: z.number() }),
+  async ({ teamId, sprintId }) => {
+    const { data } = await api.api.getSprintsByTeamIdAndSprintId(
+      teamId,
+      sprintId,
+    );
+    return data;
+  },
+  ({ teamId, sprintId }) => ["teams", teamId, "sprints", sprintId],
+);
+
+export const getSprintTasksQueryOptions = generateQueryOptions(
+  paginatedResponseSchema(taskSchema),
+  z.object({
+    sprintId: z.number(),
+    teamId: z.number(),
+    assigneeId: z.number().optional(),
+    status: taskStatus.optional(),
+    page: z.number(),
+    pageSize: z.number(),
+  }),
+  async ({ teamId, sprintId, status, assigneeId, ...req }) => {
+    const { data } = await api.api.getSprintTasks(teamId, sprintId, {
+      ...toBackendPagination(req),
+      status: status?.toUpperCase(),
+      assigneeId,
+    });
+    return fromBackendPagination(data)
+  },
+  ({teamId, sprintId, ...req}) => ["teams", teamId, "sprints", sprintId, "tasks", req],
+);

@@ -18,6 +18,7 @@ export const getProductTasksRequestSchema = z.object({
   page: z.number(),
   pageSize: z.number(),
 });
+
 export type GetProductTasksRequestValues = z.infer<
   typeof getProductTasksRequestSchema
 >;

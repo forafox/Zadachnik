@@ -1,5 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { getPrincipalQueryOptions } from "@/entities/principal";
 import {
   getTeamSprintsQueryOptions,
   getTeamSprintsRequestSchema,
@@ -37,20 +38,24 @@ function RouteComponent() {
   const { data: sprints } = useSuspenseQuery(
     getTeamSprintsQueryOptions({ teamId, ...search }),
   );
+  const { data: principal } = useSuspenseQuery(getPrincipalQueryOptions);
   useTeamsBreadcrumbs(team, "sprints");
   const table = useSprintsTable(sprints.values);
   const { Dialog, onClose } = useDialog();
+  const isMaster = principal.id === team.scrumMaster.id;
 
   return (
     <div className="flex flex-col gap-4">
-      <header>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Create Sprint</Button>
-          </DialogTrigger>
-          <CreateSprintDialogContent onClose={onClose} teamId={teamId} />
-        </Dialog>
-      </header>
+      {isMaster && (
+        <header>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Create Sprint</Button>
+            </DialogTrigger>
+            <CreateSprintDialogContent onClose={onClose} teamId={teamId} />
+          </Dialog>
+        </header>
+      )}
       <DataTable table={table} />
       <PaginationFooter
         query={search}
