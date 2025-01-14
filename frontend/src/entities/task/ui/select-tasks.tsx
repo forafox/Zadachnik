@@ -35,7 +35,10 @@ type Props = {
 export const SelectTasks = forwardRef<HTMLButtonElement, Props>(
   function SelectTasks({ value, onChange, modal = false, ...filters }, ref) {
     const [open, setOpen] = React.useState(false);
-    const { data } = useQuery(getTasksQueryOptions(filters));
+    const { data, error } = useQuery(getTasksQueryOptions(filters));
+    if(error) {
+      console.error(error);
+    }
 
     function toggleItem(task: Task) {
       if (value.some((it) => it.id === task.id)) {
