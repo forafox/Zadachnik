@@ -82,37 +82,6 @@ class TaskChangeService(
         }
     }
 
-    fun createLogChanges(task: Task) {
-        createTaskChange(
-            taskId = task.id,
-            fieldName = "type",
-            previousValue = task.type.name,
-            newValue = task.type.name,
-            changedBy = task.product.owner.id
-        )
-        createTaskChange(
-            taskId = task.id,
-            fieldName = "title",
-            previousValue = task.title,
-            newValue = task.title,
-            changedBy = task.product.owner.id
-        )
-        createTaskChange(
-            taskId = task.id,
-            fieldName = "description",
-            previousValue = task.description.orEmpty(),
-            newValue = task.description.orEmpty(),
-            changedBy = task.product.owner.id
-        )
-        createTaskChange(
-            taskId = task.id,
-            fieldName = "product",
-            previousValue = task.product.id.toString(),
-            newValue = task.product.id.toString(),
-            changedBy = task.product.owner.id
-        )
-    }
-
     fun createTaskChange(taskId: Long, fieldName: String, previousValue: String, newValue: String, changedBy: Long) {
         taskChangeRepository.save(
             TaskChange(
