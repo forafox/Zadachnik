@@ -75,11 +75,11 @@ class TeamMeetingController(
         @PathVariable teamId: Long,
         @RequestParam(required = false, defaultValue = "0") page: Int,
         @RequestParam(required = false, defaultValue = "10") size: Int
-    ) = teamMeetingService.getTeamMeetings(
-            teamId = teamId,
-            page,
-            size
-        ).map { it.toResponse() }
+    ) = teamMeetingService.getTeamMeetingsWithArticles(
+        teamId = teamId,
+        page,
+        size
+    )
 
 
     @PostMapping("{teamId}/meetings/{meetingId}/minutes")

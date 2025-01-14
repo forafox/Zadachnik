@@ -1,5 +1,6 @@
 package com.jellyone.zadachnik.service
 
+import com.jellyone.zadachnik.domain.Product
 import com.jellyone.zadachnik.domain.ProductTeamRelation
 import com.jellyone.zadachnik.domain.ProductTeamStatus
 import com.jellyone.zadachnik.repository.ProductTeamRelationRepository
@@ -12,6 +13,7 @@ class ProductsInvitationsService(
     private val productTeamRelationRepository: ProductTeamRelationRepository,
     private val productService: ProductService,
     private val teamService: TeamService,
+    private val userService: UserService
 ) {
     fun createProductInvitation(
         teamId: Long,
@@ -91,6 +93,15 @@ class ProductsInvitationsService(
         } else {
             productTeamRelationRepository.findAllByProductId(productId, PageRequest.of(page, size))
         }
+    }
+
+    fun getProductsOfCurrentUser(
+        page: Int,
+        size: Int,
+        username: String
+    ): Page<Product> {
+        val user = userService.getByUsername(username)
+        return productTeamRelationRepository.findAllProductsOfUser(PageRequest.of(page, size), user.id)
     }
 
 }

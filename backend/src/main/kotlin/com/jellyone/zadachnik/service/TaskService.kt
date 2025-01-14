@@ -42,7 +42,7 @@ class TaskService(
                 assignee = assignee,
                 product = productService.getProductById(productId)
             )
-        ).also { taskChangeService.createLogChanges(it) }
+        )
     }
 
     fun getTaskById(id: Long): Task {

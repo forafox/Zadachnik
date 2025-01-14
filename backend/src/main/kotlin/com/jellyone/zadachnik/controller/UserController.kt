@@ -1,10 +1,7 @@
 package com.jellyone.zadachnik.controller
 
 import com.jellyone.zadachnik.domain.UserTeamStatus
-import com.jellyone.zadachnik.service.ProductService
-import com.jellyone.zadachnik.service.TeamService
-import com.jellyone.zadachnik.service.TeamsInvitationsService
-import com.jellyone.zadachnik.service.UserService
+import com.jellyone.zadachnik.service.*
 import com.jellyone.zadachnik.web.dto.GetMeResponse
 import com.jellyone.zadachnik.web.response.ProductResponse
 import com.jellyone.zadachnik.web.response.TeamResponse
@@ -27,9 +24,8 @@ import java.security.Principal
 @SecurityRequirement(name = "JWT")
 class UserController(
     private val userService: UserService,
-    private val productService: ProductService,
-    private val teamService: TeamService,
-    private val teamsInvitationsService: TeamsInvitationsService
+    private val teamsInvitationsService: TeamsInvitationsService,
+    private val productInvitationsService: ProductsInvitationsService
 ) {
 
     @GetMapping("/me")
@@ -89,9 +85,11 @@ class UserController(
     fun getUsers(
         @RequestParam(required = false, defaultValue = "") search: String,
         @RequestParam(required = false, defaultValue = "0") page: Int,
-        @RequestParam(required = false, defaultValue = "10") size: Int
+        @RequestParam(required = false, defaultValue = "10") size: Int,
+        @RequestParam(required = false) productId: Long?,
+        @RequestParam(required = false) teamId: Long?
     ): Page<UserResponse> {
-        val users = userService.getUsers(search, page, size)
+        val users = userService.getUsers(search, productId, teamId, page, size)
         return users.map { user ->
             UserResponse(user.id, user.username, user.fullName, user.role)
         }
@@ -114,7 +112,7 @@ class UserController(
         @RequestParam(required = false, defaultValue = "10") size: Int,
         principal: Principal
     ): Page<ProductResponse> {
-        val products = productService.getProductsOfCurrentUser(page, size, principal.name)
+        val products = productInvitationsService.getProductsOfCurrentUser(page, size, principal.name)
         return products.map { product ->
             ProductResponse(
                 id = product.id,
@@ -143,7 +141,7 @@ class UserController(
         @RequestParam(required = false, defaultValue = "10") size: Int,
         principal: Principal
     ): Page<TeamResponse> {
-        val teams = teamService.getTeamsOfCurrentUser(page, size, principal.name)
+        val teams = teamsInvitationsService.getTeamsOfCurrentUser(page, size, principal.name)
         return teams.map { team ->
             TeamResponse(
                 id = team.id,
