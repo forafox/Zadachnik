@@ -29,7 +29,7 @@ function RouteComponent() {
   const { data: meetings } = useSuspenseQuery(
     getTeamMeetingsQueryOptions({ teamId, ...defaultPagination }),
   );
-  const table = useMeetingsTable(meetings.values);
+  const table = useMeetingsTable(meetings);
   const { Dialog: CreateDialog } = useDialog();
 
   return (

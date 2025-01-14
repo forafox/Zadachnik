@@ -1,4 +1,5 @@
 import z from "zod";
+import { articleSchema } from "@/entities/article";
 import { teamSchema } from "@/entities/team";
 
 export const meetingType = z.enum([
@@ -14,5 +15,6 @@ export const meetingSchema = z.object({
   agenda: z.string(),
   team: teamSchema,
   type: z.string().toLowerCase().pipe(meetingType),
+  articles: articleSchema.array(),
 });
 export type Meeting = z.infer<typeof meetingSchema>;
