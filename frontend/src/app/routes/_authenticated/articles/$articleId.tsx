@@ -1,6 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import * as React from "react";
 import {
   ArticleComments,
   ArticleContent,
@@ -12,7 +11,6 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/shared/components/ui/card.tsx";
 
 export const Route = createFileRoute("/_authenticated/articles/$articleId")({
