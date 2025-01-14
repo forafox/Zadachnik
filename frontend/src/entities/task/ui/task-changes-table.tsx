@@ -4,11 +4,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Translation } from "react-i18next";
-import {
-  TaskChangeEntry,
-  taskStatus,
-  TaskStatusBadge,
-} from "@/entities/task";
+import { TaskChangeEntry, taskStatus, TaskStatusBadge } from "@/entities/task";
 import { UserHoverCard } from "@/entities/user";
 import { getDefaultColumn } from "@/shared/components/ui/default-column.tsx";
 import { RichTextEditor } from "@/shared/components/ui/editor.tsx";

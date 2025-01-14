@@ -41,7 +41,6 @@ import {
   TableCell,
   TableRow,
 } from "@/shared/components/ui/table.tsx";
-import { cn } from "@/shared/lib/utils.ts";
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/tasks/$taskId",
