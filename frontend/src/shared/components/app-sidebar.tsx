@@ -23,7 +23,7 @@ type Props = {
 
 export function AppSidebar({ principalSlot, productsSlot, teamsSlot }: Props) {
   return (
-    <Sidebar>
+    <Sidebar data-testid="sidebar">
       <SidebarHeader>
         <SidebarMenuButton
           size="lg"

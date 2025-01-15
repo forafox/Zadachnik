@@ -60,6 +60,7 @@ function TeamSidebarEntry({ team }: { team: Team }) {
               >
                 <SidebarMenuSubButton asChild>
                   <TeamLink
+                    data-testid={section}
                     team={team}
                     section={section}
                     before={icons[section].icon({

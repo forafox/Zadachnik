@@ -79,14 +79,18 @@ function SidebarTeams() {
   const { Dialog, onClose } = useDialog();
 
   return (
-    <SidebarGroup>
+    <SidebarGroup data-testid="teams">
       <SidebarGroupLabel asChild>
         <Link search={defaultPagination} to="/teams">
           {t("sidebar.title")}
         </Link>
       </SidebarGroupLabel>
       <Dialog>
-        <SidebarGroupAction title={t("sidebar.actions.create.label")} asChild>
+        <SidebarGroupAction
+          title={t("sidebar.actions.create.label")}
+          asChild
+          data-testid="create"
+        >
           <DialogTrigger>
             <Plus />
             <span className="sr-only">{t("sidebar.actions.create.label")}</span>
