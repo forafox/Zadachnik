@@ -47,11 +47,13 @@ export const getArticleCommentsQueryOptions = generateQueryOptions(
   ({ articleId, ...req }) => ["articles", articleId, "comments", req],
 );
 
+export const createArticleRequestSchema = z.object({
+  articleId: z.number(),
+  content: z.string(),
+});
+
 export const useCreateArticleComment = generateMutation(
-  z.object({
-    articleId: z.number(),
-    content: z.string(),
-  }),
+  createArticleRequestSchema,
   commentSchema,
   async ({ articleId, content }) => {
     const { data } = await api.api.createArticleComment(articleId, { content });
