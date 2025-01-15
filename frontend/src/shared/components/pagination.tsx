@@ -31,6 +31,11 @@ export function PaginationFooter<T extends { page: number; pageSize: number }>({
   const totalPages = Math.ceil(total / query.pageSize);
   const hasPrevious = query.page > 1;
   const hasNext = query.page < totalPages;
+
+  if (total == 0) {
+    return null;
+  }
+
   return (
     <footer className="flex w-full justify-between">
       <div className="flex items-center space-x-2">
