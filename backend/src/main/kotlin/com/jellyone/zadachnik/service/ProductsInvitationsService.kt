@@ -5,6 +5,7 @@ import com.jellyone.zadachnik.domain.ProductTeamRelation
 import com.jellyone.zadachnik.domain.ProductTeamStatus
 import com.jellyone.zadachnik.repository.ProductTeamRelationRepository
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
@@ -102,6 +103,21 @@ class ProductsInvitationsService(
     ): Page<Product> {
         val user = userService.getByUsername(username)
         return productTeamRelationRepository.findAllProductsOfUser(PageRequest.of(page, size), user.id)
+    }
+
+    fun getProductsOfCurrentUserWithoutPagination(
+        page: Int,
+        size: Int,
+        username: String
+    ): Page<Product> {
+        val user = userService.getByUsername(username)
+        val products =
+            productTeamRelationRepository.findAllProductsOfUserWithoutPagination(PageRequest.of(page, size), user.id)
+        val productsOfScrumMaster = productTeamRelationRepository.findAllProductsOfUserOwnerWithoutPagination(
+            PageRequest.of(page, size),
+            user.id
+        )
+        return PageImpl(products + productsOfScrumMaster, PageRequest.of(page, size), products.size.toLong())
     }
 
 }
