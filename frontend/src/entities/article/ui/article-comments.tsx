@@ -1,11 +1,15 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
 import {
+  createArticleRequestSchema,
   getArticleCommentsQueryOptions,
   useCreateArticleComment,
 } from "@/entities/article";
 import { CommentItem } from "@/entities/comment";
 import { Button } from "@/shared/components/ui/button.tsx";
+import { Form, FormField } from "@/shared/components/ui/form.tsx";
 import { Textarea } from "@/shared/components/ui/textarea.tsx";
 
 export function ArticleComments({ articleId }: { articleId: number }) {
@@ -14,28 +18,6 @@ export function ArticleComments({ articleId }: { articleId: number }) {
   } = useSuspenseQuery(
     getArticleCommentsQueryOptions({ articleId, page: 1, pageSize: 50 }),
   );
-  const ref = useRef<HTMLTextAreaElement | null>(null);
-
-  const { mutate, isPending } = useCreateArticleComment();
-
-  function onSend() {
-    const value = ref.current?.value;
-    if (value == undefined) {
-      return;
-    }
-
-    mutate(
-      {
-        articleId,
-        content: value,
-      },
-      {
-        onSuccess: () => {
-          // TODO: reset
-        },
-      },
-    );
-  }
 
   return (
     <section className="w-full space-y-6">
@@ -50,20 +32,41 @@ export function ArticleComments({ articleId }: { articleId: number }) {
           ))}
         </div>
       </main>
-      <form
-        className="mt-4 space-y-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSend();
-        }}
-      >
-        <Textarea placeholder={"Leave a comment"} ref={ref} required />
+      <SendComment articleId={articleId} />
+    </section>
+  );
+}
+
+function SendComment({ articleId }: { articleId: number }) {
+  const { mutate, isPending } = useCreateArticleComment();
+  const form = useForm<z.infer<typeof createArticleRequestSchema>>({
+    resolver: zodResolver(createArticleRequestSchema),
+    defaultValues: {
+      articleId,
+      content: "",
+    },
+  });
+
+  function onSend(values: z.infer<typeof createArticleRequestSchema>) {
+    mutate(values);
+  }
+
+  return (
+    <Form {...form}>
+      <form className="mt-4 space-y-2" onSubmit={form.handleSubmit(onSend)}>
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <Textarea placeholder={"Leave a comment"} required {...field} />
+          )}
+        />
         <div className="flex flex-row justify-end">
           <Button variant="outline" type="submit" size="sm" loading={isPending}>
             Send
           </Button>
         </div>
       </form>
-    </section>
+    </Form>
   );
 }
