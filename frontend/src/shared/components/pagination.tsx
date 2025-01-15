@@ -20,7 +20,7 @@ type Props<T> = {
   setQuery: (updater: (prev: T) => T) => void;
 };
 
-const ALLOWED_PAGE_SIZE = [10, 30, 50];
+const ALLOWED_PAGE_SIZE = [10, 30, 50, 100];
 
 export function PaginationFooter<T extends { page: number; pageSize: number }>({
   query,
