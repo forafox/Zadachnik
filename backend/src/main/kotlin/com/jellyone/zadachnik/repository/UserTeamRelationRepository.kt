@@ -36,9 +36,13 @@ interface UserTeamRelationRepository : JpaRepository<UserTeamRelation, Long> {
 
     @Query(
         """
-            SELECT DISTINCT t
+            SELECT DISTINCT 
+                CASE 
+                    WHEN t.scrumMaster.id = :userId THEN t
+                    ELSE utr.team 
+                END AS result
             FROM Team t
-            LEFT JOIN UserTeamRelation utr ON t.scrumMaster.id = utr.user.id
+            FULL OUTER JOIN UserTeamRelation utr ON t.scrumMaster.id = utr.user.id
             WHERE (t.scrumMaster.id = :userId)
                OR (utr.user.id IS NOT NULL AND utr.user.id = :userId AND utr.status = 'ACCEPTED')
         """
@@ -47,4 +51,26 @@ interface UserTeamRelationRepository : JpaRepository<UserTeamRelation, Long> {
         pageable: Pageable,
         @Param("userId") userId: Long,
     ): Page<Team>
+
+    @Query(
+        """
+            SELECT utr.team
+            FROM UserTeamRelation utr
+            WHERE (utr.user.id = :userId AND utr.status = 'ACCEPTED')
+        """
+    )
+    fun findAllTeamsOfUser(
+        @Param("userId") userId: Long,
+    ): List<Team>
+
+    @Query(
+        """
+            SELECT t
+            FROM Team t
+            where t.scrumMaster.id = :userId
+        """
+    )
+    fun findAllTeamsOfUserScrumMaster(
+        @Param("userId") userId: Long,
+    ): List<Team>
 }

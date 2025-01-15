@@ -112,7 +112,7 @@ class UserController(
         @RequestParam(required = false, defaultValue = "10") size: Int,
         principal: Principal
     ): Page<ProductResponse> {
-        val products = productInvitationsService.getProductsOfCurrentUser(page, size, principal.name)
+        val products = productInvitationsService.getProductsOfCurrentUserWithoutPagination(page, size, principal.name)
         return products.map { product ->
             ProductResponse(
                 id = product.id,
@@ -141,7 +141,7 @@ class UserController(
         @RequestParam(required = false, defaultValue = "10") size: Int,
         principal: Principal
     ): Page<TeamResponse> {
-        val teams = teamsInvitationsService.getTeamsOfCurrentUser(page, size, principal.name)
+        val teams = teamsInvitationsService.getTeamsWithoutPaginationOfCurrentUser(page, size, principal.name)
         return teams.map { team ->
             TeamResponse(
                 id = team.id,

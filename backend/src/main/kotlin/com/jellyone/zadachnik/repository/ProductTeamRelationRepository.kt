@@ -59,4 +59,28 @@ interface ProductTeamRelationRepository : JpaRepository<ProductTeamRelation, Lon
     """
     )
     fun findAllProductsOfUser(pageable: Pageable, userId: Long): Page<Product>
+
+    @Query(
+        """
+            SELECT ptr.team
+            FROM ProductTeamRelation ptr
+            WHERE ptr.status = 'ACCEPTED' AND EXISTS (
+               SELECT DISTINCT utr
+               FROM UserTeamRelation utr
+               WHERE utr.user.id = :userId
+                 AND utr.team.id = ptr.team.id
+                 AND utr.status = 'ACCEPTED'
+           )  
+        """
+    )
+    fun findAllProductsOfUserWithoutPagination(pageable: Pageable, userId: Long): Page<Product>
+
+    @Query(
+        """
+         SELECT DISTINCT p
+         FROM Product p
+         WHERE (p.owner.id = :userId)
+        """
+    )
+    fun findAllProductsOfUserOwnerWithoutPagination(pageable: Pageable, userId: Long): Page<Product>
 }
