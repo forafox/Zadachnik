@@ -19,7 +19,6 @@ type ContextValue = {
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 const DialogContext = createContext<ContextValue | null>(null);
 
 function useDialogContext<T>(selector: (value: ContextValue) => T) {
