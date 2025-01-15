@@ -80,7 +80,7 @@ export function PrincipalSidebarFooter() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled>
                 <Sparkles />
                 {t("sidebarMenu.actions.upgradeToPro.label")}
               </DropdownMenuItem>
@@ -99,13 +99,13 @@ export function PrincipalSidebarFooter() {
                   {t("sidebarMenu.actions.billing.label")}
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled>
                 <Bell />
                 {t("sidebarMenu.actions.notifications.label")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem disabled>
               <LogOut />
               {t("sidebarMenu.actions.logOut.label")}
             </DropdownMenuItem>
