@@ -62,7 +62,7 @@ interface ProductTeamRelationRepository : JpaRepository<ProductTeamRelation, Lon
 
     @Query(
         """
-            SELECT ptr.team
+            SELECT ptr.product
             FROM ProductTeamRelation ptr
             WHERE ptr.status = 'ACCEPTED' AND EXISTS (
                SELECT DISTINCT utr
