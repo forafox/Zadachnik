@@ -4,12 +4,11 @@ export const Route = createFileRoute("/_authenticated/tasks")({
   component: RouteComponent,
   beforeLoad: () => {
     throw redirect({
-      to: "/products"
-    })
-  }
+      to: "/products",
+    });
+  },
 });
 
 function RouteComponent() {
-
-  return "hello"
+  return "hello";
 }

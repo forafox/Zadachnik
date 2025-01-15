@@ -94,8 +94,8 @@ export function PrincipalSidebarFooter() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem disabled>
-                  <CreditCard />
-                  {t("sidebarMenu.actions.billing.label")}
+                <CreditCard />
+                {t("sidebarMenu.actions.billing.label")}
               </DropdownMenuItem>
               <DropdownMenuItem disabled>
                 <Bell />
