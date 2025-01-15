@@ -6,6 +6,7 @@ import com.jellyone.zadachnik.domain.UserTeamRelation
 import com.jellyone.zadachnik.domain.UserTeamStatus
 import com.jellyone.zadachnik.repository.UserTeamRelationRepository
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
@@ -83,6 +84,13 @@ class TeamsInvitationsService(
     fun getTeamsOfCurrentUser(page: Int, size: Int, username: String): Page<Team> {
         val user = userService.getByUsername(username)
         return userTeamRelationRepository.findAllTeamsOfUser(PageRequest.of(page, size), user.id)
+    }
+
+    fun getTeamsWithoutPaginationOfCurrentUser(page: Int, size: Int, username: String): Page<Team> {
+        val user = userService.getByUsername(username)
+        val teams = userTeamRelationRepository.findAllTeamsOfUser(user.id)
+        val teamsOfScrumMaster = userTeamRelationRepository.findAllTeamsOfUserScrumMaster(user.id)
+        return PageImpl(teams + teamsOfScrumMaster, PageRequest.of(page, size), teams.size.toLong())
     }
 
     fun getTeamsOfUserScrumMaster(page: Int, size: Int, username: String): Page<Team> {
