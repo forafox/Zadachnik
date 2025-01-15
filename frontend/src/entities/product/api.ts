@@ -21,9 +21,6 @@ export const productSchema = z.object({
     .nullish()
     .transform((x) => x ?? undefined),
   owner: userSchema,
-  // @TODO: remove .catch after backend implementation
-  openIssues: z.number().catch(232),
-  totalIssues: z.number().catch(421),
 });
 
 export type Product = z.infer<typeof productSchema>;

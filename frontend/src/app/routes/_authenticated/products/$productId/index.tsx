@@ -11,7 +11,6 @@ import { ProductParticipants } from "@/entities/product";
 import { UserHoverCard } from "@/entities/user";
 import { defaultPagination } from "@/shared/api/schemas.ts";
 import { SetSidebarBreadcrumbs } from "@/shared/components/sidebar-breadcrumbs.tsx";
-import { Badge } from "@/shared/components/ui/badge.tsx";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -81,11 +80,6 @@ function RouteComponent() {
         <Separator orientation="horizontal" />
         <CardContent className="flex items-center gap-4 py-4">
           <UserHoverCard user={product.owner} />
-          <Badge className="bg-orange-200 text-orange-500 hover:bg-orange-100">
-            {t("indexPage.closedIssues", {
-              val: product.openIssues / product.totalIssues,
-            })}
-          </Badge>
           <div className="ml-auto">
             {principal.id == product.owner.id && (
               <Dialog>
