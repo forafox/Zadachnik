@@ -35,14 +35,6 @@ const columnDef: Array<ColumnDef<Product>> = [
     },
   },
   {
-    accessorKey: "openIssues",
-    header: () => <RenderTranslation str="items.openIssues.label" />,
-  },
-  {
-    accessorKey: "totalIssues",
-    header: () => <RenderTranslation str="items.openIssues.label" />,
-  },
-  {
     accessorKey: "description",
     header: () => <RenderTranslation str="items.description.label" />,
   },
