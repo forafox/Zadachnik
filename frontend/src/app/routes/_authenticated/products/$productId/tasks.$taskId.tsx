@@ -1,11 +1,15 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Pencil, SaveIcon } from "lucide-react";
 import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import z from "zod";
 import { CommentItem } from "@/entities/comment";
 import { getProductByIdQueryOptions, ProductLink } from "@/entities/product";
 import {
+  createTaskCommentMutationRequest,
   getTaskByIdQueryOptions,
   getTaskCommentsQueryOptions,
   Task,
@@ -34,6 +38,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
+import { Form, FormField } from "@/shared/components/ui/form.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
 import {
   Table,
@@ -41,6 +46,7 @@ import {
   TableCell,
   TableRow,
 } from "@/shared/components/ui/table.tsx";
+import { Textarea } from "@/shared/components/ui/textarea.tsx";
 
 export const Route = createFileRoute(
   "/_authenticated/products/$productId/tasks/$taskId",
@@ -164,29 +170,6 @@ function TaskComments({ task }: { task: Task }) {
       pageSize: 50,
     }),
   );
-  const ref = useRef<HTMLInputElement | null>(null);
-
-  const { mutate, isPending } = useCreateTaskCommentMutation();
-
-  function onSend() {
-    const value = ref.current?.value;
-    if (value == undefined) {
-      return;
-    }
-
-    mutate(
-      {
-        productId: task.product.id,
-        taskId: task.id,
-        content: value,
-      },
-      {
-        onSuccess: () => {
-          // TODO: reset
-        },
-      },
-    );
-  }
 
   return (
     <div>
@@ -201,20 +184,7 @@ function TaskComments({ task }: { task: Task }) {
           <CommentItem comment={comment} key={comment.id} />
         ))}
       </div>
-      <form
-        className="space-y-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSend();
-        }}
-      >
-        <Input placeholder={"Leave a comment"} ref={ref} required />
-        <div className="flex flex-row justify-end">
-          <Button variant="outline" type="submit" size="sm" loading={isPending}>
-            {t("items.comments.actions.send.label")}
-          </Button>
-        </div>
-      </form>
+      <SendComment taskId={task.id} productId={task.product.id} />
     </div>
   );
 }
@@ -269,5 +239,50 @@ function EditableTitle({ task }: { task: Task }) {
         )}
       </div>
     </CardTitle>
+  );
+}
+
+function SendComment({
+  productId,
+  taskId,
+}: {
+  taskId: number;
+  productId: number;
+}) {
+  const { mutate, isPending } = useCreateTaskCommentMutation();
+  const form = useForm<z.infer<typeof createTaskCommentMutationRequest>>({
+    resolver: zodResolver(createTaskCommentMutationRequest),
+    defaultValues: {
+      productId,
+      taskId,
+      content: "",
+    },
+  });
+
+  function onSend(values: z.infer<typeof createTaskCommentMutationRequest>) {
+    mutate(values, {
+      onSuccess: () => {
+        form.reset();
+      },
+    });
+  }
+
+  return (
+    <Form {...form}>
+      <form className="mt-4 space-y-2" onSubmit={form.handleSubmit(onSend)}>
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <Textarea placeholder={"Leave a comment"} required {...field} />
+          )}
+        />
+        <div className="flex flex-row justify-end">
+          <Button variant="outline" type="submit" size="sm" loading={isPending}>
+            Send
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

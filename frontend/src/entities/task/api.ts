@@ -183,7 +183,7 @@ export const getTaskByIdQueryOptions = generateQueryOptions(
   ],
 );
 
-const createTaskCommentMutationRequest = z.object({
+export const createTaskCommentMutationRequest = z.object({
   productId: z.number(),
   taskId: z.number(),
   content: z.string(),
