@@ -48,7 +48,11 @@ function SendComment({ articleId }: { articleId: number }) {
   });
 
   function onSend(values: z.infer<typeof createArticleRequestSchema>) {
-    mutate(values);
+    mutate(values, {
+      onSuccess: () => {
+        form.reset();
+      },
+    });
   }
 
   return (

@@ -1,8 +1,11 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Pencil, SaveIcon } from "lucide-react";
 import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import z from "zod";
 import { CommentItem } from "@/entities/comment";
 import { getProductByIdQueryOptions, ProductLink } from "@/entities/product";
 import {
@@ -35,6 +38,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card.tsx";
+import { Form, FormField } from "@/shared/components/ui/form.tsx";
 import { Input } from "@/shared/components/ui/input.tsx";
 import {
   Table,
@@ -42,14 +46,6 @@ import {
   TableCell,
   TableRow,
 } from "@/shared/components/ui/table.tsx";
-import {
-  createArticleRequestSchema,
-  useCreateArticleComment,
-} from "@/entities/article";
-import { useForm } from "react-hook-form";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField } from "@/shared/components/ui/form.tsx";
 import { Textarea } from "@/shared/components/ui/textarea.tsx";
 
 export const Route = createFileRoute(
@@ -264,7 +260,11 @@ function SendComment({
   });
 
   function onSend(values: z.infer<typeof createTaskCommentMutationRequest>) {
-    mutate(values);
+    mutate(values, {
+      onSuccess: () => {
+        form.reset();
+      },
+    });
   }
 
   return (
